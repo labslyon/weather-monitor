@@ -20,7 +20,7 @@ Captured archive summary at seed time:
 - Generated at: `2026-08-24 00:39 UTC`
 - Historical dates: 10 snapshots from `2026-08-12` to `2026-08-24`
 - Countries: United States, Canada, Australia
-- Cities: 15
+- Cities: 18
 
 ## Automatic Updates
 
@@ -28,7 +28,7 @@ The workflow at `.github/workflows/pages.yml` runs every day at `00:35 UTC` and 
 
 Scheduled/manual runs:
 
-1. Fetch current weather and 7-day forecasts for all 15 cities from Open-Meteo.
+1. Fetch current weather and 7-day forecasts for all 18 cities from Open-Meteo.
 2. Save the new UTC snapshot as `today_data`.
 3. Preserve the snapshot in `history[YYYY-MM-DD]`.
 4. Commit updated data files back to `main`.
