@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>North America Weather Monitor</title>
+    <meta name="description" content="美国、加拿大和澳洲 15 城市天气快照与 7 日预报历史监控。">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <div>
+          <p class="eyebrow">Weather Snapshot Archive</p>
+          <h1>North America Weather Monitor</h1>
+          <p class="subtitle">美国、加拿大、澳洲 15 城市天气快照与 7 日预报</p>
+        </div>
+        <dl class="header-stats" aria-label="数据概览">
+          <div>
+            <dt>快照日期</dt>
+            <dd id="statDates">--</dd>
+          </div>
+          <div>
+            <dt>城市</dt>
+            <dd id="statCities">--</dd>
+          </div>
+          <div>
+            <dt>生成时间</dt>
+            <dd id="statGenerated">--</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <main class="shell">
+      <nav class="country-tabs" id="countryTabs" aria-label="国家"></nav>
+
+      <section class="toolbar" aria-label="日期控制">
+        <label for="datePicker">快照日期</label>
+        <button class="icon-button" id="prevDate" type="button" aria-label="上一天" title="上一天">‹</button>
+        <select id="datePicker"></select>
+        <button class="icon-button" id="nextDate" type="button" aria-label="下一天" title="下一天">›</button>
+        <button class="text-button" id="todayButton" type="button">回到最新</button>
+        <span class="coverage" id="coverageText"></span>
+      </section>
+
+      <section class="alert-band hidden" id="alertBand" aria-live="polite">
+        <div class="alert-title">天气预警</div>
+        <div id="alertList"></div>
+      </section>
+
+      <section class="summary-grid" id="summaryGrid" aria-label="当前国家概览"></section>
+
+      <section class="section-head">
+        <div>
+          <p class="eyebrow" id="countryEyebrow">--</p>
+          <h2 id="cardsTitle">当前天气</h2>
+        </div>
+      </section>
+      <section class="cards-grid" id="regionCards" aria-label="当前天气"></section>
+
+      <section class="section-head forecast-head">
+        <div>
+          <p class="eyebrow">7-Day Forecast</p>
+          <h2>城市预报</h2>
+        </div>
+        <div class="forecast-tabs" id="forecastTabs" aria-label="预报城市"></div>
+      </section>
+      <section class="forecast-wrap" id="forecastWrap" aria-label="7 日预报"></section>
+    </main>
+
+    <footer class="footer">
+      Data source: Open-Meteo. Historical snapshots were extracted from the original AgentOS page.
+    </footer>
+
+    <script src="assets/weather-data.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
