@@ -1,19 +1,20 @@
 # North America Weather Monitor
 
-Static GitHub Pages version of the AgentOS weather monitor.
+Static GitHub Pages version of the AgentOS weather monitor with an automated weather archive.
 
 ## Data
 
-The original page data was captured from:
+The seed data was captured from:
 
 `https://59011d4df1f24e5d920841470fc11952.gz5.agentos-app.net`
 
-Extracted files:
+Data files:
 
 - `assets/weather-data.json`: readable JSON archive
 - `assets/weather-data.js`: same data exposed as `window.WEATHER_DATA` for static hosting
+- `scripts/update-weather-data.mjs`: daily Open-Meteo updater used by GitHub Actions
 
-Captured archive summary:
+Captured archive summary at seed time:
 
 - Latest snapshot: `2026-08-24`
 - Generated at: `2026-08-24 00:39 UTC`
@@ -21,8 +22,20 @@ Captured archive summary:
 - Countries: United States, Canada, Australia
 - Cities: 15
 
+## Automatic Updates
+
+The workflow at `.github/workflows/pages.yml` runs every day at `00:35 UTC` and can also be started manually from the Actions tab.
+
+Scheduled/manual runs:
+
+1. Fetch current weather and 7-day forecasts for all 15 cities from Open-Meteo.
+2. Save the new UTC snapshot as `today_data`.
+3. Preserve the snapshot in `history[YYYY-MM-DD]`.
+4. Commit updated data files back to `main`.
+5. Deploy the refreshed site to GitHub Pages.
+
+Pushes to `main` deploy the static site without fetching fresh weather.
+
 ## GitHub Pages
 
-This site has no build step. The included workflow at `.github/workflows/pages.yml` publishes the static files to GitHub Pages on every push to `main`.
-
-In repository settings, set Pages to use GitHub Actions if it is not already enabled.
+This site has no build step. In repository settings, set Pages to use GitHub Actions if it is not already enabled.
