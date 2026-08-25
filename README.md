@@ -16,11 +16,13 @@ Data files:
 
 Captured archive summary at seed time:
 
+Canada is monitored by priority sales provinces: Ontario (Toronto), Quebec (Montreal), British Columbia (Whistler), and Alberta (Calgary).
+
 - Latest snapshot: `2026-08-24`
 - Generated at: `2026-08-24 00:39 UTC`
 - Historical dates: 10 snapshots from `2026-08-12` to `2026-08-24`
 - Countries: United States, Canada, Australia
-- Cities: 18
+- Monitoring points: 16
 
 ## Automatic Updates
 
@@ -28,7 +30,7 @@ The workflow at `.github/workflows/pages.yml` runs every day at `00:35 UTC` and 
 
 Scheduled/manual runs:
 
-1. Fetch current weather and 7-day forecasts for all 18 cities from Open-Meteo.
+1. Fetch current weather and 7-day forecasts for all 16 monitoring points from Open-Meteo.
 2. Save the new UTC snapshot as `today_data`.
 3. Preserve the snapshot in `history[YYYY-MM-DD]`.
 4. Commit updated data files back to `main`.
@@ -39,3 +41,5 @@ Pushes to `main` deploy the static site without fetching fresh weather.
 ## GitHub Pages
 
 This site has no build step. In repository settings, set Pages to use GitHub Actions if it is not already enabled.
+
+
