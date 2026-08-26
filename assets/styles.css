@@ -576,7 +576,7 @@ h2 {
 .calendar-weekdays,
 .weather-calendar {
   display: grid;
-  grid-template-columns: repeat(7, minmax(112px, 1fr));
+  grid-template-columns: repeat(7, minmax(132px, 1fr));
 }
 
 .calendar-weekdays {
@@ -622,7 +622,7 @@ h2 {
 
 .calendar-body {
   display: grid;
-  grid-template-columns: 46px minmax(0, 1fr);
+  grid-template-columns: 42px minmax(0, 1fr);
   gap: 8px;
   align-items: center;
   min-height: 56px;
@@ -638,11 +638,11 @@ h2 {
 .calendar-temps {
   display: grid;
   gap: 1px;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .calendar-temps strong {
-  font-size: 19px;
+  font-size: 15px;
   line-height: 1.1;
 }
 
@@ -669,6 +669,6 @@ h2 {
   .calendar-title-row,
   .calendar-weekdays,
   .weather-calendar {
-    min-width: 784px;
+    min-width: 924px;
   }
 }

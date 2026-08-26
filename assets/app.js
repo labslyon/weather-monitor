@@ -352,8 +352,8 @@
           '<div class="calendar-body">' +
             '<div class="calendar-icon">' + (entry ? (entry.weather_icon || w[1]) : '') + '</div>' +
             '<div class="calendar-temps">' +
-              '<strong>' + (entry ? fmtF(entry.temp_max) : '--') + '</strong>' +
-              '<span>' + (entry ? fmtF(entry.temp_min) : '--') + '</span>' +
+              '<strong>' + (entry ? fmtFC(entry.temp_max) : '--') + '</strong>' +
+              '<span>' + (entry ? fmtFC(entry.temp_min) : '--') + '</span>' +
             '</div>' +
           '</div>' +
           '<div class="calendar-meta">' + (entry ? fmtIn(entry.precipitation) + ' · ' + fmtMph(entry.windspeed_max) : 'No data') + '</div>' +
