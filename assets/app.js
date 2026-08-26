@@ -8,11 +8,14 @@
   var state = {
     country: 'US',
     date: DATA.today,
-    forecastRegion: null
+    forecastRegion: null,
+    calendarRegion: null,
+    calendarMonth: null
   };
 
   var countries = DATA.countries || {};
   var weatherCodes = DATA.weather_codes || {};
+  var weekdayLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   var els = {
     countryTabs: document.getElementById('countryTabs'),
@@ -24,6 +27,10 @@
     alertBand: document.getElementById('alertBand'),
     alertList: document.getElementById('alertList'),
     summaryGrid: document.getElementById('summaryGrid'),
+    dailyMetrics: document.getElementById('dailyMetrics'),
+    calendarRegionTabs: document.getElementById('calendarRegionTabs'),
+    monthTabs: document.getElementById('monthTabs'),
+    calendarWrap: document.getElementById('calendarWrap'),
     countryEyebrow: document.getElementById('countryEyebrow'),
     cardsTitle: document.getElementById('cardsTitle'),
     regionCards: document.getElementById('regionCards'),
@@ -86,10 +93,37 @@
     });
   }
 
+  function fmtMonth(monthKey) {
+    var dt = new Date(monthKey + '-01T12:00:00Z');
+    return dt.toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      timeZone: 'UTC'
+    });
+  }
+
   function fmtLocalTime(value) {
     if (!value) return '--';
     var parts = value.split('T');
     return parts.length === 2 ? parts[0] + ' ' + parts[1] : value;
+  }
+
+  function addDays(date, days) {
+    var dt = new Date(date + 'T12:00:00Z');
+    dt.setUTCDate(dt.getUTCDate() + days);
+    return dt.toISOString().slice(0, 10);
+  }
+
+  function daysInMonth(year, monthIndex) {
+    return new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+  }
+
+  function monthKey(date) {
+    return date ? date.slice(0, 7) : '';
+  }
+
+  function dailyArchive(regionKey) {
+    return ((((DATA.daily_archive || {}).regions || {})[regionKey]) || {});
   }
 
   function renderHeader() {
@@ -97,10 +131,12 @@
     var first = allDates[0] || '--';
     var last = allDates[allDates.length - 1] || '--';
     var regions = Object.keys((DATA.today_data || {}).regions || {}).length;
+    var archive = DATA.daily_archive || {};
+    var archiveText = archive.range ? ' · 月历：' + archive.range.start + ' 至 ' + archive.range.end : '';
     els.statDates.textContent = allDates.length + ' 天';
     els.statCities.textContent = regions;
     els.statGenerated.textContent = (DATA.today_data && DATA.today_data.generated_at) || '--';
-    els.coverageText.textContent = '历史范围：' + first + ' 至 ' + last;
+    els.coverageText.textContent = '快照：' + first + ' 至 ' + last + archiveText;
   }
 
   function renderCountryTabs() {
@@ -206,6 +242,133 @@
     }).join('');
   }
 
+  function operationalSignal(entry) {
+    if (!entry) return { value: '--', note: 'No daily data' };
+    if (entry.precipitation != null && entry.precipitation >= 0.2) {
+      return { value: 'Rain Gear', note: '推防水包、雨衣、鞋套' };
+    }
+    if (entry.windspeed_max != null && entry.windspeed_max >= 18) {
+      return { value: 'Wind Watch', note: '骑行广告谨慎，关注室内/维修' };
+    }
+    if (entry.temp_max != null && entry.temp_max >= 90) {
+      return { value: 'Heat Ride', note: '推补水、防晒、透气装备' };
+    }
+    if (entry.temp_min != null && entry.temp_min <= 32) {
+      return { value: 'Snow / Cold', note: '推滑雪、保暖、手套护具' };
+    }
+    if (entry.temp_max != null && entry.temp_max >= 60 && entry.temp_max <= 86) {
+      return { value: 'Cycling Boost', note: '适合提高骑行类预算' };
+    }
+    return { value: 'Neutral', note: '维持常规投放' };
+  }
+
+  function renderCalendar(snapshot) {
+    var rows = getCountryRows(snapshot).filter(function (row) {
+      return Object.keys(dailyArchive(row.region_key)).length > 0;
+    });
+
+    if (!rows.length) {
+      els.calendarRegionTabs.innerHTML = '';
+      els.monthTabs.innerHTML = '';
+      els.dailyMetrics.innerHTML = '<div class="summary-item">No archive data</div>';
+      els.calendarWrap.innerHTML = '';
+      return;
+    }
+
+    if (!state.calendarRegion || !rows.some(function (row) { return row.region_key === state.calendarRegion; })) {
+      state.calendarRegion = state.forecastRegion && rows.some(function (row) { return row.region_key === state.forecastRegion; })
+        ? state.forecastRegion
+        : rows[0].region_key;
+    }
+
+    var selected = rows.filter(function (row) { return row.region_key === state.calendarRegion; })[0];
+    var archive = dailyArchive(selected.region_key);
+    var availableMonths = Object.keys(archive).map(monthKey).filter(function (value, index, arr) {
+      return value && arr.indexOf(value) === index;
+    }).sort();
+
+    if (!state.calendarMonth || availableMonths.indexOf(state.calendarMonth) < 0) {
+      state.calendarMonth = monthKey(DATA.today) && availableMonths.indexOf(monthKey(DATA.today)) >= 0
+        ? monthKey(DATA.today)
+        : availableMonths[availableMonths.length - 1];
+    }
+
+    els.calendarRegionTabs.innerHTML = rows.map(function (row) {
+      var active = row.region_key === state.calendarRegion ? ' active' : '';
+      return '<button type="button" class="' + active + '" data-calendar-region="' + row.region_key + '">' + row.city + '</button>';
+    }).join('');
+
+    els.monthTabs.innerHTML = availableMonths.map(function (month) {
+      var active = month === state.calendarMonth ? ' active' : '';
+      return '<button type="button" class="' + active + '" data-calendar-month="' + month + '">' + fmtMonth(month) + '</button>';
+    }).join('');
+
+    renderDailyMetrics(selected, archive);
+    renderMonthCalendar(selected, archive);
+  }
+
+  function renderDailyMetrics(selected, archive) {
+    var today = archive[DATA.today];
+    var signal = operationalSignal(today);
+    var current = selected.current || {};
+    els.dailyMetrics.innerHTML = [
+      metricItem('今日最高', today ? fmtFC(today.temp_max) : '--', selected.city),
+      metricItem('今日最低', today ? fmtFC(today.temp_min) : '--', selected.region),
+      metricItem('当前天气', current.weather_desc || (today ? today.weather_desc : '--'), fmtF(current.temperature)),
+      metricItem('运营信号', signal.value, signal.note)
+    ].join('');
+  }
+
+  function metricItem(label, value, note) {
+    return '<div class="metric-card">' +
+      '<div class="label">' + label + '</div>' +
+      '<div class="value">' + value + '</div>' +
+      '<div class="note">' + note + '</div>' +
+      '</div>';
+  }
+
+  function renderMonthCalendar(selected, archive) {
+    var parts = state.calendarMonth.split('-').map(Number);
+    var year = parts[0];
+    var monthIndex = parts[1] - 1;
+    var firstDate = state.calendarMonth + '-01';
+    var first = new Date(firstDate + 'T12:00:00Z');
+    var leading = (first.getUTCDay() + 6) % 7;
+    var monthDays = daysInMonth(year, monthIndex);
+    var totalCells = Math.max(35, Math.ceil((leading + monthDays) / 7) * 7);
+    var startDate = addDays(firstDate, -leading);
+    var cells = [];
+
+    for (var i = 0; i < totalCells; i++) {
+      var date = addDays(startDate, i);
+      var entry = archive[date];
+      var outside = monthKey(date) !== state.calendarMonth;
+      var today = date === DATA.today;
+      var dayNumber = Number(date.slice(8, 10));
+      var w = entry ? weather(entry.weathercode) : ['', ''];
+      cells.push(
+        '<div class="calendar-cell' + (outside ? ' outside' : '') + (today ? ' today' : '') + '">' +
+          '<div class="calendar-date">' + dayNumber + '</div>' +
+          '<div class="calendar-body">' +
+            '<div class="calendar-icon">' + (entry ? (entry.weather_icon || w[1]) : '') + '</div>' +
+            '<div class="calendar-temps">' +
+              '<strong>' + (entry ? fmtF(entry.temp_max) : '--') + '</strong>' +
+              '<span>' + (entry ? fmtF(entry.temp_min) : '--') + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="calendar-meta">' + (entry ? fmtIn(entry.precipitation) + ' · ' + fmtMph(entry.windspeed_max) : 'No data') + '</div>' +
+        '</div>'
+      );
+    }
+
+    els.calendarWrap.innerHTML = '<div class="calendar-title-row">' +
+      '<div><strong>' + selected.city + '</strong><span>' + selected.region + '</span></div>' +
+      '<div>' + fmtMonth(state.calendarMonth) + '</div>' +
+      '</div>' +
+      '<div class="calendar-weekdays">' + weekdayLabels.map(function (day) { return '<div>' + day + '</div>'; }).join('') + '</div>' +
+      '<div class="weather-calendar">' + cells.join('') + '</div>';
+  }
+
   function renderForecast(snapshot) {
     var rows = getCountryRows(snapshot).filter(function (row) {
       return row.daily && row.daily.dates;
@@ -254,6 +417,7 @@
     renderDatePicker();
     renderSummary(snapshot);
     renderAlerts(snapshot);
+    renderCalendar(snapshot);
     renderCards(snapshot);
     renderForecast(snapshot);
   }
@@ -263,6 +427,8 @@
     if (!button) return;
     state.country = button.getAttribute('data-country');
     state.forecastRegion = null;
+    state.calendarRegion = null;
+    state.calendarMonth = null;
     render();
   });
 
@@ -273,9 +439,25 @@
     renderForecast(getSnapshot(state.date));
   });
 
+  els.calendarRegionTabs.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-calendar-region]');
+    if (!button) return;
+    state.calendarRegion = button.getAttribute('data-calendar-region');
+    state.calendarMonth = null;
+    renderCalendar(getSnapshot(state.date));
+  });
+
+  els.monthTabs.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-calendar-month]');
+    if (!button) return;
+    state.calendarMonth = button.getAttribute('data-calendar-month');
+    renderCalendar(getSnapshot(state.date));
+  });
+
   els.datePicker.addEventListener('change', function () {
     state.date = els.datePicker.value;
     state.forecastRegion = null;
+    state.calendarRegion = null;
     render();
   });
 
@@ -285,6 +467,7 @@
     if (index > 0) {
       state.date = allDates[index - 1];
       state.forecastRegion = null;
+      state.calendarRegion = null;
       render();
     }
   });
@@ -295,6 +478,7 @@
     if (index >= 0 && index < allDates.length - 1) {
       state.date = allDates[index + 1];
       state.forecastRegion = null;
+      state.calendarRegion = null;
       render();
     }
   });
@@ -302,6 +486,7 @@
   els.todayButton.addEventListener('click', function () {
     state.date = DATA.today;
     state.forecastRegion = null;
+    state.calendarRegion = null;
     render();
   });
 
