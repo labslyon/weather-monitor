@@ -69,6 +69,55 @@ function weatherInfo(code) {
   return WEATHER_CODES[Number(code)] || ['Unknown', '?'];
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchJsonWithRetry(url, regionKey, label) {
+  const delays = [1000, 3000, 7000];
+  let lastError;
+
+  for (let attempt = 0; attempt <= delays.length; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          accept: 'application/json',
+          'user-agent': 'weather-monitor-github-actions'
+        }
+      });
+
+      if (response.ok) {
+        return await response.json();
+      }
+
+      const body = await response.text().catch(() => '');
+      lastError = new Error(`${label} request failed for ${regionKey}: ${response.status} ${response.statusText}${body ? ` - ${body.slice(0, 240)}` : ''}`);
+    } catch (error) {
+      lastError = error;
+    }
+
+    if (attempt < delays.length) {
+      console.warn(`${label} request retry ${attempt + 1}/${delays.length} for ${regionKey}: ${lastError.message}`);
+      await sleep(delays[attempt]);
+    }
+  }
+
+  throw lastError;
+}
+async function mapWithConcurrency(items, limit, mapper) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (nextIndex < items.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      results[index] = await mapper(items[index], index);
+    }
+  });
+
+  await Promise.all(workers);
+  return results;
+}
 function buildAlerts(current, daily) {
   const alerts = [];
   const temp = current.temperature;
@@ -160,18 +209,11 @@ function dailyEntry(date, code, max, min, precip, wind, gust, source) {
 async function fetchDailyArchive(region, startDate, endDate) {
   if (endDate < startDate) return {};
 
-  const response = await fetch(buildArchiveUrl(region, startDate, endDate), {
-    headers: {
-      accept: 'application/json',
-      'user-agent': 'weather-monitor-github-actions'
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Open-Meteo archive request failed for ${region.region_key}: ${response.status} ${response.statusText}`);
-  }
-
-  const payload = await response.json();
+  const payload = await fetchJsonWithRetry(
+    buildArchiveUrl(region, startDate, endDate),
+    region.region_key,
+    'Open-Meteo archive'
+  );
   const daily = payload.daily || {};
   const dates = daily.time || [];
 
@@ -191,18 +233,11 @@ async function fetchDailyArchive(region, startDate, endDate) {
 }
 
 async function fetchRegion(region) {
-  const response = await fetch(buildUrl(region), {
-    headers: {
-      accept: 'application/json',
-      'user-agent': 'weather-monitor-github-actions'
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Open-Meteo request failed for ${region.region_key}: ${response.status} ${response.statusText}`);
-  }
-
-  const payload = await response.json();
+  const payload = await fetchJsonWithRetry(
+    buildUrl(region),
+    region.region_key,
+    'Open-Meteo forecast'
+  );
   const code = payload.current?.weather_code;
   const [weather_desc, weather_icon] = weatherInfo(code);
 
@@ -279,20 +314,43 @@ async function main() {
     throw new Error('No region metadata found in weather data.');
   }
 
-  const fetched = await Promise.all(seeds.map(fetchRegion));
+  const fetched = await mapWithConcurrency(seeds, 4, async (seed) => {
+    try {
+      return await fetchRegion(seed);
+    } catch (error) {
+      const fallback = data.today_data?.regions?.[seed.region_key];
+      if (!fallback) throw error;
+      console.warn(`Using stale weather data for ${seed.region_key}: ${error.message}`);
+      return { ...fallback, stale: true };
+    }
+  });
+  const freshCount = fetched.filter((region) => !region.stale).length;
+
+  if (freshCount === 0) {
+    throw new Error('All Open-Meteo forecast requests failed; refusing to publish a fully stale snapshot.');
+  }
+
   const regions = Object.fromEntries(fetched.map((region) => [region.region_key, region]));
   const snapshotDate = todayUtc();
   const archiveStart = minDate(monthStart(snapshotDate), addDays(snapshotDate, -30));
   const archiveEnd = addDays(snapshotDate, -1);
-  const archiveEntries = await Promise.all(fetched.map(async (region) => {
-    const history = await fetchDailyArchive(region, archiveStart, archiveEnd);
+  const archiveEntries = await mapWithConcurrency(fetched, 3, async (region) => {
+    const existing = (((data.daily_archive || {}).regions || {})[region.region_key] || {});
+    let history = {};
+
+    try {
+      history = await fetchDailyArchive(region, archiveStart, archiveEnd);
+    } catch (error) {
+      console.warn(`Keeping existing archive for ${region.region_key}: ${error.message}`);
+    }
+
     const forecast = forecastArchiveEntries(region);
     return [region.region_key, {
-      ...(((data.daily_archive || {}).regions || {})[region.region_key] || {}),
+      ...existing,
       ...history,
-      [snapshotDate]: forecast[snapshotDate] || history[snapshotDate]
+      [snapshotDate]: forecast[snapshotDate] || history[snapshotDate] || existing[snapshotDate]
     }];
-  }));
+  });
 
   const snapshot = {
     generated_at: generatedAt(),
@@ -331,7 +389,9 @@ async function main() {
     last_history_date: historyDates[historyDates.length - 1],
     daily_archive_start: archiveStart,
     daily_archive_end: snapshotDate,
-    region_count: Object.keys(regions).length
+    region_count: Object.keys(regions).length,
+    fresh_region_count: freshCount,
+    stale_region_count: fetched.length - freshCount
   }, null, 2));
 
   if (dryRun) return;
