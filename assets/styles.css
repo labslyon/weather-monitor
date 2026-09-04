@@ -447,7 +447,7 @@ h2 {
 .overview-signal {
   position: relative;
   min-width: 0;
-  min-height: 142px;
+  min-height: 224px;
   padding: 17px 18px 15px;
   overflow: hidden;
   background: var(--panel);
@@ -523,17 +523,46 @@ h2 {
 }
 
 .overview-signal-list {
-  margin-top: 8px;
-  overflow: hidden;
+  display: grid;
+  gap: 0;
+  margin-top: 10px;
   color: var(--text);
   font-size: 12px;
   font-weight: 720;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+}
+
+.overview-signal-country {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.overview-signal-country:last-child {
+  border-bottom: 0;
+}
+
+.overview-signal-country span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.overview-signal-country strong {
+  min-width: 0;
+  color: var(--heading);
+  font-size: 11px;
+  font-weight: 760;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .overview-signal-note {
-  margin-top: 3px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line-soft);
   color: var(--muted);
   font-size: 11px;
 }
@@ -1286,8 +1315,12 @@ h2 {
   }
 
   .overview-signal {
-    min-height: 148px;
+    min-height: 0;
     padding: 15px 14px 13px;
+  }
+
+  .overview-signals {
+    grid-template-columns: 1fr;
   }
 
   .market-summary {

@@ -15,6 +15,7 @@
   };
 
   var countries = DATA.countries || {};
+  var countryLabels = { US: '美国', CA: '加拿大', AU: '澳大利亚' };
   var weatherCodes = DATA.weather_codes || {};
   var weekdayLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
@@ -242,17 +243,26 @@
     };
   }
 
-  function signalNames(items) {
-    if (!items.length) return '暂无匹配区域';
-    var names = items.slice(0, 3).map(function (item) { return item.row.city; }).join(' · ');
-    return names + (items.length > 3 ? ' +' + (items.length - 3) : '');
+  function signalGroups(items) {
+    return Object.keys(countries).map(function (countryKey) {
+      var names = items.filter(function (item) {
+        return item.countryKey === countryKey;
+      }).map(function (item) {
+        return item.row.city;
+      }).join('、');
+
+      return '<div class="overview-signal-country">' +
+        '<span>' + (countryLabels[countryKey] || countryKey) + '</span>' +
+        '<strong>' + (names || '暂无') + '</strong>' +
+        '</div>';
+    }).join('');
   }
 
   function overviewSignal(label, note, tone, items) {
     return '<article class="overview-signal tone-' + tone + '">' +
       '<div class="overview-signal-head"><span>' + label + '</span><i aria-hidden="true"></i></div>' +
       '<div class="overview-signal-value">' + items.length + '</div>' +
-      '<div class="overview-signal-list">' + signalNames(items) + '</div>' +
+      '<div class="overview-signal-list">' + signalGroups(items) + '</div>' +
       '<div class="overview-signal-note">' + note + '</div>' +
       '</article>';
   }
