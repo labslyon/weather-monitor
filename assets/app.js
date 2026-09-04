@@ -223,7 +223,15 @@
 
     els.regionCards.innerHTML = rows.map(function (row) {
       var current = row.current || {};
+      var daily = row.daily || {};
       var hasAlerts = (row.alerts || []).length > 0;
+      var todayEntry = {
+        temp_max: daily.temp_max ? daily.temp_max[0] : null,
+        temp_min: daily.temp_min ? daily.temp_min[0] : null,
+        precipitation: daily.precipitation ? daily.precipitation[0] : null,
+        windspeed_max: daily.windspeed_max ? daily.windspeed_max[0] : null
+      };
+      var signal = operationalSignal(todayEntry);
       return '<article class="weather-card' + (hasAlerts ? ' has-alerts' : '') + '">' +
         '<div class="city-row">' +
         '<div><div class="region-badge">' + row.region + '</div><div class="city-name">' + row.city + '</div></div>' +
@@ -232,6 +240,7 @@
         '<div class="temp-main">' + fmtF(current.temperature) + '</div>' +
         '<div class="temp-c">' + fmtC(current.temperature) + '</div>' +
         '<div class="condition">' + (current.weather_desc || '--') + '</div>' +
+        '<div class="signal-row"><span>运营信号</span><strong>' + signal.value + '</strong></div>' +
         '<div class="details">' +
         '<span>Wind</span><strong>' + fmtMph(current.windspeed) + '</strong>' +
         '<span>Direction</span><strong>' + (current.winddirection == null ? '--' : current.winddirection + '°') + '</strong>' +

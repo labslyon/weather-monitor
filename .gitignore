@@ -1,3 +1,4 @@
 artifacts/
 source.html
 scripts/verify-render.cjs
+.design-reference/
