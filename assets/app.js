@@ -18,6 +18,10 @@
   var weekdayLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   var els = {
+    overviewDate: document.getElementById('overviewDate'),
+    overviewSignals: document.getElementById('overviewSignals'),
+    marketOverview: document.getElementById('marketOverview'),
+    countryDetails: document.getElementById('countryDetails'),
     countryTabs: document.getElementById('countryTabs'),
     datePicker: document.getElementById('datePicker'),
     prevDate: document.getElementById('prevDate'),
@@ -63,8 +67,13 @@
     return value == null ? '--' : Math.round(value) + '°F';
   }
 
+  function toC(value) {
+    return value == null ? null : (value - 32) * 5 / 9;
+  }
+
   function fmtC(value) {
-    return value == null ? '--' : Math.round((value - 32) * 5 / 9) + '°C';
+    var converted = toC(value);
+    return converted == null ? '--' : Math.round(converted) + '°C';
   }
 
   function fmtCF(value) {
@@ -124,6 +133,189 @@
 
   function dailyArchive(regionKey) {
     return ((((DATA.daily_archive || {}).regions || {})[regionKey]) || {});
+  }
+
+  function numericValues(values) {
+    return (values || []).filter(function (value) {
+      return typeof value === 'number' && isFinite(value);
+    });
+  }
+
+  function average(values) {
+    var clean = numericValues(values);
+    if (!clean.length) return null;
+    return clean.reduce(function (sum, value) { return sum + value; }, 0) / clean.length;
+  }
+
+  function dailyMidpointF(row, index) {
+    var daily = row.daily || {};
+    var high = daily.temp_max ? daily.temp_max[index] : null;
+    var low = daily.temp_min ? daily.temp_min[index] : null;
+    if (high == null && low == null) return null;
+    if (high == null) return low;
+    if (low == null) return high;
+    return (high + low) / 2;
+  }
+
+  function trendState(deltaC) {
+    if (deltaC == null) return { label: '数据不足', tone: 'stable' };
+    if (deltaC <= -2) return { label: '降温', tone: 'cooling' };
+    if (deltaC >= 2) return { label: '升温', tone: 'warming' };
+    return { label: '平稳', tone: 'stable' };
+  }
+
+  function fmtCPrecise(value) {
+    var converted = toC(value);
+    return converted == null ? '--' : converted.toFixed(1) + '°C';
+  }
+
+  function fmtCRange(minF, maxF) {
+    if (minF == null || maxF == null) return '--';
+    return Math.round(toC(minF)) + '–' + Math.round(toC(maxF)) + '°C';
+  }
+
+  function fmtTrend(deltaC) {
+    if (deltaC == null) return '--';
+    if (deltaC > 0.05) return '上升 ' + Math.abs(deltaC).toFixed(1) + '°C';
+    if (deltaC < -0.05) return '下降 ' + Math.abs(deltaC).toFixed(1) + '°C';
+    return '持平 0.0°C';
+  }
+
+  function regionOutlook(row, countryKey) {
+    var daily = row.daily || {};
+    var highs = numericValues(daily.temp_max);
+    var lows = numericValues(daily.temp_min);
+    var forecastLength = Math.max((daily.dates || []).length, highs.length, lows.length);
+    var lastIndex = forecastLength ? Math.min(6, forecastLength - 1) : 0;
+    var startF = dailyMidpointF(row, 0);
+    var endF = dailyMidpointF(row, lastIndex);
+    var currentF = (row.current || {}).temperature;
+    var trendC = startF == null || endF == null ? null : (endF - startF) * 5 / 9;
+    var rainyDays = numericValues(daily.precipitation).filter(function (value) {
+      return value >= 0.1;
+    }).length;
+    var snowDays = (daily.weathercode || []).filter(function (code) {
+      return [71, 73, 75, 77, 85, 86].indexOf(Number(code)) >= 0;
+    }).length;
+    var minF = lows.length ? Math.min.apply(null, lows) : null;
+    var maxF = highs.length ? Math.max.apply(null, highs) : null;
+
+    return {
+      row: row,
+      countryKey: countryKey,
+      currentF: currentF == null ? startF : currentF,
+      minF: minF,
+      maxF: maxF,
+      trendC: trendC,
+      rainyDays: rainyDays,
+      snowDays: snowDays,
+      isCold: snowDays > 0 || (minF != null && toC(minF) <= 2)
+    };
+  }
+
+  function allRegionOutlooks(snapshot) {
+    var regions = snapshot && snapshot.regions ? snapshot.regions : {};
+    var result = [];
+    Object.keys(countries).forEach(function (countryKey) {
+      regionKeys(countryKey).forEach(function (regionKey) {
+        if (regions[regionKey]) result.push(regionOutlook(regions[regionKey], countryKey));
+      });
+    });
+    return result;
+  }
+
+  function countryOutlook(countryKey, snapshot) {
+    var regions = snapshot && snapshot.regions ? snapshot.regions : {};
+    var items = regionKeys(countryKey).map(function (regionKey) {
+      return regions[regionKey] ? regionOutlook(regions[regionKey], countryKey) : null;
+    }).filter(Boolean);
+    var minimums = numericValues(items.map(function (item) { return item.minF; }));
+    var maximums = numericValues(items.map(function (item) { return item.maxF; }));
+
+    return {
+      countryKey: countryKey,
+      items: items,
+      currentF: average(items.map(function (item) { return item.currentF; })),
+      minF: minimums.length ? Math.min.apply(null, minimums) : null,
+      maxF: maximums.length ? Math.max.apply(null, maximums) : null,
+      trendC: average(items.map(function (item) { return item.trendC; })),
+      rainyDays: average(items.map(function (item) { return item.rainyDays; }))
+    };
+  }
+
+  function signalNames(items) {
+    if (!items.length) return '暂无匹配区域';
+    var names = items.slice(0, 3).map(function (item) { return item.row.city; }).join(' · ');
+    return names + (items.length > 3 ? ' +' + (items.length - 3) : '');
+  }
+
+  function overviewSignal(label, note, tone, items) {
+    return '<article class="overview-signal tone-' + tone + '">' +
+      '<div class="overview-signal-head"><span>' + label + '</span><i aria-hidden="true"></i></div>' +
+      '<div class="overview-signal-value">' + items.length + '</div>' +
+      '<div class="overview-signal-list">' + signalNames(items) + '</div>' +
+      '<div class="overview-signal-note">' + note + '</div>' +
+      '</article>';
+  }
+
+  function renderOverview(snapshot) {
+    if (!snapshot) {
+      els.overviewDate.textContent = '--';
+      els.overviewSignals.innerHTML = '';
+      els.marketOverview.innerHTML = '';
+      return;
+    }
+
+    var allItems = allRegionOutlooks(snapshot);
+    var cooling = allItems.filter(function (item) { return item.trendC != null && item.trendC <= -2; });
+    var warming = allItems.filter(function (item) { return item.trendC != null && item.trendC >= 2; });
+    var rainy = allItems.filter(function (item) { return item.rainyDays >= 2; });
+    var cold = allItems.filter(function (item) { return item.isCold; });
+
+    els.overviewDate.textContent = '最新快照 · ' + DATA.today;
+    els.overviewSignals.innerHTML = [
+      overviewSignal('降温区域', '7 日趋势 ≤ -2°C', 'cooling', cooling),
+      overviewSignal('升温区域', '7 日趋势 ≥ 2°C', 'warming', warming),
+      overviewSignal('降雨区域', '未来 7 天至少 2 个雨天', 'rainy', rainy),
+      overviewSignal('低温区域', '未来 7 天最低温 ≤ 2°C', 'cold', cold)
+    ].join('');
+
+    els.marketOverview.innerHTML = Object.keys(countries).map(function (countryKey) {
+      var country = countries[countryKey];
+      var outlook = countryOutlook(countryKey, snapshot);
+      var status = trendState(outlook.trendC);
+      var rainText = outlook.rainyDays == null ? '--' : outlook.rainyDays.toFixed(1).replace('.0', '') + ' / 7 天';
+      var cities = outlook.items.map(function (item) {
+        var row = item.row;
+        var cityStatus = trendState(item.trendC);
+        var current = row.current || {};
+        var firstCode = ((row.daily || {}).weathercode || [])[0];
+        var condition = current.weather_desc || weather(firstCode)[0];
+        return '<div class="market-city">' +
+          '<div class="market-city-top"><strong>' + row.city + '</strong><span>' + fmtCPrecise(item.currentF) + '</span></div>' +
+          '<div class="market-city-region">' + row.region + '</div>' +
+          '<div class="market-city-metrics"><span>' + fmtCRange(item.minF, item.maxF) + '</span><span>' + item.rainyDays + ' / 7 雨天</span></div>' +
+          '<div class="market-city-foot"><span>' + condition + '</span><strong class="tone-' + cityStatus.tone + '">' + fmtTrend(item.trendC) + '</strong></div>' +
+          '</div>';
+      }).join('');
+
+      return '<article class="market-row">' +
+        '<div class="market-summary">' +
+          '<div class="market-title-row">' +
+            '<div><span class="market-code">' + countryKey + '</span><h3>' + country.name + '</h3></div>' +
+            '<span class="market-status tone-' + status.tone + '">' + status.label + '</span>' +
+          '</div>' +
+          '<dl class="market-kpis">' +
+            '<div><dt>平均当前温度</dt><dd>' + fmtCPrecise(outlook.currentF) + '</dd></div>' +
+            '<div><dt>未来 7 天范围</dt><dd>' + fmtCRange(outlook.minF, outlook.maxF) + '</dd></div>' +
+            '<div><dt>温度趋势</dt><dd>' + fmtTrend(outlook.trendC) + '</dd></div>' +
+            '<div><dt>区域平均雨天</dt><dd>' + rainText + '</dd></div>' +
+          '</dl>' +
+          '<button class="market-detail-button" type="button" data-overview-country="' + countryKey + '">查看国家详情 <span aria-hidden="true">→</span></button>' +
+        '</div>' +
+        '<div class="market-cities">' + cities + '</div>' +
+        '</article>';
+    }).join('');
   }
 
   function renderHeader() {
@@ -422,6 +614,7 @@
   function render() {
     var snapshot = getSnapshot(state.date);
     renderHeader();
+    renderOverview(DATA.today_data || snapshot);
     renderCountryTabs();
     renderDatePicker();
     renderSummary(snapshot);
@@ -439,6 +632,18 @@
     state.calendarRegion = null;
     state.calendarMonth = null;
     render();
+  });
+
+  els.marketOverview.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-overview-country]');
+    if (!button) return;
+    state.country = button.getAttribute('data-overview-country');
+    state.date = DATA.today;
+    state.forecastRegion = null;
+    state.calendarRegion = null;
+    state.calendarMonth = null;
+    render();
+    els.countryDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   els.forecastTabs.addEventListener('click', function (event) {
