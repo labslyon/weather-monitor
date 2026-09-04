@@ -67,8 +67,8 @@
     return value == null ? '--' : Math.round((value - 32) * 5 / 9) + '°C';
   }
 
-  function fmtFC(value) {
-    return value == null ? '--' : fmtF(value) + ' / ' + fmtC(value);
+  function fmtCF(value) {
+    return value == null ? '--' : fmtC(value) + ' / ' + fmtF(value);
   }
 
   function fmtMph(value) {
@@ -182,7 +182,7 @@
     }, 0);
 
     els.summaryGrid.innerHTML = [
-      summaryItem('最高当前温度', hottest ? fmtFC(hottest.current.temperature) : '--', hottest ? hottest.city : '--'),
+      summaryItem('最高当前温度', hottest ? fmtCF(hottest.current.temperature) : '--', hottest ? hottest.city : '--'),
       summaryItem('7 日降水最多', wettest ? fmtIn(wettest.total) : '--', wettest ? wettest.row.city : '--'),
       summaryItem('预警数量', String(alertCount), alertCount ? '需要关注' : '当前国家无预警')
     ].join('');
@@ -237,8 +237,8 @@
         '<div><div class="region-badge">' + row.region + '</div><div class="city-name">' + row.city + '</div></div>' +
         '<div class="weather-icon" aria-hidden="true">' + (current.weather_icon || '?') + '</div>' +
         '</div>' +
-        '<div class="temp-main">' + fmtF(current.temperature) + '</div>' +
-        '<div class="temp-c">' + fmtC(current.temperature) + '</div>' +
+        '<div class="temp-main">' + fmtC(current.temperature) + '</div>' +
+        '<div class="temp-secondary">' + fmtF(current.temperature) + '</div>' +
         '<div class="condition">' + (current.weather_desc || '--') + '</div>' +
         '<div class="signal-row"><span>运营信号</span><strong>' + signal.value + '</strong></div>' +
         '<div class="details">' +
@@ -321,9 +321,9 @@
     var signal = operationalSignal(today);
     var current = selected.current || {};
     els.dailyMetrics.innerHTML = [
-      metricItem('今日最高', today ? fmtFC(today.temp_max) : '--', selected.city),
-      metricItem('今日最低', today ? fmtFC(today.temp_min) : '--', selected.region),
-      metricItem('当前天气', current.weather_desc || (today ? today.weather_desc : '--'), fmtF(current.temperature)),
+      metricItem('今日最高', today ? fmtCF(today.temp_max) : '--', selected.city),
+      metricItem('今日最低', today ? fmtCF(today.temp_min) : '--', selected.region),
+      metricItem('当前天气', current.weather_desc || (today ? today.weather_desc : '--'), fmtCF(current.temperature)),
       metricItem('运营信号', signal.value, signal.note)
     ].join('');
   }
@@ -361,8 +361,8 @@
           '<div class="calendar-body">' +
             '<div class="calendar-icon">' + (entry ? (entry.weather_icon || w[1]) : '') + '</div>' +
             '<div class="calendar-temps">' +
-              '<strong>' + (entry ? fmtFC(entry.temp_max) : '--') + '</strong>' +
-              '<span>' + (entry ? fmtFC(entry.temp_min) : '--') + '</span>' +
+              '<strong>' + (entry ? fmtCF(entry.temp_max) : '--') + '</strong>' +
+              '<span>' + (entry ? fmtCF(entry.temp_min) : '--') + '</span>' +
             '</div>' +
           '</div>' +
           '<div class="calendar-meta">' + (entry ? fmtIn(entry.precipitation) + ' · ' + fmtMph(entry.windspeed_max) : 'No data') + '</div>' +
@@ -407,8 +407,8 @@
         '<td><strong>' + fmtDate(date) + '</strong><br><span class="muted">' + date + '</span></td>' +
         '<td class="forecast-icon">' + w[1] + '</td>' +
         '<td>' + w[0] + '</td>' +
-        '<td>' + fmtFC(daily.temp_max ? daily.temp_max[index] : null) + '</td>' +
-        '<td>' + fmtFC(daily.temp_min ? daily.temp_min[index] : null) + '</td>' +
+        '<td>' + fmtCF(daily.temp_max ? daily.temp_max[index] : null) + '</td>' +
+        '<td>' + fmtCF(daily.temp_min ? daily.temp_min[index] : null) + '</td>' +
         '<td class="' + (precip != null && precip >= 1 ? 'precip-high' : '') + '">' + fmtIn(precip) + '</td>' +
         '<td>' + fmtMph(daily.windspeed_max ? daily.windspeed_max[index] : null) + '</td>' +
         '</tr>';
