@@ -7,6 +7,7 @@
 
   var state = {
     country: 'US',
+    navTarget: 'overview',
     date: DATA.today,
     forecastRegion: null,
     calendarRegion: null,
@@ -18,6 +19,8 @@
   var weekdayLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   var els = {
+    headerNav: document.getElementById('headerNav'),
+    overviewSection: document.getElementById('overviewSection'),
     overviewDate: document.getElementById('overviewDate'),
     overviewSignals: document.getElementById('overviewSignals'),
     marketOverview: document.getElementById('marketOverview'),
@@ -331,6 +334,15 @@
     els.coverageText.textContent = '快照：' + first + ' 至 ' + last + archiveText;
   }
 
+  function renderHeaderNav() {
+    Array.prototype.forEach.call(els.headerNav.querySelectorAll('button'), function (button) {
+      var target = button.hasAttribute('data-nav-overview') ? 'overview' : button.getAttribute('data-nav-country');
+      var active = target === state.navTarget;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
   function renderCountryTabs() {
     els.countryTabs.innerHTML = Object.keys(countries).map(function (key) {
       var item = countries[key];
@@ -614,6 +626,7 @@
   function render() {
     var snapshot = getSnapshot(state.date);
     renderHeader();
+    renderHeaderNav();
     renderOverview(DATA.today_data || snapshot);
     renderCountryTabs();
     renderDatePicker();
@@ -624,10 +637,37 @@
     renderForecast(snapshot);
   }
 
+  function openCountryDetails(countryKey) {
+    if (!countries[countryKey]) return;
+    state.country = countryKey;
+    state.navTarget = countryKey;
+    state.date = DATA.today;
+    state.forecastRegion = null;
+    state.calendarRegion = null;
+    state.calendarMonth = null;
+    render();
+    els.countryDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  els.headerNav.addEventListener('click', function (event) {
+    var overviewButton = event.target.closest('[data-nav-overview]');
+    if (overviewButton) {
+      state.navTarget = 'overview';
+      renderHeaderNav();
+      els.overviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    var countryButton = event.target.closest('[data-nav-country]');
+    if (!countryButton) return;
+    openCountryDetails(countryButton.getAttribute('data-nav-country'));
+  });
+
   els.countryTabs.addEventListener('click', function (event) {
     var button = event.target.closest('[data-country]');
     if (!button) return;
     state.country = button.getAttribute('data-country');
+    state.navTarget = state.country;
     state.forecastRegion = null;
     state.calendarRegion = null;
     state.calendarMonth = null;
@@ -637,13 +677,7 @@
   els.marketOverview.addEventListener('click', function (event) {
     var button = event.target.closest('[data-overview-country]');
     if (!button) return;
-    state.country = button.getAttribute('data-overview-country');
-    state.date = DATA.today;
-    state.forecastRegion = null;
-    state.calendarRegion = null;
-    state.calendarMonth = null;
-    render();
-    els.countryDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    openCountryDetails(button.getAttribute('data-overview-country'));
   });
 
   els.forecastTabs.addEventListener('click', function (event) {

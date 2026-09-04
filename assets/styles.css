@@ -70,7 +70,8 @@ button {
   padding: 34px 28px 30px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(360px, 470px);
-  gap: 32px;
+  column-gap: 32px;
+  row-gap: 18px;
   align-items: end;
 }
 
@@ -147,6 +148,48 @@ h2 {
   font-size: 19px;
   font-weight: 760;
   line-height: 1.1;
+}
+
+.header-nav {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-top: 2px;
+  scrollbar-width: thin;
+}
+
+.header-nav button {
+  min-height: 39px;
+  padding: 0 16px;
+  flex: 0 0 auto;
+  color: #cbd6e2;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 780;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.header-nav button:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.header-nav button.active {
+  color: #111820;
+  background: #fff;
+  border-color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.header-nav button:focus-visible {
+  outline: 3px solid rgba(96, 165, 250, 0.5);
+  outline-offset: 2px;
 }
 
 .shell {

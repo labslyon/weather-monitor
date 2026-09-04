@@ -29,11 +29,17 @@
             <dd id="statGenerated">--</dd>
           </div>
         </dl>
+        <nav class="header-nav" id="headerNav" aria-label="顶部导航">
+          <button class="active" type="button" data-nav-overview aria-pressed="true">总览</button>
+          <button type="button" data-nav-country="US" aria-pressed="false">美国</button>
+          <button type="button" data-nav-country="CA" aria-pressed="false">加拿大</button>
+          <button type="button" data-nav-country="AU" aria-pressed="false">澳大利亚</button>
+        </nav>
       </div>
     </header>
 
     <main class="shell">
-      <section class="overview-section" aria-labelledby="overviewTitle">
+      <section class="overview-section" id="overviewSection" aria-labelledby="overviewTitle">
         <div class="section-head overview-head">
           <div>
             <p class="eyebrow">Market Overview</p>
