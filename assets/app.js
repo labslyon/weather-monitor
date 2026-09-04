@@ -5,9 +5,9 @@
     return;
   }
 
+  var pageType = document.body.getAttribute('data-page') || 'overview';
   var state = {
-    country: 'US',
-    navTarget: 'overview',
+    country: document.body.getAttribute('data-country') || 'US',
     date: DATA.today,
     forecastRegion: null,
     calendarRegion: null,
@@ -19,13 +19,9 @@
   var weekdayLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   var els = {
-    headerNav: document.getElementById('headerNav'),
-    overviewSection: document.getElementById('overviewSection'),
     overviewDate: document.getElementById('overviewDate'),
     overviewSignals: document.getElementById('overviewSignals'),
     marketOverview: document.getElementById('marketOverview'),
-    countryDetails: document.getElementById('countryDetails'),
-    countryTabs: document.getElementById('countryTabs'),
     datePicker: document.getElementById('datePicker'),
     prevDate: document.getElementById('prevDate'),
     nextDate: document.getElementById('nextDate'),
@@ -314,7 +310,7 @@
             '<div><dt>温度趋势</dt><dd>' + fmtTrend(outlook.trendC) + '</dd></div>' +
             '<div><dt>区域平均雨天</dt><dd>' + rainText + '</dd></div>' +
           '</dl>' +
-          '<button class="market-detail-button" type="button" data-overview-country="' + countryKey + '">查看国家详情 <span aria-hidden="true">→</span></button>' +
+          '<a class="market-detail-button" href="' + countryKey.toLowerCase() + '/">查看国家详情 <span aria-hidden="true">→</span></a>' +
         '</div>' +
         '<div class="market-cities">' + cities + '</div>' +
         '</article>';
@@ -325,32 +321,18 @@
     var allDates = dates();
     var first = allDates[0] || '--';
     var last = allDates[allDates.length - 1] || '--';
-    var regions = Object.keys((DATA.today_data || {}).regions || {}).length;
+    var currentRegions = (DATA.today_data || {}).regions || {};
+    var regions = pageType === 'country'
+      ? regionKeys(state.country).filter(function (key) { return Boolean(currentRegions[key]); }).length
+      : Object.keys(currentRegions).length;
     var archive = DATA.daily_archive || {};
     var archiveText = archive.range ? ' · 月历：' + archive.range.start + ' 至 ' + archive.range.end : '';
     els.statDates.textContent = allDates.length + ' 天';
     els.statCities.textContent = regions;
     els.statGenerated.textContent = (DATA.today_data && DATA.today_data.generated_at) || '--';
-    els.coverageText.textContent = '快照：' + first + ' 至 ' + last + archiveText;
-  }
-
-  function renderHeaderNav() {
-    Array.prototype.forEach.call(els.headerNav.querySelectorAll('button'), function (button) {
-      var target = button.hasAttribute('data-nav-overview') ? 'overview' : button.getAttribute('data-nav-country');
-      var active = target === state.navTarget;
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
-  }
-
-  function renderCountryTabs() {
-    els.countryTabs.innerHTML = Object.keys(countries).map(function (key) {
-      var item = countries[key];
-      var active = key === state.country ? ' active' : '';
-      return '<button type="button" class="' + active + '" data-country="' + key + '">' +
-        '<span class="country-code">' + key + '</span> ' + item.name +
-        '</button>';
-    }).join('');
+    if (els.coverageText) {
+      els.coverageText.textContent = '快照：' + first + ' 至 ' + last + archiveText;
+    }
   }
 
   function renderDatePicker() {
@@ -626,9 +608,10 @@
   function render() {
     var snapshot = getSnapshot(state.date);
     renderHeader();
-    renderHeaderNav();
-    renderOverview(DATA.today_data || snapshot);
-    renderCountryTabs();
+    if (pageType === 'overview') {
+      renderOverview(DATA.today_data || snapshot);
+      return;
+    }
     renderDatePicker();
     renderSummary(snapshot);
     renderAlerts(snapshot);
@@ -637,106 +620,65 @@
     renderForecast(snapshot);
   }
 
-  function openCountryDetails(countryKey) {
-    if (!countries[countryKey]) return;
-    state.country = countryKey;
-    state.navTarget = countryKey;
-    state.date = DATA.today;
-    state.forecastRegion = null;
-    state.calendarRegion = null;
-    state.calendarMonth = null;
-    render();
-    els.countryDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (pageType === 'country') {
+    els.forecastTabs.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-forecast]');
+      if (!button) return;
+      state.forecastRegion = button.getAttribute('data-forecast');
+      renderForecast(getSnapshot(state.date));
+    });
+
+    els.calendarRegionTabs.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-calendar-region]');
+      if (!button) return;
+      state.calendarRegion = button.getAttribute('data-calendar-region');
+      state.calendarMonth = null;
+      renderCalendar(getSnapshot(state.date));
+    });
+
+    els.monthTabs.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-calendar-month]');
+      if (!button) return;
+      state.calendarMonth = button.getAttribute('data-calendar-month');
+      renderCalendar(getSnapshot(state.date));
+    });
+
+    els.datePicker.addEventListener('change', function () {
+      state.date = els.datePicker.value;
+      state.forecastRegion = null;
+      state.calendarRegion = null;
+      render();
+    });
+
+    els.prevDate.addEventListener('click', function () {
+      var allDates = dates();
+      var index = allDates.indexOf(state.date);
+      if (index > 0) {
+        state.date = allDates[index - 1];
+        state.forecastRegion = null;
+        state.calendarRegion = null;
+        render();
+      }
+    });
+
+    els.nextDate.addEventListener('click', function () {
+      var allDates = dates();
+      var index = allDates.indexOf(state.date);
+      if (index >= 0 && index < allDates.length - 1) {
+        state.date = allDates[index + 1];
+        state.forecastRegion = null;
+        state.calendarRegion = null;
+        render();
+      }
+    });
+
+    els.todayButton.addEventListener('click', function () {
+      state.date = DATA.today;
+      state.forecastRegion = null;
+      state.calendarRegion = null;
+      render();
+    });
   }
-
-  els.headerNav.addEventListener('click', function (event) {
-    var overviewButton = event.target.closest('[data-nav-overview]');
-    if (overviewButton) {
-      state.navTarget = 'overview';
-      renderHeaderNav();
-      els.overviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-
-    var countryButton = event.target.closest('[data-nav-country]');
-    if (!countryButton) return;
-    openCountryDetails(countryButton.getAttribute('data-nav-country'));
-  });
-
-  els.countryTabs.addEventListener('click', function (event) {
-    var button = event.target.closest('[data-country]');
-    if (!button) return;
-    state.country = button.getAttribute('data-country');
-    state.navTarget = state.country;
-    state.forecastRegion = null;
-    state.calendarRegion = null;
-    state.calendarMonth = null;
-    render();
-  });
-
-  els.marketOverview.addEventListener('click', function (event) {
-    var button = event.target.closest('[data-overview-country]');
-    if (!button) return;
-    openCountryDetails(button.getAttribute('data-overview-country'));
-  });
-
-  els.forecastTabs.addEventListener('click', function (event) {
-    var button = event.target.closest('[data-forecast]');
-    if (!button) return;
-    state.forecastRegion = button.getAttribute('data-forecast');
-    renderForecast(getSnapshot(state.date));
-  });
-
-  els.calendarRegionTabs.addEventListener('click', function (event) {
-    var button = event.target.closest('[data-calendar-region]');
-    if (!button) return;
-    state.calendarRegion = button.getAttribute('data-calendar-region');
-    state.calendarMonth = null;
-    renderCalendar(getSnapshot(state.date));
-  });
-
-  els.monthTabs.addEventListener('click', function (event) {
-    var button = event.target.closest('[data-calendar-month]');
-    if (!button) return;
-    state.calendarMonth = button.getAttribute('data-calendar-month');
-    renderCalendar(getSnapshot(state.date));
-  });
-
-  els.datePicker.addEventListener('change', function () {
-    state.date = els.datePicker.value;
-    state.forecastRegion = null;
-    state.calendarRegion = null;
-    render();
-  });
-
-  els.prevDate.addEventListener('click', function () {
-    var allDates = dates();
-    var index = allDates.indexOf(state.date);
-    if (index > 0) {
-      state.date = allDates[index - 1];
-      state.forecastRegion = null;
-      state.calendarRegion = null;
-      render();
-    }
-  });
-
-  els.nextDate.addEventListener('click', function () {
-    var allDates = dates();
-    var index = allDates.indexOf(state.date);
-    if (index >= 0 && index < allDates.length - 1) {
-      state.date = allDates[index + 1];
-      state.forecastRegion = null;
-      state.calendarRegion = null;
-      render();
-    }
-  });
-
-  els.todayButton.addEventListener('click', function () {
-    state.date = DATA.today;
-    state.forecastRegion = null;
-    state.calendarRegion = null;
-    render();
-  });
 
   render();
 })();

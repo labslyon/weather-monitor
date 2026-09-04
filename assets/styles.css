@@ -159,35 +159,38 @@ h2 {
   scrollbar-width: thin;
 }
 
-.header-nav button {
+.header-nav a {
   min-height: 39px;
   padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
   color: #cbd6e2;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 6px;
-  cursor: pointer;
   font-size: 14px;
   font-weight: 780;
+  text-decoration: none;
   white-space: nowrap;
   transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.15s;
 }
 
-.header-nav button:hover {
+.header-nav a:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.13);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.header-nav button.active {
+.header-nav a.active {
   color: #111820;
   background: #fff;
   border-color: #fff;
   box-shadow: var(--shadow-soft);
 }
 
-.header-nav button:focus-visible {
+.header-nav a:focus-visible {
   outline: 3px solid rgba(96, 165, 250, 0.5);
   outline-offset: 2px;
 }
@@ -642,6 +645,9 @@ h2 {
 .market-detail-button {
   min-height: 36px;
   padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
   background: #151a22;
   border: 1px solid #151a22;
@@ -649,6 +655,7 @@ h2 {
   cursor: pointer;
   font-size: 12px;
   font-weight: 800;
+  text-decoration: none;
   transition: background 0.15s, border-color 0.15s, transform 0.15s;
 }
 
@@ -761,6 +768,12 @@ h2 {
   padding-top: 28px;
   border-top: 1px solid var(--line);
   scroll-margin-top: 14px;
+}
+
+.detail-head-first {
+  margin-top: 4px;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .cards-grid {
