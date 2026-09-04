@@ -440,9 +440,9 @@ h2 {
 }
 
 .temp-main {
-  margin-top: 14px;
+  margin-top: 12px;
   color: var(--heading);
-  font-size: 42px;
+  font-size: 34px;
   font-weight: 520;
   line-height: 1;
 }
