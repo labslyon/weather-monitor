@@ -50,6 +50,7 @@ jobs:
           mkdir _site
           cp index.html .nojekyll _site/
           cp -R assets _site/assets
+          cp -R us ca au _site/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
