@@ -671,6 +671,18 @@ h2 {
   line-height: 1.2;
 }
 
+.market-kpis dd.tone-cooling {
+  color: #1d5fae;
+}
+
+.market-kpis dd.tone-warming {
+  color: #ad5313;
+}
+
+.market-kpis dd.tone-stable {
+  color: #526173;
+}
+
 .market-detail-button {
   min-height: 36px;
   padding: 0 12px;

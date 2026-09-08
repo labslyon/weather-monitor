@@ -135,6 +135,10 @@
     return ((((DATA.daily_archive || {}).regions || {})[regionKey]) || {});
   }
 
+  function yearAgoArchive(regionKey) {
+    return ((((DATA.year_ago || {}).regions || {})[regionKey]) || {});
+  }
+
   function numericValues(values) {
     return (values || []).filter(function (value) {
       return typeof value === 'number' && isFinite(value);
@@ -155,6 +159,23 @@
     if (high == null) return low;
     if (low == null) return high;
     return (high + low) / 2;
+  }
+
+  function archiveMidpointF(entry) {
+    if (!entry) return null;
+    var high = entry.temp_max;
+    var low = entry.temp_min;
+    if (high == null && low == null) return null;
+    if (high == null) return low;
+    if (low == null) return high;
+    return (high + low) / 2;
+  }
+
+  function forecastMeanF(row) {
+    var daily = row.daily || {};
+    return average((daily.dates || []).slice(0, 7).map(function (_date, index) {
+      return dailyMidpointF(row, index);
+    }));
   }
 
   function trendState(deltaC) {
@@ -179,6 +200,18 @@
     if (deltaC > 0.05) return '上升 ' + Math.abs(deltaC).toFixed(1) + '°C';
     if (deltaC < -0.05) return '下降 ' + Math.abs(deltaC).toFixed(1) + '°C';
     return '持平 0.0°C';
+  }
+
+  function fmtYearAgoDelta(deltaC) {
+    if (deltaC == null) return '--';
+    if (deltaC > 0.05) return '偏高 ' + Math.abs(deltaC).toFixed(1) + '°C';
+    if (deltaC < -0.05) return '偏低 ' + Math.abs(deltaC).toFixed(1) + '°C';
+    return '持平 0.0°C';
+  }
+
+  function yearAgoTone(deltaC) {
+    if (deltaC == null || Math.abs(deltaC) <= 0.05) return 'stable';
+    return deltaC > 0 ? 'warming' : 'cooling';
   }
 
   function regionOutlook(row, countryKey) {
@@ -243,6 +276,28 @@
     };
   }
 
+  function countryYearAgoComparison(outlook) {
+    var matched = outlook.items.map(function (item) {
+      var currentMeanF = forecastMeanF(item.row);
+      var archive = yearAgoArchive(item.row.region_key);
+      var previousMeanF = average(Object.keys(archive).sort().map(function (date) {
+        return archiveMidpointF(archive[date]);
+      }));
+      if (currentMeanF == null || previousMeanF == null) return null;
+      return {
+        currentMeanF: currentMeanF,
+        previousMeanF: previousMeanF
+      };
+    }).filter(Boolean);
+
+    return {
+      previousF: average(matched.map(function (item) { return item.previousMeanF; })),
+      deltaC: average(matched.map(function (item) {
+        return (item.currentMeanF - item.previousMeanF) * 5 / 9;
+      }))
+    };
+  }
+
   function signalGroups(items) {
     return Object.keys(countries).map(function (countryKey) {
       var names = items.filter(function (item) {
@@ -293,6 +348,8 @@
       var country = countries[countryKey];
       var outlook = countryOutlook(countryKey, snapshot);
       var status = trendState(outlook.trendC);
+      var yearAgo = countryYearAgoComparison(outlook);
+      var comparisonTone = yearAgoTone(yearAgo.deltaC);
       var rainText = outlook.rainyDays == null ? '--' : outlook.rainyDays.toFixed(1).replace('.0', '') + ' / 7 天';
       var cities = outlook.items.map(function (item) {
         var row = item.row;
@@ -319,6 +376,8 @@
             '<div><dt>未来 7 天范围</dt><dd>' + fmtCRange(outlook.minF, outlook.maxF) + '</dd></div>' +
             '<div><dt>温度趋势</dt><dd>' + fmtTrend(outlook.trendC) + '</dd></div>' +
             '<div><dt>区域平均雨天</dt><dd>' + rainText + '</dd></div>' +
+            '<div><dt>去年同期 7 日均温</dt><dd>' + fmtCPrecise(yearAgo.previousF) + '</dd></div>' +
+            '<div><dt>较去年同期</dt><dd class="tone-' + comparisonTone + '">' + fmtYearAgoDelta(yearAgo.deltaC) + '</dd></div>' +
           '</dl>' +
           '<a class="market-detail-button" href="' + countryKey.toLowerCase() + '/">查看国家详情 <span aria-hidden="true">→</span></a>' +
         '</div>' +

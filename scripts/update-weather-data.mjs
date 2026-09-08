@@ -53,6 +53,15 @@ function addDays(date, days) {
   return dt.toISOString().slice(0, 10);
 }
 
+function previousYearDate(date) {
+  const [year, month, day] = date.split('-').map(Number);
+  const previousYear = year - 1;
+  const lastDay = new Date(Date.UTC(previousYear, month, 0)).getUTCDate();
+  return previousYear + '-' +
+    String(month).padStart(2, '0') + '-' +
+    String(Math.min(day, lastDay)).padStart(2, '0');
+}
+
 function monthStart(date) {
   return `${date.slice(0, 7)}-01`;
 }
@@ -351,6 +360,28 @@ async function main() {
       [snapshotDate]: forecast[snapshotDate] || history[snapshotDate] || existing[snapshotDate]
     }];
   });
+  const comparisonEnd = addDays(snapshotDate, 6);
+  const yearAgoStart = previousYearDate(snapshotDate);
+  const yearAgoEnd = addDays(yearAgoStart, 6);
+  const yearAgoEntries = await mapWithConcurrency(fetched, 3, async (region) => {
+    const existingRange = (data.year_ago || {}).range || {};
+    const existing = (((data.year_ago || {}).regions || {})[region.region_key] || {});
+
+    try {
+      return [
+        region.region_key,
+        await fetchDailyArchive(region, yearAgoStart, yearAgoEnd)
+      ];
+    } catch (error) {
+      const canReuse = existingRange.start === yearAgoStart && existingRange.end === yearAgoEnd;
+      console.warn(`Keeping existing year-ago data for ${region.region_key}: ${error.message}`);
+      return [region.region_key, canReuse ? existing : {}];
+    }
+  });
+  const yearAgoRegions = Object.fromEntries(yearAgoEntries);
+  const yearAgoRegionCount = Object.values(yearAgoRegions).filter((entries) => {
+    return Object.keys(entries).length > 0;
+  }).length;
 
   const snapshot = {
     generated_at: generatedAt(),
@@ -373,6 +404,16 @@ async function main() {
       },
       regions: Object.fromEntries(archiveEntries)
     },
+    year_ago: {
+      generated_at: snapshot.generated_at,
+      range: {
+        current_start: snapshotDate,
+        current_end: comparisonEnd,
+        start: yearAgoStart,
+        end: yearAgoEnd
+      },
+      regions: yearAgoRegions
+    },
     countries: data.countries,
     weather_codes: Object.fromEntries(
       Object.entries(WEATHER_CODES).map(([key, value]) => [key, value])
@@ -391,7 +432,10 @@ async function main() {
     daily_archive_end: snapshotDate,
     region_count: Object.keys(regions).length,
     fresh_region_count: freshCount,
-    stale_region_count: fetched.length - freshCount
+    stale_region_count: fetched.length - freshCount,
+    year_ago_start: yearAgoStart,
+    year_ago_end: yearAgoEnd,
+    year_ago_region_count: yearAgoRegionCount
   }, null, 2));
 
   if (dryRun) return;
