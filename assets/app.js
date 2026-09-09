@@ -16,6 +16,36 @@
 
   var countries = DATA.countries || {};
   var countryLabels = { US: '美国', CA: '加拿大', AU: '澳大利亚' };
+  var operationalRegionConfig = {
+    US: [
+      { key: 'us-northeast', name: '美东北', label: 'NORTHEAST', pointKeys: ['us-east'] },
+      { key: 'us-southeast', name: '美东南', label: 'SOUTHEAST', pointKeys: ['us-south'] },
+      { key: 'us-midwest', name: '中西部与五大湖', label: 'MIDWEST / GREAT LAKES', pointKeys: ['us-north'] },
+      { key: 'us-south', name: '美南部', label: 'SOUTH', pointKeys: ['us-central'] },
+      { key: 'us-southwest', name: '美西南', label: 'SOUTHWEST', pointKeys: ['us-southwest'] },
+      { key: 'us-west-coast', name: '美西海岸', label: 'WEST COAST', pointKeys: ['us-west', 'us-pnw'] },
+      { key: 'us-rockies', name: '落基山脉', label: 'ROCKY MOUNTAINS', pointKeys: ['us-rockies'] }
+    ],
+    CA: [
+      { key: 'ca-ontario-region', name: 'Ontario', label: '安大略省', pointKeys: ['ca-ontario'] },
+      { key: 'ca-quebec-region', name: 'Quebec', label: '魁北克省', pointKeys: ['ca-quebec-province'] },
+      { key: 'ca-bc-region', name: 'British Columbia', label: '不列颠哥伦比亚省', pointKeys: ['ca-british-columbia'] },
+      { key: 'ca-alberta-region', name: 'Alberta', label: '阿尔伯塔省', pointKeys: ['ca-alberta'] }
+    ],
+    AU: [
+      { key: 'au-east-region', name: '东部沿海', label: 'EAST COAST', pointKeys: ['au-east'] },
+      { key: 'au-northeast-region', name: '东北部', label: 'NORTHEAST', pointKeys: ['au-ne'] },
+      { key: 'au-south-region', name: '南部', label: 'SOUTH', pointKeys: ['au-south'] },
+      { key: 'au-west-region', name: '西部', label: 'WEST', pointKeys: ['au-west'] },
+      { key: 'au-north-region', name: '北部热带', label: 'TROPICAL NORTH', pointKeys: ['au-north'] }
+    ]
+  };
+  var pointLabels = {
+    'ca-ontario': 'Toronto',
+    'ca-quebec-province': 'Montreal',
+    'ca-british-columbia': 'Whistler',
+    'ca-alberta': 'Calgary'
+  };
   var weatherCodes = DATA.weather_codes || {};
   var weekdayLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
@@ -61,6 +91,29 @@
 
   function regionKeys(country) {
     return countries[country] ? countries[country].region_keys || [] : [];
+  }
+
+  function countryRegionGroups(countryKey) {
+    var configured = operationalRegionConfig[countryKey];
+    if (configured && configured.length) return configured;
+    return regionKeys(countryKey).map(function (regionKey) {
+      return { key: regionKey, name: regionKey, label: regionKey, pointKeys: [regionKey] };
+    });
+  }
+
+  function pointDisplayName(regionKey, row) {
+    return pointLabels[regionKey] || (row && row.city) || regionKey;
+  }
+
+  function regionGroupForPoint(countryKey, regionKey) {
+    return countryRegionGroups(countryKey).filter(function (group) {
+      return group.pointKeys.indexOf(regionKey) >= 0;
+    })[0] || null;
+  }
+
+  function regionNameForPoint(countryKey, regionKey, row) {
+    var group = regionGroupForPoint(countryKey, regionKey);
+    return group ? group.name : ((row && row.region) || regionKey);
   }
 
   function fmtF(value) {
@@ -195,6 +248,15 @@
     return Math.round(toC(minF)) + '–' + Math.round(toC(maxF)) + '°C';
   }
 
+  function fmtCurrentRange(values) {
+    var clean = numericValues(values);
+    if (!clean.length) return '--';
+    var minF = Math.min.apply(null, clean);
+    var maxF = Math.max.apply(null, clean);
+    if (Math.abs(maxF - minF) < 0.05) return fmtCPrecise(minF);
+    return toC(minF).toFixed(1) + '–' + toC(maxF).toFixed(1) + '°C';
+  }
+
   function fmtTrend(deltaC) {
     if (deltaC == null) return '--';
     if (deltaC > 0.05) return '上升 ' + Math.abs(deltaC).toFixed(1) + '°C';
@@ -246,38 +308,18 @@
     };
   }
 
-  function allRegionOutlooks(snapshot) {
-    var regions = snapshot && snapshot.regions ? snapshot.regions : {};
-    var result = [];
-    Object.keys(countries).forEach(function (countryKey) {
-      regionKeys(countryKey).forEach(function (regionKey) {
-        if (regions[regionKey]) result.push(regionOutlook(regions[regionKey], countryKey));
-      });
-    });
-    return result;
+  function minValue(values) {
+    var clean = numericValues(values);
+    return clean.length ? Math.min.apply(null, clean) : null;
   }
 
-  function countryOutlook(countryKey, snapshot) {
-    var regions = snapshot && snapshot.regions ? snapshot.regions : {};
-    var items = regionKeys(countryKey).map(function (regionKey) {
-      return regions[regionKey] ? regionOutlook(regions[regionKey], countryKey) : null;
-    }).filter(Boolean);
-    var minimums = numericValues(items.map(function (item) { return item.minF; }));
-    var maximums = numericValues(items.map(function (item) { return item.maxF; }));
-
-    return {
-      countryKey: countryKey,
-      items: items,
-      currentF: average(items.map(function (item) { return item.currentF; })),
-      minF: minimums.length ? Math.min.apply(null, minimums) : null,
-      maxF: maximums.length ? Math.max.apply(null, maximums) : null,
-      trendC: average(items.map(function (item) { return item.trendC; })),
-      rainyDays: average(items.map(function (item) { return item.rainyDays; }))
-    };
+  function maxValue(values) {
+    var clean = numericValues(values);
+    return clean.length ? Math.max.apply(null, clean) : null;
   }
 
-  function countryYearAgoComparison(outlook) {
-    var matched = outlook.items.map(function (item) {
+  function yearAgoComparison(items) {
+    var matched = items.map(function (item) {
       var currentMeanF = forecastMeanF(item.row);
       var archive = yearAgoArchive(item.row.region_key);
       var previousMeanF = average(Object.keys(archive).sort().map(function (date) {
@@ -290,11 +332,121 @@
       };
     }).filter(Boolean);
 
+    var currentF = average(matched.map(function (item) { return item.currentMeanF; }));
+    var previousF = average(matched.map(function (item) { return item.previousMeanF; }));
+
     return {
-      previousF: average(matched.map(function (item) { return item.previousMeanF; })),
-      deltaC: average(matched.map(function (item) {
-        return (item.currentMeanF - item.previousMeanF) * 5 / 9;
+      currentF: currentF,
+      previousF: previousF,
+      deltaC: currentF == null || previousF == null ? null : (currentF - previousF) * 5 / 9
+    };
+  }
+
+  function aggregateSignalEntry(items) {
+    return {
+      temp_max: maxValue(items.map(function (item) {
+        return ((item.row.daily || {}).temp_max || [])[0];
+      })),
+      temp_min: minValue(items.map(function (item) {
+        return ((item.row.daily || {}).temp_min || [])[0];
+      })),
+      precipitation: maxValue(items.map(function (item) {
+        return ((item.row.daily || {}).precipitation || [])[0];
+      })),
+      windspeed_max: maxValue(items.map(function (item) {
+        return ((item.row.daily || {}).windspeed_max || [])[0];
       }))
+    };
+  }
+
+  function operationalRegionOutlook(countryKey, group, snapshot) {
+    var regions = snapshot && snapshot.regions ? snapshot.regions : {};
+    var items = group.pointKeys.map(function (regionKey) {
+      return regions[regionKey] ? regionOutlook(regions[regionKey], countryKey) : null;
+    }).filter(Boolean);
+    var comparison = snapshot === DATA.today_data
+      ? yearAgoComparison(items)
+      : { currentF: null, previousF: null, deltaC: null };
+    var alerts = [];
+
+    items.forEach(function (item) {
+      (item.row.alerts || []).forEach(function (alert) {
+        alerts.push(pointDisplayName(item.row.region_key, item.row) + ': ' + alert);
+      });
+    });
+
+    return {
+      countryKey: countryKey,
+      key: group.key,
+      name: group.name,
+      label: group.label,
+      pointKeys: group.pointKeys,
+      items: items,
+      currentMinF: minValue(items.map(function (item) { return item.currentF; })),
+      currentMaxF: maxValue(items.map(function (item) { return item.currentF; })),
+      currentF: average(items.map(function (item) { return item.currentF; })),
+      forecastMeanF: average(items.map(function (item) { return forecastMeanF(item.row); })),
+      minF: minValue(items.map(function (item) { return item.minF; })),
+      maxF: maxValue(items.map(function (item) { return item.maxF; })),
+      trendC: average(items.map(function (item) { return item.trendC; })),
+      rainyDays: maxValue(items.map(function (item) { return item.rainyDays; })),
+      snowDays: maxValue(items.map(function (item) { return item.snowDays; })),
+      hasCooling: items.some(function (item) { return item.trendC != null && item.trendC <= -2; }),
+      hasWarming: items.some(function (item) { return item.trendC != null && item.trendC >= 2; }),
+      isRainy: items.some(function (item) { return item.rainyDays >= 2; }),
+      isCold: items.some(function (item) { return item.isCold; }),
+      yearAgo: comparison,
+      signalEntry: aggregateSignalEntry(items),
+      alerts: alerts
+    };
+  }
+
+  function countryOperationalOutlooks(countryKey, snapshot) {
+    return countryRegionGroups(countryKey).map(function (group) {
+      return operationalRegionOutlook(countryKey, group, snapshot);
+    });
+  }
+
+  function allOperationalRegionOutlooks(snapshot) {
+    var result = [];
+    Object.keys(countries).forEach(function (countryKey) {
+      countryOperationalOutlooks(countryKey, snapshot).forEach(function (outlook) {
+        if (outlook.items.length) result.push(outlook);
+      });
+    });
+    return result;
+  }
+
+  function countryOutlook(countryKey, snapshot) {
+    var grouped = countryOperationalOutlooks(countryKey, snapshot).filter(function (outlook) {
+      return outlook.items.length > 0;
+    });
+    var items = grouped.reduce(function (result, outlook) {
+      return result.concat(outlook.items);
+    }, []);
+
+    return {
+      countryKey: countryKey,
+      regions: grouped,
+      items: items,
+      currentF: average(grouped.map(function (item) { return item.currentF; })),
+      minF: minValue(grouped.map(function (item) { return item.minF; })),
+      maxF: maxValue(grouped.map(function (item) { return item.maxF; })),
+      trendC: average(grouped.map(function (item) { return item.trendC; })),
+      rainyDays: average(grouped.map(function (item) { return item.rainyDays; }))
+    };
+  }
+
+  function countryYearAgoComparison(outlook) {
+    var comparisons = outlook.regions.map(function (item) {
+      return item.yearAgo;
+    }).filter(function (item) {
+      return item && item.previousF != null && item.deltaC != null;
+    });
+
+    return {
+      previousF: average(comparisons.map(function (item) { return item.previousF; })),
+      deltaC: average(comparisons.map(function (item) { return item.deltaC; }))
     };
   }
 
@@ -303,7 +455,9 @@
       var names = items.filter(function (item) {
         return item.countryKey === countryKey;
       }).map(function (item) {
-        return item.row.city;
+        return item.name;
+      }).filter(function (name, index, list) {
+        return list.indexOf(name) === index;
       }).join('、');
 
       return '<div class="overview-signal-country">' +
@@ -330,10 +484,10 @@
       return;
     }
 
-    var allItems = allRegionOutlooks(snapshot);
-    var cooling = allItems.filter(function (item) { return item.trendC != null && item.trendC <= -2; });
-    var warming = allItems.filter(function (item) { return item.trendC != null && item.trendC >= 2; });
-    var rainy = allItems.filter(function (item) { return item.rainyDays >= 2; });
+    var allItems = allOperationalRegionOutlooks(snapshot);
+    var cooling = allItems.filter(function (item) { return item.hasCooling; });
+    var warming = allItems.filter(function (item) { return item.hasWarming; });
+    var rainy = allItems.filter(function (item) { return item.isRainy; });
     var cold = allItems.filter(function (item) { return item.isCold; });
 
     els.overviewDate.textContent = '最新快照 · ' + DATA.today;
@@ -351,17 +505,18 @@
       var yearAgo = countryYearAgoComparison(outlook);
       var comparisonTone = yearAgoTone(yearAgo.deltaC);
       var rainText = outlook.rainyDays == null ? '--' : outlook.rainyDays.toFixed(1).replace('.0', '') + ' / 7 天';
-      var cities = outlook.items.map(function (item) {
-        var row = item.row;
-        var cityStatus = trendState(item.trendC);
-        var current = row.current || {};
-        var firstCode = ((row.daily || {}).weathercode || [])[0];
-        var condition = current.weather_desc || weather(firstCode)[0];
+      var regionTiles = outlook.regions.map(function (item) {
+        var regionStatus = trendState(item.trendC);
+        var regionYearAgo = item.yearAgo;
+        var regionComparisonTone = yearAgoTone(regionYearAgo.deltaC);
+        var pointNames = item.items.map(function (point) {
+          return pointDisplayName(point.row.region_key, point.row);
+        }).join('、');
         return '<div class="market-city">' +
-          '<div class="market-city-top"><strong>' + row.city + '</strong><span>' + fmtCPrecise(item.currentF) + '</span></div>' +
-          '<div class="market-city-region">' + row.region + '</div>' +
-          '<div class="market-city-metrics"><span>' + fmtCRange(item.minF, item.maxF) + '</span><span>' + item.rainyDays + ' / 7 雨天</span></div>' +
-          '<div class="market-city-foot"><span>' + condition + '</span><strong class="tone-' + cityStatus.tone + '">' + fmtTrend(item.trendC) + '</strong></div>' +
+          '<div class="market-city-top"><strong>' + item.name + '</strong><span>' + fmtCurrentRange(item.items.map(function (point) { return point.currentF; })) + '</span></div>' +
+          '<div class="market-city-region">' + item.label + ' · ' + pointNames + '</div>' +
+          '<div class="market-city-metrics"><span>' + fmtCRange(item.minF, item.maxF) + '</span><span>最多 ' + (item.rainyDays == null ? '--' : item.rainyDays) + ' / 7 雨天</span></div>' +
+          '<div class="market-city-foot"><span class="tone-' + regionComparisonTone + '">同比 ' + fmtYearAgoDelta(regionYearAgo.deltaC) + '</span><strong class="tone-' + regionStatus.tone + '">' + fmtTrend(item.trendC) + '</strong></div>' +
           '</div>';
       }).join('');
 
@@ -372,7 +527,7 @@
             '<span class="market-status tone-' + status.tone + '">' + status.label + '</span>' +
           '</div>' +
           '<dl class="market-kpis">' +
-            '<div><dt>平均当前温度</dt><dd>' + fmtCPrecise(outlook.currentF) + '</dd></div>' +
+            '<div><dt>区域平均当前温度</dt><dd>' + fmtCPrecise(outlook.currentF) + '</dd></div>' +
             '<div><dt>未来 7 天范围</dt><dd>' + fmtCRange(outlook.minF, outlook.maxF) + '</dd></div>' +
             '<div><dt>温度趋势</dt><dd>' + fmtTrend(outlook.trendC) + '</dd></div>' +
             '<div><dt>区域平均雨天</dt><dd>' + rainText + '</dd></div>' +
@@ -381,7 +536,7 @@
           '</dl>' +
           '<a class="market-detail-button" href="' + countryKey.toLowerCase() + '/">查看国家详情 <span aria-hidden="true">→</span></a>' +
         '</div>' +
-        '<div class="market-cities">' + cities + '</div>' +
+        '<div class="market-cities">' + regionTiles + '</div>' +
         '</article>';
     }).join('');
   }
@@ -391,13 +546,16 @@
     var first = allDates[0] || '--';
     var last = allDates[allDates.length - 1] || '--';
     var currentRegions = (DATA.today_data || {}).regions || {};
-    var regions = pageType === 'country'
+    var pointCount = pageType === 'country'
       ? regionKeys(state.country).filter(function (key) { return Boolean(currentRegions[key]); }).length
       : Object.keys(currentRegions).length;
+    var regionCount = pageType === 'country'
+      ? countryOperationalOutlooks(state.country, DATA.today_data).filter(function (item) { return item.items.length; }).length
+      : null;
     var archive = DATA.daily_archive || {};
     var archiveText = archive.range ? ' · 月历：' + archive.range.start + ' 至 ' + archive.range.end : '';
     els.statDates.textContent = allDates.length + ' 天';
-    els.statCities.textContent = regions;
+    els.statCities.textContent = pageType === 'country' ? regionCount + ' 区 / ' + pointCount + ' 点' : pointCount;
     els.statGenerated.textContent = (DATA.today_data && DATA.today_data.generated_at) || '--';
     if (els.coverageText) {
       els.coverageText.textContent = '快照：' + first + ' 至 ' + last + archiveText;
@@ -437,8 +595,16 @@
     }, 0);
 
     els.summaryGrid.innerHTML = [
-      summaryItem('最高当前温度', hottest ? fmtCF(hottest.current.temperature) : '--', hottest ? hottest.city : '--'),
-      summaryItem('7 日降水最多', wettest ? fmtIn(wettest.total) : '--', wettest ? wettest.row.city : '--'),
+      summaryItem(
+        '最高代表点温度',
+        hottest ? fmtCF(hottest.current.temperature) : '--',
+        hottest ? pointDisplayName(hottest.region_key, hottest) + ' · ' + regionNameForPoint(state.country, hottest.region_key, hottest) : '--'
+      ),
+      summaryItem(
+        '7 日降水最多代表点',
+        wettest ? fmtIn(wettest.total) : '--',
+        wettest ? pointDisplayName(wettest.row.region_key, wettest.row) + ' · ' + regionNameForPoint(state.country, wettest.row.region_key, wettest.row) : '--'
+      ),
       summaryItem('预警数量', String(alertCount), alertCount ? '需要关注' : '当前国家无预警')
     ].join('');
   }
@@ -455,7 +621,10 @@
     var alerts = [];
     getCountryRows(snapshot).forEach(function (row) {
       (row.alerts || []).forEach(function (alert) {
-        alerts.push(row.city + ' · ' + row.region + ': ' + alert);
+        alerts.push(
+          regionNameForPoint(state.country, row.region_key, row) + ' · ' +
+          pointDisplayName(row.region_key, row) + ': ' + alert
+        );
       });
     });
 
@@ -467,41 +636,57 @@
 
   function renderCards(snapshot) {
     var country = countries[state.country] || {};
-    var rows = getCountryRows(snapshot);
-    els.countryEyebrow.textContent = country.name || state.country;
-    els.cardsTitle.textContent = (country.name || state.country) + ' 当前天气';
+    var grouped = countryOperationalOutlooks(state.country, snapshot);
+    els.countryEyebrow.textContent = (country.name || state.country) + ' Regions';
+    els.cardsTitle.textContent = (countryLabels[state.country] || country.name || state.country) + '区域天气';
 
-    if (!rows.length) {
+    if (!grouped.some(function (outlook) { return outlook.items.length; })) {
       els.regionCards.innerHTML = '<div class="weather-card">No data</div>';
       return;
     }
 
-    els.regionCards.innerHTML = rows.map(function (row) {
-      var current = row.current || {};
-      var daily = row.daily || {};
-      var hasAlerts = (row.alerts || []).length > 0;
-      var todayEntry = {
-        temp_max: daily.temp_max ? daily.temp_max[0] : null,
-        temp_min: daily.temp_min ? daily.temp_min[0] : null,
-        precipitation: daily.precipitation ? daily.precipitation[0] : null,
-        windspeed_max: daily.windspeed_max ? daily.windspeed_max[0] : null
-      };
-      var signal = operationalSignal(todayEntry);
-      return '<article class="weather-card' + (hasAlerts ? ' has-alerts' : '') + '">' +
-        '<div class="city-row">' +
-        '<div><div class="region-badge">' + row.region + '</div><div class="city-name">' + row.city + '</div></div>' +
-        '<div class="weather-icon" aria-hidden="true">' + (current.weather_icon || '?') + '</div>' +
+    els.regionCards.innerHTML = grouped.map(function (outlook) {
+      var status = trendState(outlook.trendC);
+      var comparisonTone = yearAgoTone(outlook.yearAgo.deltaC);
+      var signal = outlook.items.length
+        ? operationalSignal(outlook.signalEntry)
+        : { value: '--', note: '当前快照无代表点数据' };
+      var pointRows = outlook.items.map(function (item) {
+        var row = item.row;
+        var current = row.current || {};
+        var firstCode = ((row.daily || {}).weathercode || [])[0];
+        var condition = current.weather_desc || weather(firstCode)[0];
+        return '<div class="region-point">' +
+          '<div class="region-point-main">' +
+            '<span class="region-point-icon" aria-hidden="true">' + (current.weather_icon || weather(firstCode)[1]) + '</span>' +
+            '<div><strong>' + pointDisplayName(row.region_key, row) + '</strong><small>' + condition + '</small></div>' +
+          '</div>' +
+          '<div class="region-point-temp"><strong>' + fmtCPrecise(item.currentF) + '</strong><small>' + fmtF(item.currentF) + '</small></div>' +
+        '</div>';
+      }).join('');
+      var hasAlerts = outlook.alerts.length > 0;
+
+      return '<article class="weather-card region-weather-card' + (hasAlerts ? ' has-alerts' : '') + '">' +
+        '<div class="region-card-head">' +
+          '<div><div class="region-badge">' + outlook.label + '</div><div class="city-name">' + outlook.name + '</div>' +
+          '<div class="region-monitor-count">' + outlook.items.length + ' 个代表监测点</div></div>' +
+          '<span class="market-status tone-' + status.tone + '">' + status.label + '</span>' +
         '</div>' +
-        '<div class="temp-main">' + fmtC(current.temperature) + '</div>' +
-        '<div class="temp-secondary">' + fmtF(current.temperature) + '</div>' +
-        '<div class="condition">' + (current.weather_desc || '--') + '</div>' +
+        '<div class="region-current"><span>代表点当前温度</span><strong>' +
+          fmtCurrentRange(outlook.items.map(function (item) { return item.currentF; })) +
+        '</strong></div>' +
+        '<div class="region-point-list">' +
+          (pointRows || '<div class="region-point-empty">当前快照暂无代表点数据</div>') +
+        '</div>' +
+        '<dl class="region-kpis">' +
+          '<div><dt>未来 7 日均温</dt><dd>' + fmtCPrecise(outlook.forecastMeanF) + '</dd></div>' +
+          '<div><dt>去年同期 7 日均温</dt><dd>' + fmtCPrecise(outlook.yearAgo.previousF) + '</dd></div>' +
+          '<div><dt>较去年同期</dt><dd class="tone-' + comparisonTone + '">' + fmtYearAgoDelta(outlook.yearAgo.deltaC) + '</dd></div>' +
+          '<div><dt>未来 7 日范围</dt><dd>' + fmtCRange(outlook.minF, outlook.maxF) + '</dd></div>' +
+        '</dl>' +
         '<div class="signal-row"><span>运营信号</span><strong>' + signal.value + '</strong></div>' +
-        '<div class="details">' +
-        '<span>Wind</span><strong>' + fmtMph(current.windspeed) + '</strong>' +
-        '<span>Direction</span><strong>' + (current.winddirection == null ? '--' : current.winddirection + '°') + '</strong>' +
-        '<span>Local time</span><strong>' + fmtLocalTime(current.time) + '</strong>' +
-        '</div>' +
-        (hasAlerts ? '<div class="card-alert">⚠ ' + row.alerts.join(' · ') + '</div>' : '') +
+        '<div class="region-signal-note">' + signal.note + '</div>' +
+        (hasAlerts ? '<div class="card-alert">⚠ ' + outlook.alerts.join(' · ') + '</div>' : '') +
         '</article>';
     }).join('');
   }
@@ -559,7 +744,8 @@
 
     els.calendarRegionTabs.innerHTML = rows.map(function (row) {
       var active = row.region_key === state.calendarRegion ? ' active' : '';
-      return '<button type="button" class="' + active + '" data-calendar-region="' + row.region_key + '">' + row.city + '</button>';
+      return '<button type="button" class="' + active + '" data-calendar-region="' + row.region_key + '">' +
+        pointDisplayName(row.region_key, row) + '</button>';
     }).join('');
 
     els.monthTabs.innerHTML = availableMonths.map(function (month) {
@@ -575,9 +761,11 @@
     var today = archive[DATA.today];
     var signal = operationalSignal(today);
     var current = selected.current || {};
+    var pointName = pointDisplayName(selected.region_key, selected);
+    var regionName = regionNameForPoint(state.country, selected.region_key, selected);
     els.dailyMetrics.innerHTML = [
-      metricItem('今日最高', today ? fmtCF(today.temp_max) : '--', selected.city),
-      metricItem('今日最低', today ? fmtCF(today.temp_min) : '--', selected.region),
+      metricItem('今日最高', today ? fmtCF(today.temp_max) : '--', pointName),
+      metricItem('今日最低', today ? fmtCF(today.temp_min) : '--', regionName),
       metricItem('当前天气', current.weather_desc || (today ? today.weather_desc : '--'), fmtCF(current.temperature)),
       metricItem('运营信号', signal.value, signal.note)
     ].join('');
@@ -626,7 +814,8 @@
     }
 
     els.calendarWrap.innerHTML = '<div class="calendar-title-row">' +
-      '<div><strong>' + selected.city + '</strong><span>' + selected.region + '</span></div>' +
+      '<div><strong>' + pointDisplayName(selected.region_key, selected) + '</strong><span>' +
+        regionNameForPoint(state.country, selected.region_key, selected) + '代表监测点</span></div>' +
       '<div>' + fmtMonth(state.calendarMonth) + '</div>' +
       '</div>' +
       '<div class="calendar-weekdays">' + weekdayLabels.map(function (day) { return '<div>' + day + '</div>'; }).join('') + '</div>' +
@@ -649,7 +838,8 @@
 
     els.forecastTabs.innerHTML = rows.map(function (row) {
       var active = row.region_key === state.forecastRegion ? ' active' : '';
-      return '<button type="button" class="' + active + '" data-forecast="' + row.region_key + '">' + row.city + '</button>';
+      return '<button type="button" class="' + active + '" data-forecast="' + row.region_key + '">' +
+        pointDisplayName(row.region_key, row) + '</button>';
     }).join('');
 
     var selected = rows.filter(function (row) { return row.region_key === state.forecastRegion; })[0];

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>澳大利亚天气运营看板</title>
-    <meta name="description" content="澳大利亚 5 个运营监测点的当前天气、历史月报与 7 日预报。">
+    <meta name="description" content="澳大利亚 5 个运营区域及代表监测点的当前天气、历史同期与 7 日预报。">
     <link rel="stylesheet" href="../assets/styles.css">
   </head>
   <body data-page="country" data-country="AU">
@@ -13,11 +13,11 @@
         <div>
           <p class="eyebrow">Australia Weather</p>
           <h1>澳大利亚天气运营看板</h1>
-          <p class="subtitle">澳大利亚 5 个运营监测点的当前天气、历史月报与 7 日预报</p>
+          <p class="subtitle">澳大利亚 5 个运营区域的代表点天气、历史同期与 7 日预报</p>
         </div>
         <dl class="header-stats" aria-label="数据概览">
           <div><dt>快照日期</dt><dd id="statDates">--</dd></div>
-          <div><dt>监测点</dt><dd id="statCities">--</dd></div>
+          <div><dt>区域 / 监测点</dt><dd id="statCities">--</dd></div>
           <div><dt>生成时间</dt><dd id="statGenerated">--</dd></div>
         </dl>
         <nav class="header-nav" id="headerNav" aria-label="顶部导航">
@@ -31,7 +31,7 @@
 
     <main class="shell">
       <section class="section-head detail-head detail-head-first">
-        <div><p class="eyebrow">Country Detail</p><h2>澳大利亚天气详情</h2></div>
+        <div><p class="eyebrow">Regional Detail</p><h2>澳大利亚区域天气详情</h2></div>
       </section>
       <section class="toolbar" aria-label="日期控制">
         <label for="datePicker">快照日期</label>
@@ -48,7 +48,7 @@
       <section class="section-head">
         <div><p class="eyebrow" id="countryEyebrow">--</p><h2 id="cardsTitle">当前天气</h2></div>
       </section>
-      <section class="cards-grid" id="regionCards" aria-label="当前天气"></section>
+      <section class="cards-grid" id="regionCards" aria-label="区域天气"></section>
       <section class="section-head calendar-head">
         <div><p class="eyebrow">30-Day Weather Calendar</p><h2>天气月历</h2></div>
         <div class="forecast-tabs" id="calendarRegionTabs" aria-label="月历监测点"></div>

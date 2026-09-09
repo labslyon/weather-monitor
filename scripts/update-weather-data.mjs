@@ -3,6 +3,19 @@ import fs from 'node:fs/promises';
 const DATA_JSON = 'assets/weather-data.json';
 const DATA_JS = 'assets/weather-data.js';
 
+const REGION_SEEDS = {
+  'us-rockies': {
+    city: 'Denver',
+    region: 'Rocky Mountains',
+    region_key: 'us-rockies',
+    country: 'US',
+    country_name: 'United States',
+    country_flag: '\u{1F1FA}\u{1F1F8}',
+    lat: 39.7392,
+    lon: -104.9903
+  }
+};
+
 const WEATHER_CODES = {
   0: ['Clear sky', '☀️'],
   1: ['Mainly clear', '🌤️'],
@@ -311,7 +324,7 @@ function forecastArchiveEntries(region) {
 function orderedRegionSeeds(data) {
   const regions = data.today_data?.regions || {};
   const keys = Object.values(data.countries || {}).flatMap((country) => country.region_keys || []);
-  return keys.map((key) => regions[key]).filter(Boolean);
+  return keys.map((key) => regions[key] || REGION_SEEDS[key]).filter(Boolean);
 }
 
 async function main() {
