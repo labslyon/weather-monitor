@@ -16,6 +16,11 @@
 
   var countries = DATA.countries || {};
   var countryLabels = { US: '美国', CA: '加拿大', AU: '澳大利亚' };
+  var countryTimeZones = {
+    US: { label: '美东时间', timeZone: 'America/New_York' },
+    CA: { label: '加东时间', timeZone: 'America/Toronto' },
+    AU: { label: '澳东时间', timeZone: 'Australia/Sydney' }
+  };
   var operationalRegionConfig = {
     US: [
       { key: 'us-northeast', name: '美东北', label: 'NORTHEAST', pointKeys: ['us-east', 'us-northeast-buffalo'] },
@@ -168,6 +173,57 @@
     if (!value) return '--';
     var parts = value.split('T');
     return parts.length === 2 ? parts[0] + ' ' + parts[1] : value;
+  }
+
+  function generatedDate() {
+    var value = DATA.today_data && DATA.today_data.generated_at;
+    if (!value) return null;
+    var parsed = new Date(value.replace(' UTC', 'Z').replace(' ', 'T'));
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  function zonedDateTime(date, timeZone) {
+    return new Intl.DateTimeFormat('zh-CN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+      timeZone: timeZone
+    }).format(date).replace(/\//g, '-');
+  }
+
+  function zoneAbbreviation(date, timeZone) {
+    var parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timeZone,
+      timeZoneName: 'short'
+    }).formatToParts(date);
+    var zone = parts.filter(function (part) { return part.type === 'timeZoneName'; })[0];
+    return zone ? zone.value : '';
+  }
+
+  function updateTimeRow(label, value) {
+    return '<span class="update-time-row"><small>' + label + '</small><strong>' + value + '</strong></span>';
+  }
+
+  function generatedTimeMarkup() {
+    var date = generatedDate();
+    if (!date) return '--';
+    var beijing = zonedDateTime(date, 'Asia/Shanghai');
+
+    if (pageType === 'country') {
+      var market = countryTimeZones[state.country];
+      var local = zonedDateTime(date, market.timeZone) + ' ' + zoneAbbreviation(date, market.timeZone);
+      return updateTimeRow('北京时间', beijing) + updateTimeRow(market.label, local);
+    }
+
+    var easternZone = countryTimeZones.US.timeZone;
+    var australiaZone = countryTimeZones.AU.timeZone;
+    var eastern = zonedDateTime(date, easternZone) + ' ' + zoneAbbreviation(date, easternZone);
+    var australia = zonedDateTime(date, australiaZone) + ' ' + zoneAbbreviation(date, australiaZone);
+    return updateTimeRow('北京时间', beijing) +
+      updateTimeRow('市场当地时间', '美东/加东 ' + eastern + '<br>澳东 ' + australia);
   }
 
   function addDays(date, days) {
@@ -565,7 +621,12 @@
         '<div class="market-summary">' +
           '<div class="market-title-row">' +
             '<div><span class="market-code">' + countryKey + '</span><h3>' + country.name + '</h3><p class="market-scope">' + outlook.regions.length + ' 区 · ' + outlook.items.length + ' 个代表点</p></div>' +
-            '<span class="market-status tone-' + status.tone + '">' + status.label + '</span>' +
+            '<div class="market-title-actions">' +
+              '<span class="market-status tone-' + status.tone + '">' + status.label + '</span>' +
+              '<button class="market-toggle" type="button" data-market-toggle data-country-label="' + (countryLabels[countryKey] || countryKey) + '" aria-expanded="false" aria-controls="market-regions-' + countryKey + '" aria-label="展开' + (countryLabels[countryKey] || countryKey) + '区域" title="展开' + (countryLabels[countryKey] || countryKey) + '区域">' +
+                '<span class="market-toggle-icon" aria-hidden="true">&#9662;</span>' +
+              '</button>' +
+            '</div>' +
           '</div>' +
           '<dl class="market-kpis">' +
             '<div><dt>区域典型当前温度</dt><dd>' + fmtCPrecise(outlook.currentF) + '</dd></div>' +
@@ -577,7 +638,7 @@
           '</dl>' +
           '<a class="market-detail-button" href="' + countryKey.toLowerCase() + '/">查看国家详情 <span aria-hidden="true">→</span></a>' +
         '</div>' +
-        '<div class="market-cities">' + regionTiles + '</div>' +
+        '<div class="market-cities" id="market-regions-' + countryKey + '" hidden>' + regionTiles + '</div>' +
         '</article>';
     }).join('');
   }
@@ -597,7 +658,7 @@
     var archiveText = archive.range ? ' · 月历：' + archive.range.start + ' 至 ' + archive.range.end : '';
     els.statDates.textContent = allDates.length + ' 天';
     els.statCities.textContent = pageType === 'country' ? regionCount + ' 区 / ' + pointCount + ' 点' : pointCount;
-    els.statGenerated.textContent = (DATA.today_data && DATA.today_data.generated_at) || '--';
+    els.statGenerated.innerHTML = generatedTimeMarkup();
     if (els.coverageText) {
       els.coverageText.textContent = '快照：' + first + ' 至 ' + last + archiveText;
     }
@@ -928,6 +989,25 @@
     renderCards(snapshot);
     renderForecast(snapshot);
     renderCalendar(snapshot);
+  }
+
+  if (pageType === 'overview') {
+    els.marketOverview.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-market-toggle]');
+      if (!button) return;
+      var panel = document.getElementById(button.getAttribute('aria-controls'));
+      if (!panel) return;
+
+      var expanded = button.getAttribute('aria-expanded') === 'true';
+      var nextExpanded = !expanded;
+      var countryLabel = button.getAttribute('data-country-label') || '';
+      var nextLabel = (nextExpanded ? '收起' : '展开') + countryLabel + '区域';
+      button.setAttribute('aria-expanded', String(nextExpanded));
+      button.setAttribute('aria-label', nextLabel);
+      button.setAttribute('title', nextLabel);
+      panel.hidden = !nextExpanded;
+      button.closest('.market-row').classList.toggle('is-expanded', nextExpanded);
+    });
   }
 
   if (pageType === 'country') {
