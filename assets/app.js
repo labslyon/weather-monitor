@@ -18,26 +18,26 @@
   var countryLabels = { US: '美国', CA: '加拿大', AU: '澳大利亚' };
   var operationalRegionConfig = {
     US: [
-      { key: 'us-northeast', name: '美东北', label: 'NORTHEAST', pointKeys: ['us-east'] },
-      { key: 'us-southeast', name: '美东南', label: 'SOUTHEAST', pointKeys: ['us-south'] },
-      { key: 'us-midwest', name: '中西部与五大湖', label: 'MIDWEST / GREAT LAKES', pointKeys: ['us-north'] },
-      { key: 'us-south', name: '美南部', label: 'SOUTH', pointKeys: ['us-central'] },
-      { key: 'us-southwest', name: '美西南', label: 'SOUTHWEST', pointKeys: ['us-southwest'] },
-      { key: 'us-west-coast', name: '美西海岸', label: 'WEST COAST', pointKeys: ['us-west', 'us-pnw'] },
-      { key: 'us-rockies', name: '落基山脉', label: 'ROCKY MOUNTAINS', pointKeys: ['us-rockies'] }
+      { key: 'us-northeast', name: '美东北', label: 'NORTHEAST', pointKeys: ['us-east', 'us-northeast-buffalo'] },
+      { key: 'us-southeast', name: '美东南', label: 'SOUTHEAST', pointKeys: ['us-south', 'us-southeast-atlanta'] },
+      { key: 'us-midwest', name: '中西部与五大湖', label: 'MIDWEST / GREAT LAKES', pointKeys: ['us-north', 'us-midwest-minneapolis'] },
+      { key: 'us-south', name: '美南部', label: 'SOUTH', pointKeys: ['us-central', 'us-south-houston'] },
+      { key: 'us-southwest', name: '美西南', label: 'SOUTHWEST', pointKeys: ['us-southwest', 'us-southwest-albuquerque'] },
+      { key: 'us-west-coast', name: '美西海岸', label: 'WEST COAST', pointKeys: ['us-west', 'us-west-sf', 'us-pnw'] },
+      { key: 'us-rockies', name: '落基山脉', label: 'ROCKY MOUNTAINS', pointKeys: ['us-rockies', 'us-rockies-slc', 'us-rockies-aspen'] }
     ],
     CA: [
-      { key: 'ca-ontario-region', name: 'Ontario', label: '安大略省', pointKeys: ['ca-ontario'] },
-      { key: 'ca-quebec-region', name: 'Quebec', label: '魁北克省', pointKeys: ['ca-quebec-province'] },
-      { key: 'ca-bc-region', name: 'British Columbia', label: '不列颠哥伦比亚省', pointKeys: ['ca-british-columbia'] },
-      { key: 'ca-alberta-region', name: 'Alberta', label: '阿尔伯塔省', pointKeys: ['ca-alberta'] }
+      { key: 'ca-ontario-region', name: 'Ontario', label: '安大略省', pointKeys: ['ca-ontario', 'ca-ontario-ottawa'] },
+      { key: 'ca-quebec-region', name: 'Quebec', label: '魁北克省', pointKeys: ['ca-quebec-province', 'ca-quebec-city'] },
+      { key: 'ca-bc-region', name: 'British Columbia', label: '不列颠哥伦比亚省', pointKeys: ['ca-british-columbia-vancouver', 'ca-british-columbia'] },
+      { key: 'ca-alberta-region', name: 'Alberta', label: '阿尔伯塔省', pointKeys: ['ca-alberta', 'ca-alberta-edmonton'] }
     ],
     AU: [
-      { key: 'au-east-region', name: '东部沿海', label: 'EAST COAST', pointKeys: ['au-east'] },
-      { key: 'au-northeast-region', name: '东北部', label: 'NORTHEAST', pointKeys: ['au-ne'] },
-      { key: 'au-south-region', name: '南部', label: 'SOUTH', pointKeys: ['au-south'] },
-      { key: 'au-west-region', name: '西部', label: 'WEST', pointKeys: ['au-west'] },
-      { key: 'au-north-region', name: '北部热带', label: 'TROPICAL NORTH', pointKeys: ['au-north'] }
+      { key: 'au-east-region', name: '东部沿海', label: 'EAST COAST', pointKeys: ['au-east', 'au-east-canberra'] },
+      { key: 'au-northeast-region', name: '东北部', label: 'NORTHEAST', pointKeys: ['au-ne', 'au-ne-cairns'] },
+      { key: 'au-south-region', name: '南部', label: 'SOUTH', pointKeys: ['au-south', 'au-south-adelaide'] },
+      { key: 'au-west-region', name: '西部', label: 'WEST', pointKeys: ['au-west', 'au-west-albany'] },
+      { key: 'au-north-region', name: '北部热带', label: 'TROPICAL NORTH', pointKeys: ['au-north', 'au-north-broome'] }
     ]
   };
   var pointLabels = {
@@ -204,6 +204,33 @@
     return clean.reduce(function (sum, value) { return sum + value; }, 0) / clean.length;
   }
 
+  function median(values) {
+    var clean = numericValues(values).slice().sort(function (a, b) { return a - b; });
+    if (!clean.length) return null;
+    var middle = Math.floor(clean.length / 2);
+    return clean.length % 2 ? clean[middle] : (clean[middle - 1] + clean[middle]) / 2;
+  }
+
+  function sum(values) {
+    var clean = numericValues(values);
+    if (!clean.length) return null;
+    return clean.reduce(function (total, value) { return total + value; }, 0);
+  }
+
+  function fmtSnowfall(value) {
+    return value == null ? '--' : (value * 2.54).toFixed(value * 2.54 >= 10 ? 0 : 1) + ' cm';
+  }
+
+  function fmtSnowDepth(value) {
+    return value == null ? '--' : (value * 30.48).toFixed(value * 30.48 >= 10 ? 0 : 1) + ' cm';
+  }
+
+  function coverageLabel(actual, planned) {
+    if (!actual) return '暂无代表点';
+    if (planned && actual < planned) return '历史覆盖 ' + actual + ' / ' + planned + ' 点';
+    return actual >= 3 ? '三点覆盖' : (actual === 2 ? '双点覆盖' : '单点参考');
+  }
+
   function dailyMidpointF(row, index) {
     var daily = row.daily || {};
     var high = daily.temp_max ? daily.temp_max[index] : null;
@@ -289,9 +316,12 @@
     var rainyDays = numericValues(daily.precipitation).filter(function (value) {
       return value >= 0.1;
     }).length;
-    var snowDays = (daily.weathercode || []).filter(function (code) {
-      return [71, 73, 75, 77, 85, 86].indexOf(Number(code)) >= 0;
-    }).length;
+    var snowfall = numericValues(daily.snowfall);
+    var snowDays = snowfall.length
+      ? snowfall.filter(function (value) { return value >= 0.04; }).length
+      : (daily.weathercode || []).filter(function (code) {
+          return [71, 73, 75, 77, 85, 86].indexOf(Number(code)) >= 0;
+        }).length;
     var minF = lows.length ? Math.min.apply(null, lows) : null;
     var maxF = highs.length ? Math.max.apply(null, highs) : null;
 
@@ -304,6 +334,8 @@
       trendC: trendC,
       rainyDays: rainyDays,
       snowDays: snowDays,
+      snowfallTotal: sum(snowfall),
+      snowDepth: (row.current || {}).snow_depth,
       isCold: snowDays > 0 || (minF != null && toC(minF) <= 2)
     };
   }
@@ -332,8 +364,8 @@
       };
     }).filter(Boolean);
 
-    var currentF = average(matched.map(function (item) { return item.currentMeanF; }));
-    var previousF = average(matched.map(function (item) { return item.previousMeanF; }));
+    var currentF = median(matched.map(function (item) { return item.currentMeanF; }));
+    var previousF = median(matched.map(function (item) { return item.previousMeanF; }));
 
     return {
       currentF: currentF,
@@ -352,6 +384,12 @@
       })),
       precipitation: maxValue(items.map(function (item) {
         return ((item.row.daily || {}).precipitation || [])[0];
+      })),
+      snowfall: maxValue(items.map(function (item) {
+        return item.snowfallTotal;
+      })),
+      snow_depth: maxValue(items.map(function (item) {
+        return item.snowDepth;
       })),
       windspeed_max: maxValue(items.map(function (item) {
         return ((item.row.daily || {}).windspeed_max || [])[0];
@@ -384,13 +422,15 @@
       items: items,
       currentMinF: minValue(items.map(function (item) { return item.currentF; })),
       currentMaxF: maxValue(items.map(function (item) { return item.currentF; })),
-      currentF: average(items.map(function (item) { return item.currentF; })),
-      forecastMeanF: average(items.map(function (item) { return forecastMeanF(item.row); })),
+      currentF: median(items.map(function (item) { return item.currentF; })),
+      forecastMeanF: median(items.map(function (item) { return forecastMeanF(item.row); })),
       minF: minValue(items.map(function (item) { return item.minF; })),
       maxF: maxValue(items.map(function (item) { return item.maxF; })),
-      trendC: average(items.map(function (item) { return item.trendC; })),
+      trendC: median(items.map(function (item) { return item.trendC; })),
       rainyDays: maxValue(items.map(function (item) { return item.rainyDays; })),
       snowDays: maxValue(items.map(function (item) { return item.snowDays; })),
+      snowfallTotal: maxValue(items.map(function (item) { return item.snowfallTotal; })),
+      snowDepth: maxValue(items.map(function (item) { return item.snowDepth; })),
       hasCooling: items.some(function (item) { return item.trendC != null && item.trendC <= -2; }),
       hasWarming: items.some(function (item) { return item.trendC != null && item.trendC >= 2; }),
       isRainy: items.some(function (item) { return item.rainyDays >= 2; }),
@@ -514,8 +554,9 @@
         }).join('、');
         return '<div class="market-city">' +
           '<div class="market-city-top"><strong>' + item.name + '</strong><span>' + fmtCurrentRange(item.items.map(function (point) { return point.currentF; })) + '</span></div>' +
-          '<div class="market-city-region">' + item.label + ' · ' + pointNames + '</div>' +
-          '<div class="market-city-metrics"><span>' + fmtCRange(item.minF, item.maxF) + '</span><span>最多 ' + (item.rainyDays == null ? '--' : item.rainyDays) + ' / 7 雨天</span></div>' +
+          '<div class="market-city-region">' + item.label + '</div>' +
+          '<div class="market-city-points">' + pointNames + ' · ' + coverageLabel(item.items.length, item.pointKeys.length) + '</div>' +
+          '<div class="market-city-metrics"><span>7 日 ' + fmtCRange(item.minF, item.maxF) + '</span><span>雨 ' + (item.rainyDays == null ? '--' : item.rainyDays) + ' 天 · 雪 ' + fmtSnowfall(item.snowfallTotal) + '</span></div>' +
           '<div class="market-city-foot"><span class="tone-' + regionComparisonTone + '">同比 ' + fmtYearAgoDelta(regionYearAgo.deltaC) + '</span><strong class="tone-' + regionStatus.tone + '">' + fmtTrend(item.trendC) + '</strong></div>' +
           '</div>';
       }).join('');
@@ -523,11 +564,11 @@
       return '<article class="market-row">' +
         '<div class="market-summary">' +
           '<div class="market-title-row">' +
-            '<div><span class="market-code">' + countryKey + '</span><h3>' + country.name + '</h3></div>' +
+            '<div><span class="market-code">' + countryKey + '</span><h3>' + country.name + '</h3><p class="market-scope">' + outlook.regions.length + ' 区 · ' + outlook.items.length + ' 个代表点</p></div>' +
             '<span class="market-status tone-' + status.tone + '">' + status.label + '</span>' +
           '</div>' +
           '<dl class="market-kpis">' +
-            '<div><dt>区域平均当前温度</dt><dd>' + fmtCPrecise(outlook.currentF) + '</dd></div>' +
+            '<div><dt>区域典型当前温度</dt><dd>' + fmtCPrecise(outlook.currentF) + '</dd></div>' +
             '<div><dt>未来 7 天范围</dt><dd>' + fmtCRange(outlook.minF, outlook.maxF) + '</dd></div>' +
             '<div><dt>温度趋势</dt><dd>' + fmtTrend(outlook.trendC) + '</dd></div>' +
             '<div><dt>区域平均雨天</dt><dd>' + rainText + '</dd></div>' +
@@ -669,7 +710,7 @@
       return '<article class="weather-card region-weather-card' + (hasAlerts ? ' has-alerts' : '') + '">' +
         '<div class="region-card-head">' +
           '<div><div class="region-badge">' + outlook.label + '</div><div class="city-name">' + outlook.name + '</div>' +
-          '<div class="region-monitor-count">' + outlook.items.length + ' 个代表监测点</div></div>' +
+          '<div class="region-monitor-count">' + outlook.items.length + ' 个代表监测点 · ' + coverageLabel(outlook.items.length, outlook.pointKeys.length) + '</div></div>' +
           '<span class="market-status tone-' + status.tone + '">' + status.label + '</span>' +
         '</div>' +
         '<div class="region-current"><span>代表点当前温度</span><strong>' +
@@ -683,6 +724,8 @@
           '<div><dt>去年同期 7 日均温</dt><dd>' + fmtCPrecise(outlook.yearAgo.previousF) + '</dd></div>' +
           '<div><dt>较去年同期</dt><dd class="tone-' + comparisonTone + '">' + fmtYearAgoDelta(outlook.yearAgo.deltaC) + '</dd></div>' +
           '<div><dt>未来 7 日范围</dt><dd>' + fmtCRange(outlook.minF, outlook.maxF) + '</dd></div>' +
+          '<div><dt>未来 7 日最大降雪</dt><dd>' + fmtSnowfall(outlook.snowfallTotal) + '</dd></div>' +
+          '<div><dt>代表点最大积雪</dt><dd>' + fmtSnowDepth(outlook.snowDepth) + '</dd></div>' +
         '</dl>' +
         '<div class="signal-row"><span>运营信号</span><strong>' + signal.value + '</strong></div>' +
         '<div class="region-signal-note">' + signal.note + '</div>' +
@@ -693,6 +736,10 @@
 
   function operationalSignal(entry) {
     if (!entry) return { value: '--', note: 'No daily data' };
+    if ((entry.snowfall != null && entry.snowfall >= 0.1) ||
+        (entry.snow_depth != null && entry.snow_depth >= 0.03)) {
+      return { value: 'Snow Demand', note: '关注滑雪、保暖、手套和护具需求' };
+    }
     if (entry.precipitation != null && entry.precipitation >= 0.2) {
       return { value: 'Rain Gear', note: '推防水包、雨衣、鞋套' };
     }
@@ -763,10 +810,12 @@
     var current = selected.current || {};
     var pointName = pointDisplayName(selected.region_key, selected);
     var regionName = regionNameForPoint(state.country, selected.region_key, selected);
+    var currentNote = fmtCF(current.temperature);
+    if (current.snow_depth != null) currentNote += ' · 积雪 ' + fmtSnowDepth(current.snow_depth);
     els.dailyMetrics.innerHTML = [
       metricItem('今日最高', today ? fmtCF(today.temp_max) : '--', pointName),
       metricItem('今日最低', today ? fmtCF(today.temp_min) : '--', regionName),
-      metricItem('当前天气', current.weather_desc || (today ? today.weather_desc : '--'), fmtCF(current.temperature)),
+      metricItem('当前天气', current.weather_desc || (today ? today.weather_desc : '--'), currentNote),
       metricItem('运营信号', signal.value, signal.note)
     ].join('');
   }
@@ -848,6 +897,7 @@
       var code = daily.weathercode ? daily.weathercode[index] : 0;
       var w = weather(code);
       var precip = daily.precipitation ? daily.precipitation[index] : null;
+      var snowfall = daily.snowfall ? daily.snowfall[index] : null;
       return '<tr>' +
         '<td><strong>' + fmtDate(date) + '</strong><br><span class="muted">' + date + '</span></td>' +
         '<td class="forecast-icon">' + w[1] + '</td>' +
@@ -855,12 +905,13 @@
         '<td>' + fmtCF(daily.temp_max ? daily.temp_max[index] : null) + '</td>' +
         '<td>' + fmtCF(daily.temp_min ? daily.temp_min[index] : null) + '</td>' +
         '<td class="' + (precip != null && precip >= 1 ? 'precip-high' : '') + '">' + fmtIn(precip) + '</td>' +
+        '<td class="' + (snowfall != null && snowfall >= 0.1 ? 'precip-high' : '') + '">' + fmtSnowfall(snowfall) + '</td>' +
         '<td>' + fmtMph(daily.windspeed_max ? daily.windspeed_max[index] : null) + '</td>' +
         '</tr>';
     }).join('');
 
     els.forecastWrap.innerHTML = '<table class="forecast-table">' +
-      '<thead><tr><th>Date</th><th></th><th>Weather</th><th>High</th><th>Low</th><th>Precip</th><th>Wind</th></tr></thead>' +
+      '<thead><tr><th>Date</th><th></th><th>Weather</th><th>High</th><th>Low</th><th>Precip</th><th>Snow</th><th>Wind</th></tr></thead>' +
       '<tbody>' + body + '</tbody></table>';
   }
 
@@ -874,9 +925,9 @@
     renderDatePicker();
     renderSummary(snapshot);
     renderAlerts(snapshot);
-    renderCalendar(snapshot);
     renderCards(snapshot);
     renderForecast(snapshot);
+    renderCalendar(snapshot);
   }
 
   if (pageType === 'country') {

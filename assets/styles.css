@@ -569,13 +569,16 @@ h2 {
 
 .market-overview {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
   gap: 12px;
   margin-top: 14px;
 }
 
 .market-row {
-  display: grid;
-  grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
   overflow: hidden;
   background: var(--panel);
   border: 1px solid var(--line);
@@ -586,7 +589,7 @@ h2 {
 .market-summary {
   padding: 20px;
   background: #fafbfc;
-  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 .market-title-row {
@@ -602,6 +605,13 @@ h2 {
   font-size: 20px;
   font-weight: 820;
   line-height: 1.15;
+}
+
+.market-scope {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 760;
 }
 
 .market-code {
@@ -716,17 +726,18 @@ h2 {
 }
 
 .market-cities {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  align-content: stretch;
+  display: block;
 }
 
 .market-city {
   min-width: 0;
-  min-height: 158px;
+  min-height: 142px;
   padding: 16px;
-  border-right: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
+}
+
+.market-city:last-child {
+  border-bottom: 0;
 }
 
 .market-city-top {
@@ -759,6 +770,15 @@ h2 {
   font-weight: 760;
   line-height: 1.35;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.market-city-points {
+  margin-top: 6px;
+  color: var(--muted-strong);
+  font-size: 11px;
+  font-weight: 720;
+  line-height: 1.4;
   overflow-wrap: anywhere;
 }
 
@@ -1134,7 +1154,14 @@ h2 {
   align-items: start;
 }
 
+.forecast-head > div:first-child,
+.calendar-head > div:first-child {
+  flex: 0 0 150px;
+}
+
 .forecast-tabs {
+  min-width: 0;
+  flex: 1;
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
@@ -1398,6 +1425,17 @@ h2 {
   font-size: 12px;
 }
 
+.footer a {
+  color: inherit;
+  font-weight: 760;
+}
+
+@media (max-width: 1120px) {
+  .market-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 980px) {
   .header-inner {
     grid-template-columns: 1fr;
@@ -1417,6 +1455,11 @@ h2 {
 
   .section-head {
     display: block;
+  }
+
+  .forecast-head > div:first-child,
+  .calendar-head > div:first-child {
+    width: auto;
   }
 
   .market-row {
@@ -1461,6 +1504,10 @@ h2 {
 
   .overview-signals {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .market-overview {
+    grid-template-columns: 1fr;
   }
 
   .overview-date {

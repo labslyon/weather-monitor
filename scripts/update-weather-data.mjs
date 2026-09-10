@@ -3,17 +3,66 @@ import fs from 'node:fs/promises';
 const DATA_JSON = 'assets/weather-data.json';
 const DATA_JS = 'assets/weather-data.js';
 
+const COUNTRY_META = {
+  US: { name: 'United States', flag: '\u{1F1FA}\u{1F1F8}' },
+  CA: { name: 'Canada', flag: '\u{1F1E8}\u{1F1E6}' },
+  AU: { name: 'Australia', flag: '\u{1F1E6}\u{1F1FA}' }
+};
+
+function seed(country, regionKey, city, region, lat, lon) {
+  return {
+    city,
+    region,
+    region_key: regionKey,
+    country,
+    country_name: COUNTRY_META[country].name,
+    country_flag: COUNTRY_META[country].flag,
+    lat,
+    lon
+  };
+}
+
 const REGION_SEEDS = {
-  'us-rockies': {
-    city: 'Denver',
-    region: 'Rocky Mountains',
-    region_key: 'us-rockies',
-    country: 'US',
-    country_name: 'United States',
-    country_flag: '\u{1F1FA}\u{1F1F8}',
-    lat: 39.7392,
-    lon: -104.9903
-  }
+  'us-east': seed('US', 'us-east', 'New York', 'Northeast', 40.7128, -74.006),
+  'us-northeast-buffalo': seed('US', 'us-northeast-buffalo', 'Buffalo', 'Northeast', 42.8864, -78.8784),
+  'us-south': seed('US', 'us-south', 'Miami', 'Southeast', 25.7617, -80.1918),
+  'us-southeast-atlanta': seed('US', 'us-southeast-atlanta', 'Atlanta', 'Southeast', 33.749, -84.388),
+  'us-north': seed('US', 'us-north', 'Chicago', 'Midwest / Great Lakes', 41.8781, -87.6298),
+  'us-midwest-minneapolis': seed('US', 'us-midwest-minneapolis', 'Minneapolis', 'Midwest / Great Lakes', 44.9778, -93.265),
+  'us-central': seed('US', 'us-central', 'Dallas', 'South', 32.7767, -96.797),
+  'us-south-houston': seed('US', 'us-south-houston', 'Houston', 'South', 29.7604, -95.3698),
+  'us-southwest': seed('US', 'us-southwest', 'Phoenix', 'Southwest', 33.4484, -112.074),
+  'us-southwest-albuquerque': seed('US', 'us-southwest-albuquerque', 'Albuquerque', 'Southwest', 35.0844, -106.6504),
+  'us-west': seed('US', 'us-west', 'Los Angeles', 'West Coast', 34.0522, -118.2437),
+  'us-west-sf': seed('US', 'us-west-sf', 'San Francisco', 'West Coast', 37.7749, -122.4194),
+  'us-pnw': seed('US', 'us-pnw', 'Seattle', 'West Coast', 47.6062, -122.3321),
+  'us-rockies': seed('US', 'us-rockies', 'Denver', 'Rocky Mountains', 39.7392, -104.9903),
+  'us-rockies-slc': seed('US', 'us-rockies-slc', 'Salt Lake City', 'Rocky Mountains', 40.7608, -111.891),
+  'us-rockies-aspen': seed('US', 'us-rockies-aspen', 'Aspen', 'Rocky Mountains', 39.1911, -106.8175),
+  'ca-ontario': seed('CA', 'ca-ontario', 'Toronto', 'Ontario', 43.6532, -79.3832),
+  'ca-ontario-ottawa': seed('CA', 'ca-ontario-ottawa', 'Ottawa', 'Ontario', 45.4215, -75.6972),
+  'ca-quebec-province': seed('CA', 'ca-quebec-province', 'Montreal', 'Quebec', 45.5017, -73.5673),
+  'ca-quebec-city': seed('CA', 'ca-quebec-city', 'Quebec City', 'Quebec', 46.8139, -71.208),
+  'ca-british-columbia': seed('CA', 'ca-british-columbia', 'Whistler', 'British Columbia', 50.1163, -122.9574),
+  'ca-british-columbia-vancouver': seed('CA', 'ca-british-columbia-vancouver', 'Vancouver', 'British Columbia', 49.2827, -123.1207),
+  'ca-alberta': seed('CA', 'ca-alberta', 'Calgary', 'Alberta', 51.0447, -114.0719),
+  'ca-alberta-edmonton': seed('CA', 'ca-alberta-edmonton', 'Edmonton', 'Alberta', 53.5461, -113.4938),
+  'au-east': seed('AU', 'au-east', 'Sydney', 'East Coast', -33.8688, 151.2093),
+  'au-east-canberra': seed('AU', 'au-east-canberra', 'Canberra', 'East Coast', -35.2809, 149.13),
+  'au-ne': seed('AU', 'au-ne', 'Brisbane', 'Northeast', -27.4698, 153.0251),
+  'au-ne-cairns': seed('AU', 'au-ne-cairns', 'Cairns', 'Northeast', -16.9186, 145.7781),
+  'au-south': seed('AU', 'au-south', 'Melbourne', 'South', -37.8136, 144.9631),
+  'au-south-adelaide': seed('AU', 'au-south-adelaide', 'Adelaide', 'South', -34.9285, 138.6007),
+  'au-west': seed('AU', 'au-west', 'Perth', 'West', -31.9505, 115.8605),
+  'au-west-albany': seed('AU', 'au-west-albany', 'Albany', 'West', -35.0269, 117.8839),
+  'au-north': seed('AU', 'au-north', 'Darwin', 'Tropical North', -12.4634, 130.8456),
+  'au-north-broome': seed('AU', 'au-north-broome', 'Broome', 'Tropical North', -17.9614, 122.2359)
+};
+
+const COUNTRY_REGION_KEYS = {
+  US: ['us-east', 'us-northeast-buffalo', 'us-south', 'us-southeast-atlanta', 'us-north', 'us-midwest-minneapolis', 'us-central', 'us-south-houston', 'us-southwest', 'us-southwest-albuquerque', 'us-west', 'us-west-sf', 'us-pnw', 'us-rockies', 'us-rockies-slc', 'us-rockies-aspen'],
+  CA: ['ca-ontario', 'ca-ontario-ottawa', 'ca-quebec-province', 'ca-quebec-city', 'ca-british-columbia', 'ca-british-columbia-vancouver', 'ca-alberta', 'ca-alberta-edmonton'],
+  AU: ['au-east', 'au-east-canberra', 'au-ne', 'au-ne-cairns', 'au-south', 'au-south-adelaide', 'au-west', 'au-west-albany', 'au-north', 'au-north-broome']
 };
 
 const WEATHER_CODES = {
@@ -144,6 +193,7 @@ function buildAlerts(current, daily) {
   const alerts = [];
   const temp = current.temperature;
   const precipMax = Math.max(...(daily.precipitation || []).map((value) => Number(value) || 0));
+  const snowfallTotal = (daily.snowfall || []).reduce((sum, value) => sum + (Number(value) || 0), 0);
   const gustMax = Math.max(...(daily.windgusts_max || []).map((value) => Number(value) || 0));
 
   if (temp != null && temp >= 95) {
@@ -158,6 +208,10 @@ function buildAlerts(current, daily) {
     alerts.push(`High Wind — gusts ${Math.round(gustMax)} mph`);
   }
 
+  if (snowfallTotal >= 1) {
+    alerts.push(`Snowfall - ${snowfallTotal.toFixed(1)} in / 7 days`);
+  }
+
   return alerts;
 }
 
@@ -169,13 +223,15 @@ function buildUrl(region) {
       'temperature_2m',
       'wind_speed_10m',
       'wind_direction_10m',
-      'weather_code'
+      'weather_code',
+      'snow_depth'
     ].join(','),
     daily: [
       'weather_code',
       'temperature_2m_max',
       'temperature_2m_min',
       'precipitation_sum',
+      'snowfall_sum',
       'wind_speed_10m_max',
       'wind_gusts_10m_max'
     ].join(','),
@@ -200,6 +256,7 @@ function buildArchiveUrl(region, startDate, endDate) {
       'temperature_2m_max',
       'temperature_2m_min',
       'precipitation_sum',
+      'snowfall_sum',
       'wind_speed_10m_max',
       'wind_gusts_10m_max'
     ].join(','),
@@ -212,7 +269,7 @@ function buildArchiveUrl(region, startDate, endDate) {
   return `https://archive-api.open-meteo.com/v1/archive?${params.toString()}`;
 }
 
-function dailyEntry(date, code, max, min, precip, wind, gust, source) {
+function dailyEntry(date, code, max, min, precip, snowfall, wind, gust, source) {
   const [weather_desc, weather_icon] = weatherInfo(code);
   return {
     date,
@@ -222,6 +279,7 @@ function dailyEntry(date, code, max, min, precip, wind, gust, source) {
     temp_max: round(max),
     temp_min: round(min),
     precipitation: round(precip, 3),
+    snowfall: round(snowfall, 3),
     windspeed_max: round(wind),
     windgusts_max: round(gust),
     source
@@ -247,6 +305,7 @@ async function fetchDailyArchive(region, startDate, endDate) {
       daily.temperature_2m_max?.[index],
       daily.temperature_2m_min?.[index],
       daily.precipitation_sum?.[index],
+      daily.snowfall_sum?.[index],
       daily.wind_speed_10m_max?.[index],
       daily.wind_gusts_10m_max?.[index],
       'archive'
@@ -268,6 +327,7 @@ async function fetchRegion(region) {
     windspeed: round(payload.current?.wind_speed_10m),
     winddirection: payload.current?.wind_direction_10m == null ? null : Math.round(payload.current.wind_direction_10m),
     weathercode: code == null ? null : Number(code),
+    snow_depth: round(payload.current?.snow_depth, 3),
     weather_desc,
     weather_icon,
     time: payload.current?.time || null
@@ -278,6 +338,7 @@ async function fetchRegion(region) {
     temp_max: (payload.daily?.temperature_2m_max || []).map((value) => round(value)),
     temp_min: (payload.daily?.temperature_2m_min || []).map((value) => round(value)),
     precipitation: (payload.daily?.precipitation_sum || []).map((value) => round(value, 3)),
+    snowfall: (payload.daily?.snowfall_sum || []).map((value) => round(value, 3)),
     weathercode: (payload.daily?.weather_code || []).map((value) => Number(value)),
     windspeed_max: (payload.daily?.wind_speed_10m_max || []).map((value) => round(value)),
     windgusts_max: (payload.daily?.wind_gusts_10m_max || []).map((value) => round(value))
@@ -314,6 +375,7 @@ function forecastArchiveEntries(region) {
       daily.temp_max?.[index],
       daily.temp_min?.[index],
       daily.precipitation?.[index],
+      daily.snowfall?.[index],
       daily.windspeed_max?.[index],
       daily.windgusts_max?.[index],
       date <= todayUtc() ? 'forecast-current' : 'forecast'
@@ -323,8 +385,18 @@ function forecastArchiveEntries(region) {
 
 function orderedRegionSeeds(data) {
   const regions = data.today_data?.regions || {};
-  const keys = Object.values(data.countries || {}).flatMap((country) => country.region_keys || []);
-  return keys.map((key) => regions[key] || REGION_SEEDS[key]).filter(Boolean);
+  const keys = Object.values(COUNTRY_REGION_KEYS).flat();
+  return keys.map((key) => REGION_SEEDS[key] || regions[key]).filter(Boolean);
+}
+
+function nextCountries(data) {
+  return Object.fromEntries(Object.entries(data.countries || {}).map(([countryKey, country]) => [
+    countryKey,
+    {
+      ...country,
+      region_keys: COUNTRY_REGION_KEYS[countryKey] || country.region_keys || []
+    }
+  ]));
 }
 
 async function main() {
@@ -427,7 +499,7 @@ async function main() {
       },
       regions: yearAgoRegions
     },
-    countries: data.countries,
+    countries: nextCountries(data),
     weather_codes: Object.fromEntries(
       Object.entries(WEATHER_CODES).map(([key, value]) => [key, value])
     )
