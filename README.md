@@ -37,7 +37,7 @@ Current coverage:
 
 ## Automatic Updates
 
-The workflow at `.github/workflows/pages.yml` runs every day at `00:35 UTC` and can also be started manually from the Actions tab.
+The workflow at `.github/workflows/pages.yml` runs every day at `01:00 UTC` (09:00 Beijing time) and can also be started manually from the Actions tab.
 
 Scheduled/manual runs:
 
@@ -52,6 +52,16 @@ Scheduled/manual runs:
 9. Deploy the refreshed site to GitHub Pages.
 
 Pushes to `main` deploy the static site without fetching fresh weather.
+
+## WeCom Daily Digest
+
+The scheduled workflow sends one Markdown operations digest after data refresh and Pages deployment. The digest includes all three CNY exchange-rate pairs, country-level weather ranges, notable rain/cooling/snow signals, category guidance, and a dashboard link.
+
+Configure the full group-robot webhook as the repository Actions secret `WECOM_WEBHOOK_URL`. The webhook is read only at runtime and must never be committed to the repository. Manual workflow runs send the digest only when the `send_wecom` input is enabled.
+
+Preview the generated message without sending it:
+
+`node scripts/send-wecom-digest.mjs --preview`
 
 ## GitHub Pages
 

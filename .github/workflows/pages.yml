@@ -4,8 +4,14 @@ on:
   push:
     branches: ["main"]
   schedule:
-    - cron: "35 0 * * *"
+    - cron: "0 1 * * *"
   workflow_dispatch:
+    inputs:
+      send_wecom:
+        description: "Send the WeCom operations digest after deployment"
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -64,3 +70,14 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Send WeCom operations digest
+        if: >-
+          ${{
+            github.event_name == 'schedule' ||
+            (github.event_name == 'workflow_dispatch' && inputs.send_wecom == true) ||
+            (github.event_name == 'push' && contains(github.event.head_commit.message, '[wecom-test]'))
+          }}
+        env:
+          WECOM_WEBHOOK_URL: ${{ secrets.WECOM_WEBHOOK_URL }}
+        run: node scripts/send-wecom-digest.mjs
