@@ -4,6 +4,7 @@ const WEATHER_FILE = 'assets/weather-data.json';
 const FX_FILE = 'assets/fx-data.json';
 const DASHBOARD_URL = 'https://labslyon.github.io/weather-monitor/';
 const previewOnly = process.argv.includes('--preview');
+const validateOnly = process.argv.includes('--validate-only');
 
 const COUNTRY_LABELS = { US: '美国', CA: '加拿大', AU: '澳大利亚' };
 const CURRENCY_META = {
@@ -257,13 +258,14 @@ function buildMessage(weather, fx) {
 
 function validateWebhook(value) {
   if (!value) throw new Error('WECOM_WEBHOOK_URL is not configured');
-  const url = new URL(value);
-  const valid = url.protocol === 'https:' &&
-    url.hostname === 'qyapi.weixin.qq.com' &&
-    url.pathname === '/cgi-bin/webhook/send' &&
-    url.searchParams.has('key');
-  if (!valid) throw new Error('WECOM_WEBHOOK_URL is not a valid WeCom group robot webhook');
-  return url.toString();
+  const normalized = value.trim().replace(/^["']|["']$/g, '').trim();
+  const urlMatch = normalized.match(/(?:https:\/\/)?qyapi\.weixin\.qq\.com\/cgi-bin\/webhook\/send\?[^\s"']*?key=([A-Za-z0-9_-]{16,})/i);
+  const keyMatch = normalized.match(/^(?:key=)?([A-Za-z0-9_-]{16,})$/i);
+  const key = urlMatch?.[1] || keyMatch?.[1];
+  if (!key) {
+    throw new Error(`WECOM_WEBHOOK_URL format is not recognized (${normalized.length} characters)`);
+  }
+  return `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${encodeURIComponent(key)}`;
 }
 
 async function sendMessage(webhook, content) {
@@ -309,6 +311,10 @@ async function main() {
   }
 
   const webhook = validateWebhook(process.env.WECOM_WEBHOOK_URL);
+  if (validateOnly) {
+    console.log('WeCom webhook format accepted');
+    return;
+  }
   await sendMessage(webhook, content);
   console.log(`WeCom digest delivered successfully (${bytes} bytes)`);
 }
