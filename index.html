@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>跨市场天气运营看板</title>
-    <meta name="description" content="美国、加拿大和澳大利亚 16 个运营区域、34 个代表监测点天气趋势总览。">
+    <title>跨市场运营情报看板</title>
+    <meta name="description" content="美国、加拿大和澳大利亚的天气、汇率与跨市场运营趋势总览。">
     <link rel="stylesheet" href="assets/styles.css">
   </head>
   <body data-page="overview">
     <header class="app-header">
       <div class="header-inner">
         <div>
-          <p class="eyebrow">Weather Operations</p>
-          <h1>跨市场天气运营看板</h1>
-          <p class="subtitle">美国、加拿大、澳大利亚 16 个运营区域、34 个代表监测点天气趋势总览</p>
+          <p class="eyebrow">Cross-Market Operations</p>
+          <h1>跨市场运营情报看板</h1>
+          <p class="subtitle">汇集美、加、澳天气趋势与人民币汇率变化，服务选品、投放、库存和回款判断</p>
         </div>
         <dl class="header-stats" aria-label="数据概览">
           <div>
@@ -34,6 +34,7 @@
           <a href="us/">美国</a>
           <a href="ca/">加拿大</a>
           <a href="au/">澳大利亚</a>
+          <a href="fx/">汇率</a>
         </nav>
       </div>
     </header>
@@ -48,15 +49,26 @@
           <span class="overview-date" id="overviewDate">--</span>
         </div>
         <div class="overview-signals" id="overviewSignals" aria-label="跨市场天气信号"></div>
+        <div class="section-head overview-subhead">
+          <div><p class="eyebrow">Currency Pulse</p><h2>人民币汇率动态</h2></div>
+          <a class="section-link" href="fx/">查看完整汇率走势 <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="fx-summary-grid" id="fxOverviewSummary" aria-label="美加澳汇率总览"></div>
+        <div class="section-head overview-subhead country-board-head">
+          <div><p class="eyebrow">Weather by Market</p><h2>国家天气详情</h2></div>
+          <span class="overview-date">区域趋势 · 7 日预报 · 历史同期</span>
+        </div>
         <div class="market-overview" id="marketOverview" aria-label="国家天气总览"></div>
       </section>
     </main>
 
     <footer class="footer">
-      Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. Historical snapshots were extracted from the original AgentOS page.
+      Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. FX reference data by <a href="https://data.ecb.europa.eu/currency-converter" target="_blank" rel="noopener">European Central Bank</a>.
     </footer>
 
     <script src="assets/weather-data.js"></script>
+    <script src="assets/fx-data.js"></script>
     <script src="assets/app.js"></script>
+    <script src="assets/fx-summary.js"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
-# Weather Operations Dashboard
+# Cross-Market Operations Dashboard
 
-Static GitHub Pages weather monitor for ecommerce operations, with regional forecasts, representative monitoring points, snapshot history, and a rolling daily weather calendar.
+Static GitHub Pages operations dashboard for ecommerce teams. It combines regional weather forecasts, representative monitoring points, snapshot history, rolling weather calendars, and USD/CAD/AUD exchange-rate trends against CNY.
 
 ## Data
 
@@ -14,6 +14,11 @@ Data files:
 - `assets/weather-data.js`: same data exposed as `window.WEATHER_DATA` for static hosting
 - `scripts/update-weather-data.mjs`: daily Open-Meteo updater used by GitHub Actions
 - `daily_archive`: rolling 30-day daily archive used by the weather calendar
+- `assets/fx-data.json`: structured ECB reference-rate archive for the current year
+- `assets/fx-data.js`: same exchange-rate data exposed as `window.FX_DATA`
+- `scripts/update-fx-data.mjs`: ECB updater and EUR-based cross-rate calculator
+
+Exchange rates use European Central Bank euro reference rates to calculate USD/CNY, CAD/CNY, and AUD/CNY cross rates. Completed-month points use the final available ECB working day; the current-month chart keeps each published working-day value. These are reference rates for trend analysis, not bank settlement or transaction quotes.
 
 Canada is monitored by priority sales provinces with paired representative points: Ontario (Toronto and Ottawa), Quebec (Montreal and Quebec City), British Columbia (Vancouver and Whistler), and Alberta (Calgary and Edmonton).
 
@@ -41,8 +46,10 @@ Scheduled/manual runs:
 3. Save the new UTC snapshot as `today_data`.
 4. Preserve the snapshot in `history[YYYY-MM-DD]`.
 5. Maintain `daily_archive` for the weather calendar.
-6. Commit updated data files back to `main`.
-7. Deploy the refreshed site to GitHub Pages.
+6. Fetch ECB reference rates and calculate USD/CNY, CAD/CNY, and AUD/CNY.
+7. Refresh completed month-end and current-month daily exchange-rate series.
+8. Commit updated data files back to `main`.
+9. Deploy the refreshed site to GitHub Pages.
 
 Pushes to `main` deploy the static site without fetching fresh weather.
 

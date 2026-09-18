@@ -25,6 +25,7 @@
           <a class="active" href="../us/" aria-current="page">美国</a>
           <a href="../ca/">加拿大</a>
           <a href="../au/">澳大利亚</a>
+          <a href="../fx/">汇率</a>
         </nav>
       </div>
     </header>
@@ -45,6 +46,12 @@
         <div class="alert-title">天气预警</div><div id="alertList"></div>
       </section>
       <section class="summary-grid" id="summaryGrid" aria-label="当前国家概览"></section>
+      <section class="country-fx-section" aria-labelledby="countryFxTitle">
+        <div class="section-head compact-section-head">
+          <div><p class="eyebrow">Currency Pulse</p><h2 id="countryFxTitle">美元兑人民币</h2></div>
+        </div>
+        <div id="countryFxSummary"></div>
+      </section>
       <section class="section-head">
         <div><p class="eyebrow" id="countryEyebrow">--</p><h2 id="cardsTitle">当前天气</h2></div>
       </section>
@@ -63,8 +70,10 @@
       <section class="calendar-wrap" id="calendarWrap" aria-label="过去一个月天气月历"></section>
     </main>
 
-    <footer class="footer">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. Historical snapshots were extracted from the original AgentOS page.</footer>
+    <footer class="footer">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. FX reference data by <a href="https://data.ecb.europa.eu/currency-converter" target="_blank" rel="noopener">European Central Bank</a>.</footer>
     <script src="../assets/weather-data.js"></script>
+    <script src="../assets/fx-data.js"></script>
     <script src="../assets/app.js"></script>
+    <script src="../assets/fx-summary.js"></script>
   </body>
 </html>

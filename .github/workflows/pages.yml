@@ -26,22 +26,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Update weather archive
+      - name: Update operational data
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           node --version
           node scripts/update-weather-data.mjs
+          node scripts/update-fx-data.mjs
 
-      - name: Commit weather archive
+      - name: Commit operational data
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/weather-data.json assets/weather-data.js
+          git add assets/weather-data.json assets/weather-data.js assets/fx-data.json assets/fx-data.js
           if git diff --cached --quiet; then
-            echo "No weather data changes to commit."
+            echo "No operational data changes to commit."
           else
-            git commit -m "Update weather data"
+            git commit -m "Update operational data"
             git push
           fi
 
@@ -50,7 +51,7 @@ jobs:
           mkdir _site
           cp index.html .nojekyll _site/
           cp -R assets _site/assets
-          cp -R us ca au _site/
+          cp -R us ca au fx _site/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

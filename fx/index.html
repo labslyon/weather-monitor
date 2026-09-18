@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>汇率运营看板</title>
+    <meta name="description" content="美元、加元和澳元兑人民币的月末与当月日度参考汇率趋势。">
+    <link rel="stylesheet" href="../assets/styles.css">
+  </head>
+  <body data-page="fx">
+    <header class="app-header">
+      <div class="header-inner">
+        <div>
+          <p class="eyebrow">Cross-Market Intelligence</p>
+          <h1>汇率运营看板</h1>
+          <p class="subtitle">美元、加元、澳元兑人民币参考汇率，连接海外收入、广告投放与采购成本判断</p>
+        </div>
+        <dl class="header-stats" aria-label="数据概览">
+          <div><dt>最新汇率日期</dt><dd id="fxStatDate">--</dd></div>
+          <div><dt>监测货币</dt><dd id="fxStatPairs">--</dd></div>
+          <div><dt>生成时间</dt><dd id="fxStatGenerated" class="update-time-list">--</dd></div>
+        </dl>
+        <nav class="header-nav" aria-label="顶部导航">
+          <a href="../">总览</a>
+          <a href="../us/">美国</a>
+          <a href="../ca/">加拿大</a>
+          <a href="../au/">澳大利亚</a>
+          <a class="active" href="../fx/" aria-current="page">汇率</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="shell fx-shell">
+      <section aria-labelledby="fxOverviewTitle">
+        <div class="section-head detail-head detail-head-first">
+          <div><p class="eyebrow">Currency Overview</p><h2 id="fxOverviewTitle">当前参考汇率</h2></div>
+          <span class="overview-date">1 单位外币可兑换的人民币金额 · ECB 参考汇率</span>
+        </div>
+        <div class="fx-headline-grid" id="fxHeadlineCards"></div>
+      </section>
+
+      <section aria-labelledby="fxTrendTitle">
+        <div class="section-head fx-chart-head">
+          <div><p class="eyebrow">Rate Trends</p><h2 id="fxTrendTitle">汇率走势</h2></div>
+          <div class="segmented-control" id="fxModeControl" aria-label="走势图显示方式">
+            <button class="active" type="button" data-fx-mode="rate" aria-pressed="true">实际汇率</button>
+            <button type="button" data-fx-mode="relative" aria-pressed="false">相对变化</button>
+          </div>
+        </div>
+        <p class="chart-notice" id="fxChartNotice" hidden>走势图组件未载入，可展开图表下方的数据表查看全部数值。</p>
+        <div class="fx-chart-grid">
+          <article class="fx-chart-panel">
+            <div class="fx-panel-head"><div><span>已完成月份</span><h3>本年月底汇率</h3></div><small>每月最后一个有效工作日</small></div>
+            <div class="fx-canvas-wrap"><canvas id="fxMonthChart" aria-label="本年月底汇率走势图" role="img"></canvas></div>
+            <details class="fx-table-details"><summary>查看月底数据表</summary><div class="fx-table-scroll" id="fxMonthTable"></div></details>
+          </article>
+          <article class="fx-chart-panel">
+            <div class="fx-panel-head"><div><span>Current Month</span><h3>当月每日汇率</h3></div><small>工作日参考汇率</small></div>
+            <div class="fx-canvas-wrap"><canvas id="fxDailyChart" aria-label="当月每日汇率走势图" role="img"></canvas></div>
+            <details class="fx-table-details"><summary>查看当月数据表</summary><div class="fx-table-scroll" id="fxDailyTable"></div></details>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="fxImpactTitle">
+        <div class="section-head">
+          <div><p class="eyebrow">Operating Impact</p><h2 id="fxImpactTitle">运营换算影响</h2></div>
+          <span class="overview-date">按每 1 万单位外币，对比当月首个有效工作日</span>
+        </div>
+        <div class="fx-impact-grid" id="fxImpactGrid"></div>
+      </section>
+
+      <section class="method-band" aria-labelledby="fxMethodTitle">
+        <div><p class="eyebrow">Methodology</p><h2 id="fxMethodTitle">口径与使用说明</h2></div>
+        <div class="method-copy">
+          <p>数据采用欧洲中央银行公布的欧元参考汇率，通过交叉换算得到 USD/CNY、CAD/CNY 与 AUD/CNY。月底值取该月最后一个有效工作日，当月曲线不填补周末与节假日。</p>
+          <p><strong>仅用于运营趋势判断。</strong>该数据不是银行结售汇、平台回款或信用卡清算报价，实际到账应以对应服务商成交价及费用为准。</p>
+          <a class="inline-link" href="https://data.ecb.europa.eu/currency-converter" target="_blank" rel="noopener">查看 ECB 数据来源 <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. FX reference data by <a href="https://data.ecb.europa.eu/currency-converter" target="_blank" rel="noopener">European Central Bank</a>.</footer>
+    <script src="../assets/fx-data.js"></script>
+    <script src="../assets/vendor/chart.umd.min.js"></script>
+    <script src="../assets/fx-app.js"></script>
+  </body>
+</html>
