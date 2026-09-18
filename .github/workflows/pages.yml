@@ -71,13 +71,25 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+  notify:
+    name: Send WeCom digest
+    needs: deploy
+    if: >-
+      ${{
+        github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_dispatch' && inputs.send_wecom == true) ||
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[wecom-test]'))
+      }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout current main data
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
       - name: Send WeCom operations digest
-        if: >-
-          ${{
-            github.event_name == 'schedule' ||
-            (github.event_name == 'workflow_dispatch' && inputs.send_wecom == true) ||
-            (github.event_name == 'push' && contains(github.event.head_commit.message, '[wecom-test]'))
-          }}
         env:
           WECOM_WEBHOOK_URL: ${{ secrets.WECOM_WEBHOOK_URL }}
         run: node scripts/send-wecom-digest.mjs
