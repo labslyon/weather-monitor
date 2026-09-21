@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
   schedule:
-    - cron: "17 9 * * *"
+    - cron: "30 9 * * *"
       timezone: "Asia/Shanghai"
   workflow_dispatch:
     inputs:
@@ -37,7 +37,7 @@ jobs:
         if: >-
           ${{
             github.event_name == 'workflow_dispatch' ||
-            (github.event_name == 'schedule' && github.event.schedule == '17 9 * * *')
+            (github.event_name == 'schedule' && github.event.schedule == '30 9 * * *')
           }}
         run: |
           node --version
@@ -48,7 +48,7 @@ jobs:
         if: >-
           ${{
             github.event_name == 'workflow_dispatch' ||
-            (github.event_name == 'schedule' && github.event.schedule == '17 9 * * *')
+            (github.event_name == 'schedule' && github.event.schedule == '30 9 * * *')
           }}
         run: |
           git config user.name "github-actions[bot]"
@@ -85,7 +85,7 @@ jobs:
     needs: deploy
     if: >-
       ${{
-        (github.event_name == 'schedule' && github.event.schedule == '17 9 * * *') ||
+        (github.event_name == 'schedule' && github.event.schedule == '30 9 * * *') ||
         (github.event_name == 'workflow_dispatch' && inputs.send_wecom == true) ||
         (github.event_name == 'push' && contains(github.event.head_commit.message, '[wecom-test]'))
       }}

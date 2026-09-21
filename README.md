@@ -37,7 +37,7 @@ Current coverage:
 
 ## Automatic Updates
 
-The workflow at `.github/workflows/pages.yml` runs every day at `09:17 Asia/Shanghai` and can also be started manually from the Actions tab. The non-hourly minute reduces the chance of GitHub Actions schedule congestion.
+The workflow at `.github/workflows/pages.yml` runs every day at `09:30 Asia/Shanghai` and can also be started manually from the Actions tab. The non-hourly minute reduces the chance of GitHub Actions schedule congestion.
 
 Scheduled/manual runs:
 
