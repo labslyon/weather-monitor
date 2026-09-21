@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-20 05:30 UTC",
+  "generated_at": "2026-09-21 06:57 UTC",
   "source": {
     "name": "European Central Bank",
     "page_url": "https://data.ecb.europa.eu/currency-converter",
-    "api_url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD%2BCAD%2BAUD%2BCNY.EUR.SP00.A?startPeriod=2025-12-01&endPeriod=2026-09-20&format=jsondata",
+    "api_url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD%2BCAD%2BAUD%2BCNY.EUR.SP00.A?startPeriod=2025-12-01&endPeriod=2026-09-21&format=jsondata",
     "method": "ECB euro reference rates converted into CNY cross rates",
     "note": "Reference rates for information purposes only; not transaction or settlement quotes."
   },
