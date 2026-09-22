@@ -37,7 +37,7 @@ Current coverage:
 
 ## Automatic Updates
 
-The workflow at `.github/workflows/pages.yml` runs every day at `09:30 Asia/Shanghai` and can also be started manually from the Actions tab. The non-hourly minute reduces the chance of GitHub Actions schedule congestion.
+The workflow at `.github/workflows/pages.yml` checks every 15 minutes from `04:00` through `09:45 Asia/Shanghai`. The first run that actually starts at or after `09:30` refreshes the data and sends the digest; all other candidates skip after reading `state/wecom-digest.json`. This compensates for GitHub schedule delays while preventing duplicate daily messages. The workflow can also be started manually from the Actions tab.
 
 Scheduled/manual runs:
 
