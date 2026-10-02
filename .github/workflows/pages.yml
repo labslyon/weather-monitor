@@ -4,15 +4,9 @@ on:
   push:
     branches: ["main"]
   schedule:
-    - cron: "0,15,30,45 4-9 * * *"
+    - cron: "30 8 * * *"
       timezone: "Asia/Shanghai"
   workflow_dispatch:
-    inputs:
-      send_wecom:
-        description: "Send the WeCom operations digest after deployment"
-        required: true
-        default: false
-        type: boolean
 
 permissions:
   contents: write
@@ -24,27 +18,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  gate:
-    name: Check daily run window
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    outputs:
-      should_run: ${{ steps.gate.outputs.should_run }}
-      beijing_date: ${{ steps.gate.outputs.beijing_date }}
-    steps:
-      - name: Checkout current state
-        uses: actions/checkout@v6
-        with:
-          ref: main
-
-      - name: Check Beijing time and delivery state
-        id: gate
-        run: node scripts/check-daily-run.mjs --event=${{ github.event_name }} --target=09:30
-
   deploy:
-    needs: gate
-    if: needs.gate.outputs.should_run == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -57,8 +31,7 @@ jobs:
         if: >-
           ${{
             github.event_name == 'workflow_dispatch' ||
-            github.event_name == 'schedule' ||
-            (github.event_name == 'push' && contains(github.event.head_commit.message, '[wecom-test]'))
+            github.event_name == 'schedule'
           }}
         run: |
           node --version
@@ -69,8 +42,7 @@ jobs:
         if: >-
           ${{
             github.event_name == 'workflow_dispatch' ||
-            github.event_name == 'schedule' ||
-            (github.event_name == 'push' && contains(github.event.head_commit.message, '[wecom-test]'))
+            github.event_name == 'schedule'
           }}
         run: |
           git config user.name "github-actions[bot]"
@@ -101,39 +73,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  notify:
-    name: Send WeCom digest
-    needs: [gate, deploy]
-    if: >-
-      ${{
-        (github.event_name == 'schedule' && needs.gate.outputs.should_run == 'true') ||
-        (github.event_name == 'workflow_dispatch' && inputs.send_wecom == true) ||
-        (github.event_name == 'push' && contains(github.event.head_commit.message, '[wecom-test]'))
-      }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout current main data
-        uses: actions/checkout@v6
-        with:
-          ref: main
-
-      - name: Send WeCom operations digest
-        env:
-          WECOM_WEBHOOK_URL: ${{ secrets.WECOM_WEBHOOK_URL }}
-        run: node scripts/send-wecom-digest.mjs
-
-      - name: Record successful delivery
-        run: |
-          sent_date=$(node scripts/mark-wecom-sent.mjs --date=${{ needs.gate.outputs.beijing_date }})
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state/wecom-digest.json
-          if git diff --cached --quiet; then
-            echo "Delivery for ${sent_date} is already recorded."
-          else
-            git commit -m "Record WeCom delivery for ${sent_date} [skip ci]"
-            git push
-          fi
