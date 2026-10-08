@@ -49,6 +49,45 @@
           <span class="overview-date" id="overviewDate">--</span>
         </div>
         <div class="overview-signals" id="overviewSignals" aria-label="跨市场天气信号"></div>
+        <div class="section-head overview-subhead weather-map-heading">
+          <div>
+            <p class="eyebrow">Regional Weather Map</p>
+            <h2 id="weatherMapTitle">美加澳天气分布</h2>
+          </div>
+          <div class="weather-map-mode-control" role="group" aria-label="地图展示指标">
+            <button type="button" data-weather-map-mode="temperature" aria-pressed="true">当前温度</button>
+            <button type="button" data-weather-map-mode="trend" aria-pressed="false">7 日趋势</button>
+            <button type="button" data-weather-map-mode="rain" aria-pressed="false">降雨风险</button>
+          </div>
+        </div>
+        <div class="weather-map-legend" id="weatherMapLegend" aria-live="polite"></div>
+        <div class="weather-map-grid" id="weatherMapGrid" data-weather-map-status="loading" aria-labelledby="weatherMapTitle">
+          <article class="weather-map-panel" aria-labelledby="weatherMapUSTitle">
+            <div class="weather-map-panel-head">
+              <div><span class="weather-map-country-code">US</span><h3 id="weatherMapUSTitle">美国</h3></div>
+              <p>7 区 · 16 个代表点</p>
+            </div>
+            <div class="weather-map-stage" id="weatherMapUS" role="img" aria-label="美国各运营区域天气分布地图"></div>
+            <div class="weather-map-selection" id="weatherMapDetailUS" aria-live="polite"></div>
+          </article>
+          <article class="weather-map-panel" aria-labelledby="weatherMapCATitle">
+            <div class="weather-map-panel-head">
+              <div><span class="weather-map-country-code">CA</span><h3 id="weatherMapCATitle">加拿大</h3></div>
+              <p>4 省 · 8 个代表点</p>
+            </div>
+            <div class="weather-map-stage" id="weatherMapCA" role="img" aria-label="加拿大主要省份天气分布地图"></div>
+            <div class="weather-map-selection" id="weatherMapDetailCA" aria-live="polite"></div>
+          </article>
+          <article class="weather-map-panel" aria-labelledby="weatherMapAUTitle">
+            <div class="weather-map-panel-head">
+              <div><span class="weather-map-country-code">AU</span><h3 id="weatherMapAUTitle">澳大利亚</h3></div>
+              <p>5 区 · 10 个代表点</p>
+            </div>
+            <div class="weather-map-stage" id="weatherMapAU" role="img" aria-label="澳大利亚各运营区域天气分布地图"></div>
+            <div class="weather-map-selection" id="weatherMapDetailAU" aria-live="polite"></div>
+          </article>
+        </div>
+        <p class="weather-map-note" id="weatherMapNote">区域结果由现有代表点聚合；点击地图上的区域可查看温度范围、趋势、降雨和降雪。地图边界仅用于方位示意。</p>
         <div class="section-head overview-subhead">
           <div><p class="eyebrow">Currency Pulse</p><h2>人民币汇率动态</h2></div>
           <a class="section-link" href="fx/">查看完整汇率走势 <span aria-hidden="true">→</span></a>
@@ -70,5 +109,8 @@
     <script src="assets/fx-data.js"></script>
     <script src="assets/app.js"></script>
     <script src="assets/fx-summary.js"></script>
+    <script src="assets/vendor/echarts.min.js"></script>
+    <script src="assets/weather-maps.js"></script>
+    <script src="assets/weather-map.js"></script>
   </body>
 </html>
