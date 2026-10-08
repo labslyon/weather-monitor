@@ -15,6 +15,7 @@
   };
 
   var countries = DATA.countries || {};
+  var PLACE_LABELS = window.WEATHER_PLACE_LABELS || { points: {}, regions: {} };
   var countryLabels = { US: '美国', CA: '加拿大', AU: '澳大利亚' };
   var countryTimeZones = {
     US: { label: '美东时间', timeZone: 'America/New_York' },
@@ -32,10 +33,10 @@
       { key: 'us-rockies', name: '落基山脉', label: 'ROCKY MOUNTAINS', pointKeys: ['us-rockies', 'us-rockies-slc', 'us-rockies-aspen'] }
     ],
     CA: [
-      { key: 'ca-ontario-region', name: 'Ontario', label: '安大略省', pointKeys: ['ca-ontario', 'ca-ontario-ottawa'] },
-      { key: 'ca-quebec-region', name: 'Quebec', label: '魁北克省', pointKeys: ['ca-quebec-province', 'ca-quebec-city'] },
-      { key: 'ca-bc-region', name: 'British Columbia', label: '不列颠哥伦比亚省', pointKeys: ['ca-british-columbia-vancouver', 'ca-british-columbia'] },
-      { key: 'ca-alberta-region', name: 'Alberta', label: '阿尔伯塔省', pointKeys: ['ca-alberta', 'ca-alberta-edmonton'] }
+      { key: 'ca-ontario-region', name: '安大略省', label: 'ONTARIO', pointKeys: ['ca-ontario', 'ca-ontario-ottawa'] },
+      { key: 'ca-quebec-region', name: '魁北克省', label: 'QUEBEC', pointKeys: ['ca-quebec-province', 'ca-quebec-city'] },
+      { key: 'ca-bc-region', name: '不列颠哥伦比亚省', label: 'BRITISH COLUMBIA', pointKeys: ['ca-british-columbia-vancouver', 'ca-british-columbia'] },
+      { key: 'ca-alberta-region', name: '阿尔伯塔省', label: 'ALBERTA', pointKeys: ['ca-alberta', 'ca-alberta-edmonton'] }
     ],
     AU: [
       { key: 'au-east-region', name: '东部沿海', label: 'EAST COAST', pointKeys: ['au-east', 'au-east-canberra'] },
@@ -45,18 +46,13 @@
       { key: 'au-north-region', name: '北部热带', label: 'TROPICAL NORTH', pointKeys: ['au-north', 'au-north-broome'] }
     ]
   };
-  var pointLabels = {
-    'ca-ontario': 'Toronto',
-    'ca-quebec-province': 'Montreal',
-    'ca-british-columbia': 'Whistler',
-    'ca-alberta': 'Calgary'
-  };
   var weatherCodes = DATA.weather_codes || {};
   var weekdayLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   var els = {
     overviewDate: document.getElementById('overviewDate'),
     overviewSignals: document.getElementById('overviewSignals'),
+    overviewTrendSummaries: document.getElementById('overviewTrendSummaries'),
     marketOverview: document.getElementById('marketOverview'),
     datePicker: document.getElementById('datePicker'),
     prevDate: document.getElementById('prevDate'),
@@ -75,6 +71,7 @@
     regionCards: document.getElementById('regionCards'),
     forecastTabs: document.getElementById('forecastTabs'),
     forecastWrap: document.getElementById('forecastWrap'),
+    countryTrendSummary: document.getElementById('countryTrendSummary'),
     statDates: document.getElementById('statDates'),
     statCities: document.getElementById('statCities'),
     statGenerated: document.getElementById('statGenerated')
@@ -106,8 +103,21 @@
     });
   }
 
+  function pointLabel(regionKey, row) {
+    var configured = (PLACE_LABELS.points || {})[regionKey] || {};
+    return {
+      zh: configured.zh || (row && row.city_zh) || (row && row.city) || regionKey,
+      en: configured.en || (row && row.city) || ''
+    };
+  }
+
+  function pointChineseName(regionKey, row) {
+    return pointLabel(regionKey, row).zh;
+  }
+
   function pointDisplayName(regionKey, row) {
-    return pointLabels[regionKey] || (row && row.city) || regionKey;
+    var label = pointLabel(regionKey, row);
+    return label.en && label.en !== label.zh ? label.zh + ' · ' + label.en : label.zh;
   }
 
   function regionGroupForPoint(countryKey, regionKey) {
@@ -118,7 +128,8 @@
 
   function regionNameForPoint(countryKey, regionKey, row) {
     var group = regionGroupForPoint(countryKey, regionKey);
-    return group ? group.name : ((row && row.region) || regionKey);
+    var configured = row && ((PLACE_LABELS.regions || {})[countryKey] || {})[row.region];
+    return group ? group.name : ((row && row.region_zh) || (configured && configured.zh) || (row && row.region) || regionKey);
   }
 
   function fmtF(value) {
@@ -546,6 +557,161 @@
     };
   }
 
+  function recentPointTrendC(regionKey) {
+    var archive = dailyArchive(regionKey);
+    var values = Object.keys(archive).filter(function (date) {
+      return date <= DATA.today;
+    }).sort().slice(-7).map(function (date) {
+      return archiveMidpointF(archive[date]);
+    }).filter(function (value) {
+      return value != null;
+    });
+    if (values.length < 4) return null;
+    var windowSize = Math.min(3, Math.floor(values.length / 2));
+    var startF = average(values.slice(0, windowSize));
+    var endF = average(values.slice(-windowSize));
+    return startF == null || endF == null ? null : (endF - startF) * 5 / 9;
+  }
+
+  function quantile(values, ratio) {
+    var clean = numericValues(values).slice().sort(function (left, right) { return left - right; });
+    if (!clean.length) return null;
+    var index = (clean.length - 1) * ratio;
+    var lower = Math.floor(index);
+    var upper = Math.ceil(index);
+    if (lower === upper) return clean[lower];
+    return clean[lower] + (clean[upper] - clean[lower]) * (index - lower);
+  }
+
+  function trendDistribution(values, threshold) {
+    var clean = numericValues(values);
+    return clean.reduce(function (result, value) {
+      if (value <= -threshold) result.cooling += 1;
+      else if (value >= threshold) result.warming += 1;
+      else result.stable += 1;
+      return result;
+    }, { cooling: 0, warming: 0, stable: 0, total: clean.length });
+  }
+
+  function majorityCount(total) {
+    return Math.max(1, Math.ceil(total * 0.55));
+  }
+
+  function countryTrendSummary(countryKey, snapshot) {
+    var countryName = countryLabels[countryKey] || countryKey;
+    var regions = countryOperationalOutlooks(countryKey, snapshot).filter(function (region) {
+      return region.items.length > 0;
+    });
+
+    if (regions.length < Math.min(2, countryRegionGroups(countryKey).length)) {
+      return {
+        countryKey: countryKey,
+        tone: 'stable',
+        text: countryName + '当前可用监测区域不足，暂不生成近期趋势判断。'
+      };
+    }
+
+    var recentValues = regions.map(function (region) {
+      return median(region.pointKeys.map(recentPointTrendC));
+    });
+    var recent = trendDistribution(recentValues, 1.5);
+    var recentMajority = majorityCount(recent.total);
+    var recentPhrase;
+
+    if (!recent.total) recentPhrase = countryName + '近期历史数据覆盖不足';
+    else if (recent.cooling >= recentMajority) recentPhrase = countryName + '多数监测区域近7日气温逐步下行';
+    else if (recent.warming >= recentMajority) recentPhrase = countryName + '多数监测区域近7日气温逐步上行';
+    else if (recent.stable >= recentMajority) recentPhrase = countryName + '多数监测区域近7日气温整体平稳';
+    else if (recent.cooling > recent.warming) recentPhrase = countryName + '近7日以降温区域为主，但各地走势有所分化';
+    else if (recent.warming > recent.cooling) recentPhrase = countryName + '近7日以升温区域为主，但各地走势有所分化';
+    else recentPhrase = countryName + '近7日各区域气温走势分化';
+
+    var currentValues = regions.map(function (region) {
+      return region.currentF == null ? null : toC(region.currentF);
+    });
+    var currentMin = minValue(currentValues);
+    var currentMax = maxValue(currentValues);
+    var temperaturePhrase = '当前区域气温数据不足';
+
+    if (currentMin != null && currentMax != null) {
+      if (currentMax - currentMin >= 12) {
+        var sortedRegions = regions.filter(function (region) {
+          return region.currentF != null;
+        }).sort(function (left, right) {
+          return left.currentF - right.currentF;
+        });
+        temperaturePhrase = sortedRegions[0].name + '明显偏凉，' + sortedRegions[sortedRegions.length - 1].name + '相对温暖';
+      } else {
+        var lower = quantile(currentValues, 0.25);
+        var upper = quantile(currentValues, 0.75);
+        temperaturePhrase = Math.round(lower) === Math.round(upper)
+          ? '多数区域当前约' + Math.round(lower) + '°C'
+          : '多数区域当前约' + Math.round(lower) + '–' + Math.round(upper) + '°C';
+      }
+    }
+
+    var rainyRegions = regions.filter(function (region) { return region.rainyDays >= 1; }).length;
+    var frequentRainRegions = regions.filter(function (region) { return region.rainyDays >= 3; }).length;
+    var snowRegions = regions.filter(function (region) { return region.snowDays >= 1; }).length;
+    var precipitationPhrase;
+
+    if (snowRegions >= majorityCount(regions.length)) precipitationPhrase = '多地有降雪风险';
+    else if (snowRegions > 0) precipitationPhrase = '部分地区伴有降雪风险';
+    else if (frequentRainRegions >= majorityCount(regions.length)) precipitationPhrase = '多地降雨较频繁';
+    else if (rainyRegions >= majorityCount(regions.length)) precipitationPhrase = '多数地区有间歇性降雨';
+    else if (rainyRegions > 0) precipitationPhrase = '部分地区有降雨';
+    else precipitationPhrase = '整体降水有限';
+
+    var future = trendDistribution(regions.map(function (region) { return region.trendC; }), 2);
+    var futureMajority = majorityCount(future.total);
+    var futurePhrase;
+    var tone = 'stable';
+
+    if (!future.total) futurePhrase = '趋势数据暂不完整';
+    else if (future.cooling >= futureMajority) {
+      futurePhrase = '大部分地区将继续降温';
+      tone = 'cooling';
+    } else if (future.warming >= futureMajority) {
+      futurePhrase = '大部分地区将继续升温';
+      tone = 'warming';
+    } else if (future.cooling > 0 && future.warming === 0) {
+      futurePhrase = '多数地区以平稳至继续降温为主';
+      tone = 'cooling';
+    } else if (future.warming > 0 && future.cooling === 0) {
+      futurePhrase = '多数地区以平稳至继续升温为主';
+      tone = 'warming';
+    } else if (future.stable >= futureMajority) futurePhrase = '整体将维持当前温度水平';
+    else futurePhrase = '各区域升降温并存';
+
+    return {
+      countryKey: countryKey,
+      tone: tone,
+      text: recentPhrase + '，' + temperaturePhrase + '，' + precipitationPhrase + '；未来7日' + futurePhrase + '。'
+    };
+  }
+
+  function renderOverviewTrendSummaries(snapshot) {
+    if (!els.overviewTrendSummaries) return;
+    els.overviewTrendSummaries.innerHTML = Object.keys(countries).map(function (countryKey) {
+      var summary = countryTrendSummary(countryKey, snapshot);
+      return '<article class="trend-summary-row tone-' + summary.tone + '">' +
+        '<div class="trend-summary-country"><span>' + countryKey + '</span><strong>' + countryLabels[countryKey] + '</strong></div>' +
+        '<p>' + summary.text + '</p>' +
+        '<a href="' + countryKey.toLowerCase() + '/" aria-label="查看' + countryLabels[countryKey] + '详情">查看详情 <span aria-hidden="true">→</span></a>' +
+        '</article>';
+    }).join('');
+  }
+
+  function renderCountryTrendSummary() {
+    if (!els.countryTrendSummary) return;
+    var summary = countryTrendSummary(state.country, DATA.today_data);
+    els.countryTrendSummary.innerHTML =
+      '<div class="country-trend-label"><span class="market-code">' + state.country + '</span><strong>近期国家趋势</strong></div>' +
+      '<p>' + summary.text + '</p>' +
+      '<span class="country-trend-method">基于现有代表点近7日记录与未来7日预报</span>';
+    els.countryTrendSummary.className = 'country-trend-summary tone-' + summary.tone;
+  }
+
   function signalGroups(items) {
     return Object.keys(countries).map(function (countryKey) {
       var names = items.filter(function (item) {
@@ -593,6 +759,7 @@
       overviewSignal('降雨区域', '未来 7 天至少 2 个雨天', 'rainy', rainy),
       overviewSignal('低温区域', '未来 7 天最低温 ≤ 2°C', 'cold', cold)
     ].join('');
+    renderOverviewTrendSummaries(snapshot);
 
     els.marketOverview.innerHTML = Object.keys(countries).map(function (countryKey) {
       var country = countries[countryKey];
@@ -983,6 +1150,7 @@
       renderOverview(DATA.today_data || snapshot);
       return;
     }
+    renderCountryTrendSummary();
     renderDatePicker();
     renderSummary(snapshot);
     renderAlerts(snapshot);

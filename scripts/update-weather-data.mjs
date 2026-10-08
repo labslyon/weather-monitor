@@ -1,7 +1,23 @@
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
+import vm from 'node:vm';
 
 const DATA_JSON = 'assets/weather-data.json';
 const DATA_JS = 'assets/weather-data.js';
+const PLACE_LABELS_JS = 'assets/place-labels.js';
+
+function readAssignedObject(path, propertyName) {
+  const source = fsSync.readFileSync(path, 'utf8');
+  const sandbox = { window: {} };
+  vm.runInNewContext(source, sandbox, { filename: path, timeout: 1000 });
+  const value = sandbox.window[propertyName];
+  if (!value || typeof value !== 'object') {
+    throw new Error(`Missing window.${propertyName} in ${path}`);
+  }
+  return value;
+}
+
+const PLACE_LABELS = readAssignedObject(PLACE_LABELS_JS, 'WEATHER_PLACE_LABELS');
 
 const COUNTRY_META = {
   US: { name: 'United States', flag: '\u{1F1FA}\u{1F1F8}' },
@@ -10,9 +26,13 @@ const COUNTRY_META = {
 };
 
 function seed(country, regionKey, city, region, lat, lon) {
+  const cityLabel = PLACE_LABELS.points?.[regionKey] || {};
+  const regionLabel = PLACE_LABELS.regions?.[country]?.[region] || {};
   return {
     city,
+    city_zh: cityLabel.zh || city,
     region,
+    region_zh: regionLabel.zh || region,
     region_key: regionKey,
     country,
     country_name: COUNTRY_META[country].name,
@@ -350,7 +370,9 @@ async function fetchRegion(region) {
 
   return {
     city: region.city,
+    city_zh: region.city_zh,
     region: region.region,
+    region_zh: region.region_zh,
     region_key: region.region_key,
     country: region.country,
     country_name: region.country_name,
@@ -415,7 +437,12 @@ async function main() {
       const fallback = data.today_data?.regions?.[seed.region_key];
       if (!fallback) throw error;
       console.warn(`Using stale weather data for ${seed.region_key}: ${error.message}`);
-      return { ...fallback, stale: true };
+      return {
+        ...fallback,
+        city_zh: seed.city_zh,
+        region_zh: seed.region_zh,
+        stale: true
+      };
     }
   });
   const freshCount = fetched.filter((region) => !region.stale).length;

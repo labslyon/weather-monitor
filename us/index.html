@@ -34,6 +34,20 @@
       <section class="section-head detail-head detail-head-first">
         <div><p class="eyebrow">Regional Detail</p><h2>美国区域天气详情</h2></div>
       </section>
+      <section class="country-temperature-section" aria-labelledby="countryTemperatureTitle">
+        <div class="section-head country-temperature-head">
+          <div><p class="eyebrow">Current Temperature Map</p><h2 id="countryTemperatureTitle">美国当前气温分布</h2></div>
+          <span class="overview-date" id="countryTemperatureUpdated">--</span>
+        </div>
+        <div class="country-temperature-map-frame">
+          <div class="country-temperature-map" id="countryTemperatureMap" role="img" aria-label="美国全国当前气温分布图">
+            <canvas class="country-temperature-raster" id="countryTemperatureRaster" aria-hidden="true"></canvas>
+            <div class="country-temperature-chart" id="countryTemperatureChart" aria-hidden="true"></div>
+          </div>
+        </div>
+        <p class="country-temperature-note" id="countryTemperatureNote">正在载入全国当前气温分布...</p>
+        <div class="country-trend-summary" id="countryTrendSummary" aria-live="polite"></div>
+      </section>
       <section class="toolbar" aria-label="日期控制">
         <label for="datePicker">快照日期</label>
         <button class="icon-button" id="prevDate" type="button" aria-label="上一天" title="上一天">‹</button>
@@ -72,8 +86,12 @@
 
     <footer class="footer">Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>. FX reference data by <a href="https://data.ecb.europa.eu/currency-converter" target="_blank" rel="noopener">European Central Bank</a>.</footer>
     <script src="../assets/weather-data.js"></script>
+    <script src="../assets/place-labels.js"></script>
     <script src="../assets/fx-data.js"></script>
     <script src="../assets/app.js"></script>
     <script src="../assets/fx-summary.js"></script>
+    <script src="../assets/vendor/echarts.min.js"></script>
+    <script src="../assets/weather-admin-maps.js"></script>
+    <script src="../assets/country-temperature-map.js"></script>
   </body>
 </html>

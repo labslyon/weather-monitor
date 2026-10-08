@@ -36,6 +36,7 @@ jobs:
         run: |
           node --version
           node scripts/update-weather-data.mjs
+          node scripts/update-temperature-map.mjs
           node scripts/update-fx-data.mjs
 
       - name: Commit operational data

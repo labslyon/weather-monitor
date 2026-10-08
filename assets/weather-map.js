@@ -7,6 +7,7 @@
   var DATA = window.WEATHER_DATA;
   var MAPS = window.WEATHER_MAP_GEODATA;
   var ECHARTS = window.echarts;
+  var PLACE_LABELS = window.WEATHER_PLACE_LABELS || { points: {} };
 
   function showError(message) {
     root.setAttribute('data-weather-map-status', 'error');
@@ -35,10 +36,10 @@
       { key: 'us-rockies', name: '落基山脉', label: 'ROCKY MOUNTAINS', points: ['us-rockies', 'us-rockies-slc', 'us-rockies-aspen'], position: 'top', offset: [8, -10] }
     ],
     CA: [
-      { key: 'ca-ontario-region', name: 'Ontario', label: '安大略省', points: ['ca-ontario', 'ca-ontario-ottawa'], position: 'top', offset: [-9, -8] },
-      { key: 'ca-quebec-region', name: 'Quebec', label: '魁北克省', points: ['ca-quebec-province', 'ca-quebec-city'], position: 'top', offset: [12, -8] },
-      { key: 'ca-bc-region', name: 'British Columbia', label: '不列颠哥伦比亚省', points: ['ca-british-columbia-vancouver', 'ca-british-columbia'], position: 'right', offset: [4, -5] },
-      { key: 'ca-alberta-region', name: 'Alberta', label: '阿尔伯塔省', points: ['ca-alberta', 'ca-alberta-edmonton'], position: 'top', offset: [0, -8] }
+      { key: 'ca-ontario-region', name: '安大略省', label: 'ONTARIO', points: ['ca-ontario', 'ca-ontario-ottawa'], position: 'top', offset: [-9, -8] },
+      { key: 'ca-quebec-region', name: '魁北克省', label: 'QUEBEC', points: ['ca-quebec-province', 'ca-quebec-city'], position: 'top', offset: [12, -8] },
+      { key: 'ca-bc-region', name: '不列颠哥伦比亚省', label: 'BRITISH COLUMBIA', points: ['ca-british-columbia-vancouver', 'ca-british-columbia'], position: 'right', offset: [4, -5] },
+      { key: 'ca-alberta-region', name: '阿尔伯塔省', label: 'ALBERTA', points: ['ca-alberta', 'ca-alberta-edmonton'], position: 'top', offset: [0, -8] }
     ],
     AU: [
       { key: 'au-east-region', name: '东部沿海', label: 'EAST COAST', points: ['au-east', 'au-east-canberra'], position: 'left', offset: [-5, 11] },
@@ -54,6 +55,23 @@
     selected: {},
     charts: {}
   };
+
+  function pointLabel(row) {
+    var configured = (PLACE_LABELS.points || {})[row.region_key] || {};
+    return {
+      zh: configured.zh || row.city_zh || row.city,
+      en: configured.en || row.city || ''
+    };
+  }
+
+  function pointChineseName(row) {
+    return pointLabel(row).zh;
+  }
+
+  function pointDisplayName(row) {
+    var label = pointLabel(row);
+    return label.en && label.en !== label.zh ? label.zh + ' · ' + label.en : label.zh;
+  }
 
   function numeric(values) {
     return (values || []).filter(function (value) {
@@ -310,7 +328,7 @@
     var pointLines = region.points.map(function (row) {
       var value = row.current && row.current.temperature;
       return '<div style="display:flex;justify-content:space-between;gap:18px;margin-top:5px"><span style="color:#697586">' +
-        escapeHtml(row.city) + '</span><strong>' + (value == null ? '--' : toC(value).toFixed(1) + '°C') + '</strong></div>';
+        escapeHtml(pointDisplayName(row)) + '</span><strong>' + (value == null ? '--' : toC(value).toFixed(1) + '°C') + '</strong></div>';
     }).join('');
     return '<div style="min-width:185px">' +
       '<div style="font-size:13px;font-weight:800;color:#151a22">' + escapeHtml(region.name) + '</div>' +
@@ -326,7 +344,7 @@
     var regions = regionsByCountry[country];
     var allPoints = regions.reduce(function (list, region) {
       return list.concat(region.points.map(function (row) {
-        return { name: row.city, value: [row.lon, row.lat] };
+        return { name: pointChineseName(row), value: [row.lon, row.lat] };
       }));
     }, []);
     var regionSeries = regions.map(function (region) {
@@ -426,7 +444,7 @@
   function renderDetail(country, region) {
     state.selected[country] = region.key;
     var tone = metricColor(region);
-    var points = region.points.map(function (row) { return escapeHtml(row.city); }).join(' · ');
+    var points = region.points.map(function (row) { return escapeHtml(pointDisplayName(row)); }).join(' · ');
     document.getElementById(countryMeta[country].detail).innerHTML =
       '<div class="weather-map-selection-head">' +
         '<div class="weather-map-selection-name"><span>' + escapeHtml(region.label) + ' · ' + region.pointCount + ' 个代表点</span><strong>' + escapeHtml(region.name) + '</strong></div>' +

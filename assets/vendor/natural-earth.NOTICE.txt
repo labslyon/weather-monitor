@@ -1,0 +1,3 @@
+Administrative boundaries are derived from Natural Earth 1:50m cultural vector data.
+Natural Earth data is in the public domain.
+Source: https://www.naturalearthdata.com/
