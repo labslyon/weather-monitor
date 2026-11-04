@@ -2,7 +2,7 @@ name: Update cross-border news
 
 on:
   schedule:
-    - cron: "0 16 * * 1-5"
+    - cron: "0 */2 * * 1-5"
       timezone: "Asia/Shanghai"
   workflow_dispatch:
 

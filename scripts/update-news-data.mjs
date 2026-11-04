@@ -180,6 +180,9 @@ function buildItem(input) {
     url,
     priority: input.priority || 'medium',
     score: input.score || 50,
+    emergency_push: input.emergency_push === true,
+    emergency_title_zh: cleanText(input.emergency_title_zh),
+    action_zh: cleanText(input.action_zh),
     tags: [...new Set(input.tags || [])],
     monitoring_reason: input.monitoring_reason || 'new_publication',
     monitoring_reason_zh: input.monitoring_reason_zh || '本期新发布',
@@ -307,6 +310,9 @@ async function collectOngoingWatchlist(catalog, window) {
       url: entry.url,
       priority: entry.priority,
       score: entry.score,
+      emergency_push: entry.emergency_push === true,
+      emergency_title_zh: entry.emergency_title_zh,
+      action_zh: entry.action_zh,
       tags: entry.tags,
       version_key: `${entry.revision || entry.id}|${reason.key}`,
       monitoring_reason: reason.code,
@@ -577,18 +583,26 @@ async function collectPortLa(window) {
     const title = cleanText(anchor.text());
     if (!date || !title || !compareDate(date, window.start, window.end)) return;
     if (!/cargo|container|terminal|truck|rail|labor|closure|congestion|shipping|port|interchange/i.test(title)) return;
+    const confirmedDisruption = /\b(closed|closure|shutdown|work stoppage|operations? suspended|terminal shutdown)\b/i.test(title)
+      && /\b(terminal|port|cargo|container|labor|gate|operations?)\b/i.test(title)
+      && !/\b(potential|possible|risk|threat|may|could|planned|scheduled|holiday|maintenance)\b/i.test(title);
     items.push(buildItem({
       source: 'port_la',
       category: 'logistics',
-      status: 'announced',
-      status_zh: '港口公告',
+      status: confirmedDisruption ? 'confirmed_disruption' : 'announced',
+      status_zh: confirmedDisruption ? '已确认中断' : '港口公告',
       published_date: date,
       title,
       fact_zh: `洛杉矶港发布物流动态：“${title}”。`,
-      impact_zh: '可能影响美西到港、提柜或内陆转运判断；当前为港口公告，需进一步核对是否存在实际停工、关闭或拥堵。',
+      impact_zh: confirmedDisruption
+        ? '已确认的港口作业中断可能影响美西到港、提柜和后续 FBA 送仓时效，需立即核对受影响货件。'
+        : '可能影响美西到港、提柜或内陆转运判断；当前为港口公告，需进一步核对是否存在实际停工、关闭或拥堵。',
       url: anchor.attr('href'),
-      priority: /closure|labor|congestion|terminal/i.test(title) ? 'high' : 'medium',
-      score: /closure|labor|congestion|terminal/i.test(title) ? 87 : 60,
+      priority: confirmedDisruption ? 'critical' : /closure|labor|congestion|terminal/i.test(title) ? 'high' : 'medium',
+      score: confirmedDisruption ? 100 : /closure|labor|congestion|terminal/i.test(title) ? 87 : 60,
+      emergency_push: confirmedDisruption,
+      emergency_title_zh: confirmedDisruption ? '洛杉矶港确认发生作业中断' : '',
+      action_zh: confirmedDisruption ? '立即核对美西在途货件、提柜预约、免堆期和 FBA 送仓安排，并向货代确认替代方案。' : '',
       tags: ['美西港口']
     }));
   });
@@ -635,7 +649,12 @@ async function collectNws() {
   const items = [...grouped.values()].map(({ feature, event, states }) => {
     const properties = feature.properties;
     const translated = EVENT_TRANSLATIONS[event] || event;
-    const severityScore = properties.severity === 'Extreme' ? 99 : 92;
+    const areaDesc = cleanText(properties.areaDesc);
+    const observedExtreme = properties.severity === 'Extreme' && properties.certainty === 'Observed';
+    const majorHubWarning = /^(?:Hurricane|Storm Surge|Blizzard|Ice Storm) Warning$/i.test(event)
+      && LOGISTICS_HUB_PATTERN.test(areaDesc);
+    const emergencyPush = observedExtreme || majorHubWarning;
+    const severityScore = emergencyPush ? 100 : properties.severity === 'Extreme' ? 99 : 92;
     return buildItem({
       source: 'nws',
       category: 'weather',
@@ -644,11 +663,14 @@ async function collectNws() {
       published_date: zonedParts(new Date(properties.sent || Date.now()), EASTERN_TIMEZONE).date,
       published_at: properties.sent,
       title: properties.headline || `${event}: ${properties.areaDesc}`,
-      fact_zh: `美国国家气象局对 ${states.join('、')} 发布${translated}，影响区域包括 ${cleanText(properties.areaDesc).slice(0, 180)}。`,
+      fact_zh: `美国国家气象局对 ${states.join('、')} 发布${translated}，影响区域包括 ${areaDesc.slice(0, 180)}。`,
       impact_zh: '若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。',
       url: properties['@id'] || properties.id || SOURCE_META.nws.homepage,
-      priority: 'high',
+      priority: emergencyPush ? 'critical' : 'high',
       score: severityScore,
+      emergency_push: emergencyPush,
+      emergency_title_zh: emergencyPush ? `${translated}影响美国重点物流区域` : '',
+      action_zh: emergencyPush ? '立即核对相关州的在途货件、仓库预约与承运人时效，并准备延迟或改线方案。' : '',
       tags: ['当前预警', ...states]
     });
   }).sort((left, right) => right.score - left.score).slice(0, 2);
@@ -682,6 +704,36 @@ async function safeCollect(id, collector) {
       error: error.message,
       items: []
     };
+  }
+}
+
+function assertSourceContinuity(runs, existing, editionId) {
+  const degraded = new Map();
+  for (const source of ['ongoing_watchlist', 'nws', 'port_la', 'calendar_registry']) {
+    const run = runs.find((item) => item.id === source);
+    if (!run || run.status !== 'ok' || run.warning) {
+      degraded.set(source, run?.warning || run?.error || 'unavailable');
+    }
+  }
+  if (existing.latest?.id !== editionId) {
+    if (degraded.size) {
+      throw new Error(`Required source check failed; keeping the previous edition: ${[...degraded].map(([source, detail]) => `${source}: ${detail}`).join('; ')}`);
+    }
+    return;
+  }
+  const previousCounts = new Map();
+  (existing.latest.items || []).forEach((item) => {
+    previousCounts.set(item.source, (previousCounts.get(item.source) || 0) + 1);
+  });
+  for (const [source, previousCount] of previousCounts) {
+    const run = runs.find((item) => item.id === source);
+    const currentCount = run?.status === 'ok' ? run.items.length : 0;
+    if (!run || run.status !== 'ok' || run.warning || currentCount < previousCount) {
+      degraded.set(source, `${currentCount}/${previousCount}${run?.warning ? ` (${run.warning})` : ''}`);
+    }
+  }
+  if (degraded.size) {
+    throw new Error(`Source continuity check failed; keeping the previous edition: ${[...degraded].map(([source, detail]) => `${source}: ${detail}`).join('; ')}`);
   }
 }
 
@@ -814,6 +866,16 @@ async function readExisting() {
   }
 }
 
+function editionContentKey(edition) {
+  if (!edition) return '';
+  return JSON.stringify({
+    id: edition.id,
+    coverage: edition.coverage,
+    items: edition.items,
+    upcoming: edition.upcoming
+  });
+}
+
 function buildPreview(edition) {
   const lines = [
     `【美国跨境简报｜${edition.id}】`,
@@ -865,7 +927,15 @@ async function main() {
   if (successful.length < 5) throw new Error(`Only ${successful.length} news sources succeeded; refusing to publish`);
 
   const editionId = window.end;
-  const selected = selectItems(runs.flatMap((run) => run.items), existing, editionId);
+  assertSourceContinuity(runs, existing, editionId);
+  const previousLatestItems = new Map((existing.latest?.items || []).map((item) => [item.id, item]));
+  const selected = selectItems(runs.flatMap((run) => run.items), existing, editionId).map((item) => {
+    if (!item.emergency_push) return item;
+    return {
+      ...item,
+      detected_at: previousLatestItems.get(item.id)?.detected_at || now.toISOString()
+    };
+  });
   const edition = {
     id: editionId,
     generated_at: now.toISOString(),
@@ -908,7 +978,8 @@ async function main() {
     editions
   };
 
-  if (!hasFlag('no-write')) {
+  const unchanged = !hasFlag('force-write') && editionContentKey(existing.latest) === editionContentKey(edition);
+  if (!hasFlag('no-write') && !unchanged) {
     await fs.writeFile(DATA_JSON, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
     const safeJson = JSON.stringify(data).replace(/<\//g, '<\\/');
     await fs.writeFile(DATA_JS, `window.NEWS_DATA = ${safeJson};\n`, 'utf8');
@@ -917,7 +988,8 @@ async function main() {
   if (hasFlag('preview') || hasFlag('no-write')) console.log(buildPreview(edition));
   console.log(JSON.stringify({
     ok: true,
-    wrote_files: !hasFlag('no-write'),
+    wrote_files: !hasFlag('no-write') && !unchanged,
+    unchanged,
     should_run_today: window.shouldRun,
     coverage: window,
     selected_items: selected.length,
