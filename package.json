@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "news:update": "node scripts/update-news-data.mjs",
+    "news:north-america:update": "node scripts/update-north-america-news-data.mjs",
     "news:preview": "node scripts/update-news-data.mjs --preview --no-write"
   },
   "dependencies": {

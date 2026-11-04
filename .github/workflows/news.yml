@@ -32,11 +32,14 @@ jobs:
       - name: Update news data
         run: npm run news:update
 
+      - name: Update North America all-team data
+        run: npm run news:north-america:update
+
       - name: Commit news data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/news-data.json assets/news-data.js
+          git add assets/news-data.json assets/news-data.js assets/north-america-news-data.json
           if git diff --cached --quiet; then
             echo "No news data changes to commit."
           else
