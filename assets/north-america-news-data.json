@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-04T08:34:36.170Z",
+  "generated_at": "2026-11-04T15:57:35.718Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -13,7 +13,7 @@
   },
   "latest": {
     "id": "2026-11-03",
-    "generated_at": "2026-11-04T08:34:36.170Z",
+    "generated_at": "2026-11-04T15:57:35.718Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
@@ -41,6 +41,9 @@
         "impact_is_inference": true,
         "url": "https://www.stgusa.com/alerts/customer-advisory-potential-labor-disruption-at-ports-of-los-angeles-and-long-beach/",
         "priority": "high",
+        "emergency_push": false,
+        "emergency_title_zh": "",
+        "action_zh": "",
         "tags": [
           "美西港口",
           "劳资谈判",
@@ -53,40 +56,6 @@
         "active_until": "2026-11-05",
         "country_code": "US",
         "country_zh": "美国"
-      },
-      {
-        "id": "c771e0aa05e8c1c523d2",
-        "source": "canada_weather",
-        "source_name": "加拿大环境与气候变化部",
-        "source_tier": "official",
-        "source_tier_zh": "加拿大官方来源",
-        "country_code": "CA",
-        "country_zh": "加拿大",
-        "category": "weather",
-        "category_zh": "天气与运营",
-        "status": "active_alert",
-        "status_zh": "当前生效",
-        "published_at": "2026-11-03T12:00:00-05:00",
-        "published_date_et": "2026-11-03",
-        "title": "Freezing rain - 魁北克省",
-        "fact_zh": "加拿大环境与气候变化部对魁北克省发布冻雨预警，当前页面涉及 8 个预报区域。",
-        "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
-        "impact_is_inference": true,
-        "url": "https://weather.gc.ca/warnings/report_e.html?qc40=#203022568639015907202611020504",
-        "priority": "high",
-        "emergency_push": false,
-        "emergency_title_zh": "",
-        "action_zh": "",
-        "tags": [
-          "魁北克省",
-          "冻雨预警",
-          "黄色预警"
-        ],
-        "monitoring_reason": "active_alert",
-        "monitoring_reason_zh": "加拿大 · 黄色预警",
-        "effective_date": null,
-        "deadline_date": null,
-        "active_until": null
       },
       {
         "id": "783fe2ed93486651f16d",
@@ -139,6 +108,9 @@
         "impact_is_inference": true,
         "url": "https://www.federalregister.gov/documents/2026/11/03/2026-22410/notice-of-agreements-filed",
         "priority": "medium",
+        "emergency_push": false,
+        "emergency_title_zh": "",
+        "action_zh": "",
         "tags": [
           "海运协议备案",
           "Federal Maritime Commission"
@@ -268,7 +240,7 @@
         "id": "canada_weather",
         "name": "加拿大环境与气候变化部天气预警",
         "status": "ok",
-        "relevant_count": 1,
+        "relevant_count": 0,
         "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
       }
     ]
@@ -276,7 +248,7 @@
   "editions": [
     {
       "id": "2026-11-03",
-      "generated_at": "2026-11-04T08:34:36.170Z",
+      "generated_at": "2026-11-04T15:57:35.718Z",
       "mode": "north-america-general-team-rules",
       "delivery_status": "scf_ready",
       "coverage": {
@@ -304,6 +276,9 @@
           "impact_is_inference": true,
           "url": "https://www.stgusa.com/alerts/customer-advisory-potential-labor-disruption-at-ports-of-los-angeles-and-long-beach/",
           "priority": "high",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
           "tags": [
             "美西港口",
             "劳资谈判",
@@ -316,40 +291,6 @@
           "active_until": "2026-11-05",
           "country_code": "US",
           "country_zh": "美国"
-        },
-        {
-          "id": "c771e0aa05e8c1c523d2",
-          "source": "canada_weather",
-          "source_name": "加拿大环境与气候变化部",
-          "source_tier": "official",
-          "source_tier_zh": "加拿大官方来源",
-          "country_code": "CA",
-          "country_zh": "加拿大",
-          "category": "weather",
-          "category_zh": "天气与运营",
-          "status": "active_alert",
-          "status_zh": "当前生效",
-          "published_at": "2026-11-03T12:00:00-05:00",
-          "published_date_et": "2026-11-03",
-          "title": "Freezing rain - 魁北克省",
-          "fact_zh": "加拿大环境与气候变化部对魁北克省发布冻雨预警，当前页面涉及 8 个预报区域。",
-          "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
-          "impact_is_inference": true,
-          "url": "https://weather.gc.ca/warnings/report_e.html?qc40=#203022568639015907202611020504",
-          "priority": "high",
-          "emergency_push": false,
-          "emergency_title_zh": "",
-          "action_zh": "",
-          "tags": [
-            "魁北克省",
-            "冻雨预警",
-            "黄色预警"
-          ],
-          "monitoring_reason": "active_alert",
-          "monitoring_reason_zh": "加拿大 · 黄色预警",
-          "effective_date": null,
-          "deadline_date": null,
-          "active_until": null
         },
         {
           "id": "783fe2ed93486651f16d",
@@ -402,6 +343,9 @@
           "impact_is_inference": true,
           "url": "https://www.federalregister.gov/documents/2026/11/03/2026-22410/notice-of-agreements-filed",
           "priority": "medium",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
           "tags": [
             "海运协议备案",
             "Federal Maritime Commission"
@@ -531,7 +475,7 @@
           "id": "canada_weather",
           "name": "加拿大环境与气候变化部天气预警",
           "status": "ok",
-          "relevant_count": 1,
+          "relevant_count": 0,
           "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
         }
       ]
