@@ -1,4 +1,6 @@
 artifacts/
 source.html
 scripts/verify-render.cjs
+scripts/verify-news-render.cjs
 .design-reference/
+node_modules/

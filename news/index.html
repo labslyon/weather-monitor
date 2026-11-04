@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>美国跨境业务简报</title>
+    <meta name="description" content="面向亚马逊美国站运营的政策、合规、物流、平台和重大天气简报。">
+    <link rel="stylesheet" href="../assets/styles.css">
+  </head>
+  <body data-page="news">
+    <header class="app-header">
+      <div class="header-inner">
+        <div>
+          <p class="eyebrow">Cross-Border Intelligence</p>
+          <h1>美国跨境业务简报</h1>
+          <p class="subtitle">聚焦政策合规、FBA 入仓、港口物流和重大天气，区分官方事实与运营判断</p>
+        </div>
+        <dl class="header-stats" aria-label="新闻数据概览">
+          <div><dt>覆盖日期</dt><dd id="newsStatCoverage">--</dd></div>
+          <div><dt>精选内容</dt><dd id="newsStatItems">--</dd></div>
+          <div><dt>生成时间</dt><dd id="newsStatGenerated" class="update-time-list">--</dd></div>
+        </dl>
+        <nav class="header-nav" aria-label="顶部导航">
+          <a href="../">总览</a>
+          <a href="../us/">美国</a>
+          <a href="../ca/">加拿大</a>
+          <a href="../au/">澳大利亚</a>
+          <a href="../fx/">汇率</a>
+          <a class="active" href="../news/" aria-current="page">新闻</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="shell news-shell">
+      <section aria-labelledby="newsLatestTitle">
+        <div class="section-head detail-head detail-head-first news-page-head">
+          <div>
+            <p class="eyebrow">Daily Briefing</p>
+            <h2 id="newsLatestTitle">最新跨境简报</h2>
+          </div>
+          <span class="news-prototype-badge">固定来源＋持续事项试运行</span>
+        </div>
+        <div class="news-coverage-band" id="newsCoverageBand" aria-live="polite"></div>
+        <div class="news-list" id="newsLatestList"></div>
+      </section>
+
+      <section aria-labelledby="newsUpcomingTitle">
+        <div class="section-head news-section-head">
+          <div><p class="eyebrow">Forward Calendar</p><h2 id="newsUpcomingTitle">赛事与短假预告</h2></div>
+          <span class="overview-date">未来 60 天</span>
+        </div>
+        <div class="news-upcoming-list" id="newsUpcoming"></div>
+      </section>
+
+      <section aria-labelledby="newsHistoryTitle">
+        <div class="section-head news-section-head">
+          <div><p class="eyebrow">Briefing Archive</p><h2 id="newsHistoryTitle">历史简报</h2></div>
+          <span class="overview-date">最多保留 90 期</span>
+        </div>
+        <div class="news-history" id="newsHistory"></div>
+      </section>
+
+      <section aria-labelledby="newsSourceTitle">
+        <div class="section-head news-section-head">
+          <div><p class="eyebrow">Source Health</p><h2 id="newsSourceTitle">本次来源状态</h2></div>
+          <span class="overview-date">官方来源 / 已标注行业预警</span>
+        </div>
+        <div class="news-source-table-wrap" id="newsSources"></div>
+      </section>
+
+      <section class="method-band news-method" aria-labelledby="newsMethodTitle">
+        <div><p class="eyebrow">Methodology</p><h2 id="newsMethodTitle">口径与限制</h2></div>
+        <div class="method-copy">
+          <p>当前版本不使用搜索 API 或 AI 模型。系统同时检查“前一美国工作日新发布内容”和“仍在生效、临近生效或临近截止的持续事项”，并按业务规则筛选。</p>
+          <p><strong>事实与判断分开呈现。</strong>“事件事实”来自链接中的官方内容；“影响／建议”是规则生成的条件式运营判断，不代表官方结论。</p>
+          <p>STG 等物流商信息会明确标注为“行业预警”，不能视为港口停工的官方确认。Amazon Seller News、物流商及港口网页属于公开页面适配，结构变化可能导致采集失败；来源状态会在上方显示。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">Sources include Federal Register, CPSC, NWS, Amazon Seller News, USTR, official port pages, OPM and clearly labeled industry advisories. Verify material decisions against the linked source.</footer>
+    <script src="../assets/news-data.js"></script>
+    <script src="../assets/news-app.js"></script>
+  </body>
+</html>

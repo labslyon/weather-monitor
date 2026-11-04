@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "tracked_items": [
+    {
+      "id": "stg-la-lb-labor-2026-11",
+      "source_name": "STG Logistics",
+      "source_tier": "industry_advisory",
+      "url": "https://www.stgusa.com/alerts/customer-advisory-potential-labor-disruption-at-ports-of-los-angeles-and-long-beach/",
+      "title": "Customer Advisory: Potential Labor Disruption at Ports of Los Angeles and Long Beach",
+      "published_at": "2026-10-29T12:00:00-07:00",
+      "published_date": "2026-10-29",
+      "updated_date": "2026-11-02",
+      "deadline_date": "2026-11-04",
+      "active_until": "2026-11-05",
+      "deadline_window_days": 7,
+      "category": "logistics",
+      "status": "risk_watch",
+      "status_zh": "行业风险预警",
+      "fact_zh": "STG 通报洛杉矶／长滩港相关潜在罢工期限已延至美西时间 11 月 4 日 17:00；谈判仍在继续，尚未确认停工。",
+      "impact_zh": "若有美西到港货件，建议核对提柜预约、免堆期和送仓安排，防范潜在延误及额外费用；该信息属于物流商风险预警，不等于港口已经停工。",
+      "priority": "high",
+      "score": 99,
+      "revision": "deadline-2026-11-04-1700-pt",
+      "tags": ["美西港口", "劳资谈判", "行业预警"],
+      "expected_phrases": [
+        "deadline has been extended to Wednesday, November 4, 2026",
+        "5:00 p.m. Pacific Time"
+      ]
+    },
+    {
+      "id": "amazon-fba-peak-extension-2026",
+      "source_name": "Amazon Seller News",
+      "source_tier": "official_platform",
+      "url": "https://sellercentral.amazon.com/seller-forums/discussions/t/f25ba535-e06e-4fa3-8bb0-cb3a095fd696?postId=f25ba535-e06e-4fa3-8bb0-cb3a095fd696",
+      "title": "Temporary peak season extensions for international FBA shipments",
+      "published_at": "2026-10-30T16:16:54.917Z",
+      "published_date": "2026-10-30",
+      "active_from": "2026-08-01",
+      "active_until": "2026-11-30",
+      "deadline_date": "2026-11-30",
+      "recent_window_days": 7,
+      "deadline_window_days": 7,
+      "category": "platform",
+      "status": "temporary_measure",
+      "status_zh": "临时措施生效中",
+      "fact_zh": "亚马逊对 8 月 1 日至 11 月 30 日创建的国际 FBA 货件计划给予临时宽限：关联货件接收窗口由 30 天延至 45 天，自动关闭窗口延至 90 天，符合条件的相关费用将自动退还。",
+      "impact_zh": "建议核对分仓货件首票接收日期、Inbound Performance Dashboard 和退款记录；该宽限不代表旺季到仓节点同步延期。",
+      "priority": "high",
+      "score": 94,
+      "revision": "published-2026-10-30",
+      "tags": ["Amazon US", "FBA", "国际货件", "临时宽限"],
+      "expected_phrases": [
+        "shipment plans created between August 1 and November 30, 2026",
+        "extended the window for related shipments",
+        "automatic shipment closure window to 90 days"
+      ]
+    },
+    {
+      "id": "amazon-liability-insurance-2026-11-02",
+      "source_name": "Amazon Seller News",
+      "source_tier": "official_platform",
+      "url": "https://sellercentral.amazon.com/seller-forums/discussions/t/287d5c33-8278-4802-ba69-2f58f7dda408",
+      "title": "New Commercial Liability Insurance Requirements effective November 2, 2026",
+      "published_at": "2026-09-03T18:32:42.875Z",
+      "published_date": "2026-09-03",
+      "effective_date": "2026-11-02",
+      "effective_window_days_before": 3,
+      "effective_window_days_after": 3,
+      "category": "platform",
+      "status": "effective",
+      "status_zh": "已生效",
+      "fact_zh": "亚马逊商业责任保险新规已于 11 月 2 日生效：强化安全要求类目不再受月销售额门槛限制；中国大陆卖家新提交的保单须通过 Amazon Insurance Accelerator，既有合规保单可继续使用至到期。",
+      "impact_zh": "建议按账号核对受影响商品、现有保单到期日和新保单提交渠道；含锂电池的骑行或户外商品需要重点确认是否落入强化安全要求类目。",
+      "priority": "high",
+      "score": 97,
+      "revision": "effective-2026-11-02",
+      "tags": ["Amazon US", "保险", "中国大陆卖家", "已生效"],
+      "expected_phrases": [
+        "Effective November 2, 2026",
+        "sellers based in Mainland China",
+        "Amazon Insurance Accelerator"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "iceman-cometh-2026",
+      "type": "cycling_event",
+      "date": "2026-11-07",
+      "title_zh": "Iceman Cometh 山地车赛",
+      "scope_zh": "美国密歇根州；Kalkaska 至 Traverse City 的秋冬山地车赛事。",
+      "impact_zh": "可观察低温骑行、防风保暖和山地车装备使用场景；赛事热度不直接等同于销量增长。",
+      "source_name": "Traverse City 官方活动日历",
+      "source_url": "https://www.traversecity.com/event-detail/iceman-cometh-challenge-2026/24923/",
+      "expected_phrases": ["Iceman Cometh Challenge 2026", "November 7, 2026"]
+    },
+    {
+      "id": "el-tour-de-tucson-2026",
+      "type": "cycling_event",
+      "date": "2026-11-21",
+      "title_zh": "El Tour de Tucson",
+      "scope_zh": "美国亚利桑那州图森；长距离公路骑行活动。",
+      "impact_zh": "可围绕长距离骑行、随车收纳、补给及装备维护策划内容；赛事热度不直接等同于销量增长。",
+      "source_name": "El Tour de Tucson 官网",
+      "source_url": "https://eltourdetucson.org/",
+      "expected_phrases": ["November 21, 2026", "El Tour de Tucson"]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "cross-market-operations-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static operations dashboard data updaters and local validation tools",
+  "type": "module",
+  "scripts": {
+    "news:update": "node scripts/update-news-data.mjs",
+    "news:preview": "node scripts/update-news-data.mjs --preview --no-write"
+  },
+  "dependencies": {
+    "cheerio": "1.2.0"
+  }
+}

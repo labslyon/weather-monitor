@@ -1,0 +1,45 @@
+name: Update cross-border news
+
+on:
+  schedule:
+    - cron: "0 16 * * 1-5"
+      timezone: "Asia/Shanghai"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update news data
+        run: npm run news:update
+
+      - name: Commit news data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/news-data.json assets/news-data.js
+          if git diff --cached --quiet; then
+            echo "No news data changes to commit."
+          else
+            git commit -m "Update cross-border news"
+            git push
+          fi

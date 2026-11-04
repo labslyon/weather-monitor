@@ -1,0 +1,572 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-11-04T08:00:00.000Z",
+  "mode": "fixed-source-rules-with-watchlist-prototype",
+  "ai_summary_enabled": false,
+  "search_api_enabled": false,
+  "automated_push_enabled": false,
+  "source_strategy": {
+    "daily_publications": true,
+    "rolling_watchlist": true,
+    "events_and_holidays": true,
+    "calendar_horizon_days": 60
+  },
+  "timezone_rules": {
+    "run_timezone": "Asia/Shanghai",
+    "source_date_timezone": "America/New_York",
+    "weekday_target": "16:00 Asia/Shanghai",
+    "monday_window": "U.S. Friday through Sunday"
+  },
+  "latest": {
+    "id": "2026-11-03",
+    "generated_at": "2026-11-04T08:00:00.000Z",
+    "mode": "fixed-source-rules-with-watchlist-prototype",
+    "delivery_status": "preview_only",
+    "coverage": {
+      "start": "2026-11-03",
+      "end": "2026-11-03",
+      "timezone": "America/New_York",
+      "reason": "Previous U.S. Eastern date"
+    },
+    "items": [
+      {
+        "id": "cd47cfb1e4ae26883e29",
+        "source": "ongoing_watchlist",
+        "source_name": "STG Logistics",
+        "source_tier": "industry_advisory",
+        "source_tier_zh": "行业预警",
+        "category": "logistics",
+        "category_zh": "物流与入仓",
+        "status": "risk_watch",
+        "status_zh": "行业风险预警",
+        "published_at": "2026-10-29T12:00:00-07:00",
+        "published_date_et": "2026-10-29",
+        "title": "Customer Advisory: Potential Labor Disruption at Ports of Los Angeles and Long Beach",
+        "fact_zh": "STG 通报洛杉矶／长滩港相关潜在罢工期限已延至美西时间 11 月 4 日 17:00；谈判仍在继续，尚未确认停工。",
+        "impact_zh": "若有美西到港货件，建议核对提柜预约、免堆期和送仓安排，防范潜在延误及额外费用；该信息属于物流商风险预警，不等于港口已经停工。",
+        "impact_is_inference": true,
+        "url": "https://www.stgusa.com/alerts/customer-advisory-potential-labor-disruption-at-ports-of-los-angeles-and-long-beach/",
+        "priority": "high",
+        "tags": [
+          "美西港口",
+          "劳资谈判",
+          "行业预警"
+        ],
+        "monitoring_reason": "deadline_approaching",
+        "monitoring_reason_zh": "1 天后截止 · 2026-11-04",
+        "effective_date": null,
+        "deadline_date": "2026-11-04",
+        "active_until": "2026-11-05"
+      },
+      {
+        "id": "397d7e68e7e502a76376",
+        "source": "ongoing_watchlist",
+        "source_name": "Amazon Seller News",
+        "source_tier": "official_platform",
+        "source_tier_zh": "官方来源",
+        "category": "platform",
+        "category_zh": "亚马逊平台",
+        "status": "effective",
+        "status_zh": "已生效",
+        "published_at": "2026-09-03T18:32:42.875Z",
+        "published_date_et": "2026-09-03",
+        "title": "New Commercial Liability Insurance Requirements effective November 2, 2026",
+        "fact_zh": "亚马逊商业责任保险新规已于 11 月 2 日生效：强化安全要求类目不再受月销售额门槛限制；中国大陆卖家新提交的保单须通过 Amazon Insurance Accelerator，既有合规保单可继续使用至到期。",
+        "impact_zh": "建议按账号核对受影响商品、现有保单到期日和新保单提交渠道；含锂电池的骑行或户外商品需要重点确认是否落入强化安全要求类目。",
+        "impact_is_inference": true,
+        "url": "https://sellercentral.amazon.com/seller-forums/discussions/t/287d5c33-8278-4802-ba69-2f58f7dda408",
+        "priority": "high",
+        "tags": [
+          "Amazon US",
+          "保险",
+          "中国大陆卖家",
+          "已生效"
+        ],
+        "monitoring_reason": "recently_effective",
+        "monitoring_reason_zh": "近期生效 · 2026-11-02",
+        "effective_date": "2026-11-02",
+        "deadline_date": null,
+        "active_until": null
+      },
+      {
+        "id": "cf1d293992baed331411",
+        "source": "ongoing_watchlist",
+        "source_name": "Amazon Seller News",
+        "source_tier": "official_platform",
+        "source_tier_zh": "官方来源",
+        "category": "platform",
+        "category_zh": "亚马逊平台",
+        "status": "temporary_measure",
+        "status_zh": "临时措施生效中",
+        "published_at": "2026-10-30T16:16:54.917Z",
+        "published_date_et": "2026-10-30",
+        "title": "Temporary peak season extensions for international FBA shipments",
+        "fact_zh": "亚马逊对 8 月 1 日至 11 月 30 日创建的国际 FBA 货件计划给予临时宽限：关联货件接收窗口由 30 天延至 45 天，自动关闭窗口延至 90 天，符合条件的相关费用将自动退还。",
+        "impact_zh": "建议核对分仓货件首票接收日期、Inbound Performance Dashboard 和退款记录；该宽限不代表旺季到仓节点同步延期。",
+        "impact_is_inference": true,
+        "url": "https://sellercentral.amazon.com/seller-forums/discussions/t/f25ba535-e06e-4fa3-8bb0-cb3a095fd696?postId=f25ba535-e06e-4fa3-8bb0-cb3a095fd696",
+        "priority": "high",
+        "tags": [
+          "Amazon US",
+          "FBA",
+          "国际货件",
+          "临时宽限"
+        ],
+        "monitoring_reason": "recent_watch",
+        "monitoring_reason_zh": "近期发布 · 2026-10-30",
+        "effective_date": null,
+        "deadline_date": "2026-11-30",
+        "active_until": "2026-11-30"
+      },
+      {
+        "id": "eec4031cc7eadfa842fe",
+        "source": "federal_register",
+        "source_name": "美国联邦公报",
+        "source_tier": "official",
+        "source_tier_zh": "官方来源",
+        "category": "logistics",
+        "category_zh": "物流与入仓",
+        "status": "filing",
+        "status_zh": "海运协议备案",
+        "published_at": "2026-11-03T12:00:00-05:00",
+        "published_date_et": "2026-11-03",
+        "title": "Notice of Agreements Filed",
+        "fact_zh": "美国联邦海事委员会公布新提交的海运协议备案，具体协议主体和内容需查看原文。",
+        "impact_zh": "这是海运协议备案公告，不等于港口停工或运价已经调整；仅当协议主体或航线与在途货件相关时继续核对。",
+        "impact_is_inference": true,
+        "url": "https://www.federalregister.gov/documents/2026/11/03/2026-22410/notice-of-agreements-filed",
+        "priority": "medium",
+        "tags": [
+          "海运协议备案",
+          "Federal Maritime Commission"
+        ],
+        "monitoring_reason": "new_publication",
+        "monitoring_reason_zh": "本期新发布",
+        "effective_date": null,
+        "deadline_date": null,
+        "active_until": null
+      }
+    ],
+    "upcoming": [
+      {
+        "type": "cycling_event",
+        "date": "2026-11-07",
+        "date_display": "2026-11-07",
+        "title_zh": "Iceman Cometh 山地车赛",
+        "scope_zh": "美国密歇根州；Kalkaska 至 Traverse City 的秋冬山地车赛事。",
+        "impact_zh": "可观察低温骑行、防风保暖和山地车装备使用场景；赛事热度不直接等同于销量增长。",
+        "source_name": "Traverse City 官方活动日历",
+        "source_url": "https://www.traversecity.com/event-detail/iceman-cometh-challenge-2026/24923/"
+      },
+      {
+        "type": "federal_holiday",
+        "date": "2026-11-11",
+        "date_display": "2026-11-11",
+        "title_zh": "退伍军人节",
+        "scope_zh": "美国联邦假日；政府机构和部分企业休息，私营企业不一定停工。",
+        "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+        "source_name": "美国人事管理局（OPM）",
+        "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+      },
+      {
+        "type": "cycling_event",
+        "date": "2026-11-21",
+        "date_display": "2026-11-21",
+        "title_zh": "El Tour de Tucson",
+        "scope_zh": "美国亚利桑那州图森；长距离公路骑行活动。",
+        "impact_zh": "可围绕长距离骑行、随车收纳、补给及装备维护策划内容；赛事热度不直接等同于销量增长。",
+        "source_name": "El Tour de Tucson 官网",
+        "source_url": "https://eltourdetucson.org/"
+      },
+      {
+        "type": "federal_holiday",
+        "date": "2026-11-26",
+        "date_display": "2026-11-26—2026-11-29",
+        "title_zh": "感恩节周末",
+        "scope_zh": "感恩节为周四；周五也休息的单位可形成四天周末，但并非全国统一四天假。",
+        "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+        "source_name": "美国人事管理局（OPM）",
+        "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+      },
+      {
+        "type": "federal_holiday",
+        "date": "2026-12-25",
+        "date_display": "2026-12-25—2026-12-27",
+        "title_zh": "圣诞节周末",
+        "scope_zh": "圣诞节为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+        "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+        "source_name": "美国人事管理局（OPM）",
+        "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+      },
+      {
+        "type": "federal_holiday",
+        "date": "2027-01-01",
+        "date_display": "2027-01-01—2027-01-03",
+        "title_zh": "元旦周末",
+        "scope_zh": "元旦为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+        "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+        "source_name": "美国人事管理局（OPM）",
+        "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+      }
+    ],
+    "source_runs": [
+      {
+        "id": "federal_register",
+        "name": "美国联邦公报",
+        "status": "ok",
+        "fetched_count": 81,
+        "relevant_count": 1,
+        "elapsed_ms": 2485,
+        "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&order=newest&conditions%5Bpublication_date%5D%5Bgte%5D=2026-11-03&conditions%5Bpublication_date%5D%5Blte%5D=2026-11-03",
+        "warning": ""
+      },
+      {
+        "id": "cpsc",
+        "name": "美国消费品安全委员会",
+        "status": "ok",
+        "fetched_count": 0,
+        "relevant_count": 0,
+        "elapsed_ms": 958,
+        "url": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2026-11-03&RecallDateEnd=2026-11-03",
+        "warning": ""
+      },
+      {
+        "id": "nws",
+        "name": "美国国家气象局",
+        "status": "ok",
+        "fetched_count": 363,
+        "relevant_count": 0,
+        "elapsed_ms": 1585,
+        "url": "https://api.weather.gov/alerts/active?status=actual",
+        "warning": ""
+      },
+      {
+        "id": "amazon_seller_news",
+        "name": "亚马逊卖家新闻",
+        "status": "ok",
+        "fetched_count": 14,
+        "relevant_count": 0,
+        "elapsed_ms": 1792,
+        "url": "https://sellercentral.amazon.com/seller-forums/discussions?categories=amzn1.spce.category.8b1ad9d2",
+        "warning": ""
+      },
+      {
+        "id": "ustr",
+        "name": "美国贸易代表办公室",
+        "status": "ok",
+        "fetched_count": 30,
+        "relevant_count": 0,
+        "elapsed_ms": 1232,
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases",
+        "warning": ""
+      },
+      {
+        "id": "port_la",
+        "name": "洛杉矶港",
+        "status": "ok",
+        "fetched_count": 643,
+        "relevant_count": 0,
+        "elapsed_ms": 3516,
+        "url": "https://portoflosangeles.org/news/news-release-archive",
+        "warning": ""
+      },
+      {
+        "id": "ongoing_watchlist",
+        "name": "持续事项监控（STG／Amazon）",
+        "status": "ok",
+        "fetched_count": 3,
+        "relevant_count": 3,
+        "elapsed_ms": 1706,
+        "url": "https://www.stgusa.com/alerts/",
+        "warning": ""
+      },
+      {
+        "id": "calendar_registry",
+        "name": "赛事与 OPM 假日日历",
+        "status": "ok",
+        "fetched_count": 3,
+        "relevant_count": 3,
+        "elapsed_ms": 4286,
+        "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+        "warning": ""
+      }
+    ]
+  },
+  "editions": [
+    {
+      "id": "2026-11-03",
+      "generated_at": "2026-11-04T08:00:00.000Z",
+      "mode": "fixed-source-rules-with-watchlist-prototype",
+      "delivery_status": "preview_only",
+      "coverage": {
+        "start": "2026-11-03",
+        "end": "2026-11-03",
+        "timezone": "America/New_York",
+        "reason": "Previous U.S. Eastern date"
+      },
+      "items": [
+        {
+          "id": "cd47cfb1e4ae26883e29",
+          "source": "ongoing_watchlist",
+          "source_name": "STG Logistics",
+          "source_tier": "industry_advisory",
+          "source_tier_zh": "行业预警",
+          "category": "logistics",
+          "category_zh": "物流与入仓",
+          "status": "risk_watch",
+          "status_zh": "行业风险预警",
+          "published_at": "2026-10-29T12:00:00-07:00",
+          "published_date_et": "2026-10-29",
+          "title": "Customer Advisory: Potential Labor Disruption at Ports of Los Angeles and Long Beach",
+          "fact_zh": "STG 通报洛杉矶／长滩港相关潜在罢工期限已延至美西时间 11 月 4 日 17:00；谈判仍在继续，尚未确认停工。",
+          "impact_zh": "若有美西到港货件，建议核对提柜预约、免堆期和送仓安排，防范潜在延误及额外费用；该信息属于物流商风险预警，不等于港口已经停工。",
+          "impact_is_inference": true,
+          "url": "https://www.stgusa.com/alerts/customer-advisory-potential-labor-disruption-at-ports-of-los-angeles-and-long-beach/",
+          "priority": "high",
+          "tags": [
+            "美西港口",
+            "劳资谈判",
+            "行业预警"
+          ],
+          "monitoring_reason": "deadline_approaching",
+          "monitoring_reason_zh": "1 天后截止 · 2026-11-04",
+          "effective_date": null,
+          "deadline_date": "2026-11-04",
+          "active_until": "2026-11-05"
+        },
+        {
+          "id": "397d7e68e7e502a76376",
+          "source": "ongoing_watchlist",
+          "source_name": "Amazon Seller News",
+          "source_tier": "official_platform",
+          "source_tier_zh": "官方来源",
+          "category": "platform",
+          "category_zh": "亚马逊平台",
+          "status": "effective",
+          "status_zh": "已生效",
+          "published_at": "2026-09-03T18:32:42.875Z",
+          "published_date_et": "2026-09-03",
+          "title": "New Commercial Liability Insurance Requirements effective November 2, 2026",
+          "fact_zh": "亚马逊商业责任保险新规已于 11 月 2 日生效：强化安全要求类目不再受月销售额门槛限制；中国大陆卖家新提交的保单须通过 Amazon Insurance Accelerator，既有合规保单可继续使用至到期。",
+          "impact_zh": "建议按账号核对受影响商品、现有保单到期日和新保单提交渠道；含锂电池的骑行或户外商品需要重点确认是否落入强化安全要求类目。",
+          "impact_is_inference": true,
+          "url": "https://sellercentral.amazon.com/seller-forums/discussions/t/287d5c33-8278-4802-ba69-2f58f7dda408",
+          "priority": "high",
+          "tags": [
+            "Amazon US",
+            "保险",
+            "中国大陆卖家",
+            "已生效"
+          ],
+          "monitoring_reason": "recently_effective",
+          "monitoring_reason_zh": "近期生效 · 2026-11-02",
+          "effective_date": "2026-11-02",
+          "deadline_date": null,
+          "active_until": null
+        },
+        {
+          "id": "cf1d293992baed331411",
+          "source": "ongoing_watchlist",
+          "source_name": "Amazon Seller News",
+          "source_tier": "official_platform",
+          "source_tier_zh": "官方来源",
+          "category": "platform",
+          "category_zh": "亚马逊平台",
+          "status": "temporary_measure",
+          "status_zh": "临时措施生效中",
+          "published_at": "2026-10-30T16:16:54.917Z",
+          "published_date_et": "2026-10-30",
+          "title": "Temporary peak season extensions for international FBA shipments",
+          "fact_zh": "亚马逊对 8 月 1 日至 11 月 30 日创建的国际 FBA 货件计划给予临时宽限：关联货件接收窗口由 30 天延至 45 天，自动关闭窗口延至 90 天，符合条件的相关费用将自动退还。",
+          "impact_zh": "建议核对分仓货件首票接收日期、Inbound Performance Dashboard 和退款记录；该宽限不代表旺季到仓节点同步延期。",
+          "impact_is_inference": true,
+          "url": "https://sellercentral.amazon.com/seller-forums/discussions/t/f25ba535-e06e-4fa3-8bb0-cb3a095fd696?postId=f25ba535-e06e-4fa3-8bb0-cb3a095fd696",
+          "priority": "high",
+          "tags": [
+            "Amazon US",
+            "FBA",
+            "国际货件",
+            "临时宽限"
+          ],
+          "monitoring_reason": "recent_watch",
+          "monitoring_reason_zh": "近期发布 · 2026-10-30",
+          "effective_date": null,
+          "deadline_date": "2026-11-30",
+          "active_until": "2026-11-30"
+        },
+        {
+          "id": "eec4031cc7eadfa842fe",
+          "source": "federal_register",
+          "source_name": "美国联邦公报",
+          "source_tier": "official",
+          "source_tier_zh": "官方来源",
+          "category": "logistics",
+          "category_zh": "物流与入仓",
+          "status": "filing",
+          "status_zh": "海运协议备案",
+          "published_at": "2026-11-03T12:00:00-05:00",
+          "published_date_et": "2026-11-03",
+          "title": "Notice of Agreements Filed",
+          "fact_zh": "美国联邦海事委员会公布新提交的海运协议备案，具体协议主体和内容需查看原文。",
+          "impact_zh": "这是海运协议备案公告，不等于港口停工或运价已经调整；仅当协议主体或航线与在途货件相关时继续核对。",
+          "impact_is_inference": true,
+          "url": "https://www.federalregister.gov/documents/2026/11/03/2026-22410/notice-of-agreements-filed",
+          "priority": "medium",
+          "tags": [
+            "海运协议备案",
+            "Federal Maritime Commission"
+          ],
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "本期新发布",
+          "effective_date": null,
+          "deadline_date": null,
+          "active_until": null
+        }
+      ],
+      "upcoming": [
+        {
+          "type": "cycling_event",
+          "date": "2026-11-07",
+          "date_display": "2026-11-07",
+          "title_zh": "Iceman Cometh 山地车赛",
+          "scope_zh": "美国密歇根州；Kalkaska 至 Traverse City 的秋冬山地车赛事。",
+          "impact_zh": "可观察低温骑行、防风保暖和山地车装备使用场景；赛事热度不直接等同于销量增长。",
+          "source_name": "Traverse City 官方活动日历",
+          "source_url": "https://www.traversecity.com/event-detail/iceman-cometh-challenge-2026/24923/"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2026-11-11",
+          "date_display": "2026-11-11",
+          "title_zh": "退伍军人节",
+          "scope_zh": "美国联邦假日；政府机构和部分企业休息，私营企业不一定停工。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+        },
+        {
+          "type": "cycling_event",
+          "date": "2026-11-21",
+          "date_display": "2026-11-21",
+          "title_zh": "El Tour de Tucson",
+          "scope_zh": "美国亚利桑那州图森；长距离公路骑行活动。",
+          "impact_zh": "可围绕长距离骑行、随车收纳、补给及装备维护策划内容；赛事热度不直接等同于销量增长。",
+          "source_name": "El Tour de Tucson 官网",
+          "source_url": "https://eltourdetucson.org/"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2026-11-26",
+          "date_display": "2026-11-26—2026-11-29",
+          "title_zh": "感恩节周末",
+          "scope_zh": "感恩节为周四；周五也休息的单位可形成四天周末，但并非全国统一四天假。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2026-12-25",
+          "date_display": "2026-12-25—2026-12-27",
+          "title_zh": "圣诞节周末",
+          "scope_zh": "圣诞节为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2027-01-01",
+          "date_display": "2027-01-01—2027-01-03",
+          "title_zh": "元旦周末",
+          "scope_zh": "元旦为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 FBA 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+        }
+      ],
+      "source_runs": [
+        {
+          "id": "federal_register",
+          "name": "美国联邦公报",
+          "status": "ok",
+          "fetched_count": 81,
+          "relevant_count": 1,
+          "elapsed_ms": 2485,
+          "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&order=newest&conditions%5Bpublication_date%5D%5Bgte%5D=2026-11-03&conditions%5Bpublication_date%5D%5Blte%5D=2026-11-03",
+          "warning": ""
+        },
+        {
+          "id": "cpsc",
+          "name": "美国消费品安全委员会",
+          "status": "ok",
+          "fetched_count": 0,
+          "relevant_count": 0,
+          "elapsed_ms": 958,
+          "url": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2026-11-03&RecallDateEnd=2026-11-03",
+          "warning": ""
+        },
+        {
+          "id": "nws",
+          "name": "美国国家气象局",
+          "status": "ok",
+          "fetched_count": 363,
+          "relevant_count": 0,
+          "elapsed_ms": 1585,
+          "url": "https://api.weather.gov/alerts/active?status=actual",
+          "warning": ""
+        },
+        {
+          "id": "amazon_seller_news",
+          "name": "亚马逊卖家新闻",
+          "status": "ok",
+          "fetched_count": 14,
+          "relevant_count": 0,
+          "elapsed_ms": 1792,
+          "url": "https://sellercentral.amazon.com/seller-forums/discussions?categories=amzn1.spce.category.8b1ad9d2",
+          "warning": ""
+        },
+        {
+          "id": "ustr",
+          "name": "美国贸易代表办公室",
+          "status": "ok",
+          "fetched_count": 30,
+          "relevant_count": 0,
+          "elapsed_ms": 1232,
+          "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases",
+          "warning": ""
+        },
+        {
+          "id": "port_la",
+          "name": "洛杉矶港",
+          "status": "ok",
+          "fetched_count": 643,
+          "relevant_count": 0,
+          "elapsed_ms": 3516,
+          "url": "https://portoflosangeles.org/news/news-release-archive",
+          "warning": ""
+        },
+        {
+          "id": "ongoing_watchlist",
+          "name": "持续事项监控（STG／Amazon）",
+          "status": "ok",
+          "fetched_count": 3,
+          "relevant_count": 3,
+          "elapsed_ms": 1706,
+          "url": "https://www.stgusa.com/alerts/",
+          "warning": ""
+        },
+        {
+          "id": "calendar_registry",
+          "name": "赛事与 OPM 假日日历",
+          "status": "ok",
+          "fetched_count": 3,
+          "relevant_count": 3,
+          "elapsed_ms": 4286,
+          "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "warning": ""
+        }
+      ]
+    }
+  ]
+}

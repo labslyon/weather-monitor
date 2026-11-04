@@ -37,7 +37,7 @@ Current coverage:
 
 ## Automatic Updates
 
-The workflow at `.github/workflows/pages.yml` checks every 15 minutes from `04:00` through `09:45 Asia/Shanghai`. The first run that actually starts at or after `09:30` refreshes the data and sends the digest; all other candidates skip after reading `state/wecom-digest.json`. This compensates for GitHub schedule delays while preventing duplicate daily messages. The workflow can also be started manually from the Actions tab.
+The workflow at `.github/workflows/pages.yml` refreshes the site every day at `08:30 Asia/Shanghai`. It can also be started manually from the Actions tab.
 
 Scheduled/manual runs:
 
@@ -55,13 +55,31 @@ Pushes to `main` deploy the static site without fetching fresh weather.
 
 ## WeCom Daily Digest
 
-The scheduled workflow sends one Markdown operations digest after data refresh and Pages deployment. The digest includes all three CNY exchange-rate pairs, country-level weather ranges, notable rain/cooling/snow signals, category guidance, and a dashboard link.
+The active weather and FX digest is sent by the Tencent Cloud Function in `tencent-scf/`, not by GitHub Actions. Its robot webhooks are stored only in Tencent Cloud environment variables. Keep the legacy GitHub sender disabled to avoid duplicate messages.
 
-Configure the full group-robot webhook as the repository Actions secret `WECOM_WEBHOOK_URL`. The webhook is read only at runtime and must never be committed to the repository. Manual workflow runs send the digest only when the `send_wecom` input is enabled.
+See `tencent-scf/README.md` for the current deployment and `DRY_RUN` instructions.
 
-Preview the generated message without sending it:
+## News Prototype
 
-`node scripts/send-wecom-digest.mjs --preview`
+The news page at `news/` is a fixed-source, rule-based prototype. It currently reads public data from Federal Register, CPSC, NWS, Amazon Seller News, USTR, and the Port of Los Angeles. A separately verified rolling watchlist adds time-sensitive Amazon policy and labeled logistics-industry advisories, while a 60-day calendar covers selected cycling events and OPM federal holidays. It does not use a search API or an AI model.
+
+Generated files:
+
+- `assets/news-data.json`: readable briefing history and source health
+- `assets/news-data.js`: static browser payload
+- `scripts/update-news-data.mjs`: collection, U.S. Eastern date windows, filtering, deduplication, and holiday notices
+- `state/news-watchlist.json`: verified ongoing items and selected event registry, including effective dates and deadlines
+- `assets/news-app.js`: news page rendering
+
+Daily selection combines two time dimensions: newly published items in the target U.S. Eastern date window, and previously published items that are still active, newly effective, or approaching a deadline. Industry advisories are labeled separately from official confirmations and are never described as confirmed shutdowns unless an official source says so.
+
+The news collector runs from `.github/workflows/news.yml` at 16:00 Asia/Shanghai, Monday through Friday. Monday editions cover the previous U.S. Friday through Sunday; other weekday editions cover the previous U.S. Eastern date. The workflow updates the site archive but does not send WeCom messages. Run a no-write local preview with:
+
+`npm run news:preview`
+
+Generate local preview data with:
+
+`npm run news:update`
 
 ## GitHub Pages
 
