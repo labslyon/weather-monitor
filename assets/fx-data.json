@@ -1,59 +1,59 @@
 {
-  "generated_at": "2026-11-09 07:00 UTC",
+  "generated_at": "2026-11-10 07:37 UTC",
   "source": {
     "name": "European Central Bank",
     "page_url": "https://data.ecb.europa.eu/currency-converter",
-    "api_url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD%2BCAD%2BAUD%2BCNY.EUR.SP00.A?startPeriod=2025-12-01&endPeriod=2026-11-09&format=jsondata",
+    "api_url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD%2BCAD%2BAUD%2BCNY.EUR.SP00.A?startPeriod=2025-12-01&endPeriod=2026-11-10&format=jsondata",
     "method": "ECB euro reference rates converted into CNY cross rates",
     "note": "Reference rates for information purposes only; not transaction or settlement quotes."
   },
   "base_currency": "CNY",
   "direction": "1 foreign currency = CNY",
   "year": 2026,
-  "latest_date": "2026-11-06",
+  "latest_date": "2026-11-09",
   "current_month": "2026-11",
   "currencies": {
     "USD": {
       "country": "US",
       "name": "US Dollar",
       "pair": "USD/CNY",
-      "latest": 6.671294,
-      "latest_date": "2026-11-06",
+      "latest": 6.672831,
+      "latest_date": "2026-11-09",
       "month_start": 6.64827,
-      "month_change_pct": 0.3463,
+      "month_change_pct": 0.3694,
       "previous_month_end": 6.652882,
-      "previous_month_change_pct": 0.2768,
+      "previous_month_change_pct": 0.2999,
       "month_min": 6.64827,
-      "month_max": 6.672332,
-      "per_10000_change_cny": 230.24
+      "month_max": 6.672831,
+      "per_10000_change_cny": 245.61
     },
     "CAD": {
       "country": "CA",
       "name": "Canadian Dollar",
       "pair": "CAD/CNY",
-      "latest": 4.742757,
-      "latest_date": "2026-11-06",
+      "latest": 4.731644,
+      "latest_date": "2026-11-09",
       "month_start": 4.757672,
-      "month_change_pct": -0.3135,
+      "month_change_pct": -0.5471,
       "previous_month_end": 4.762655,
-      "previous_month_change_pct": -0.4178,
-      "month_min": 4.742757,
+      "previous_month_change_pct": -0.6511,
+      "month_min": 4.731644,
       "month_max": 4.788039,
-      "per_10000_change_cny": -149.15
+      "per_10000_change_cny": -260.28
     },
     "AUD": {
       "country": "AU",
       "name": "Australian Dollar",
       "pair": "AUD/CNY",
-      "latest": 4.583692,
-      "latest_date": "2026-11-06",
+      "latest": 4.600209,
+      "latest_date": "2026-11-09",
       "month_start": 4.659273,
-      "month_change_pct": -1.6222,
+      "month_change_pct": -1.2677,
       "previous_month_end": 4.673415,
-      "previous_month_change_pct": -1.9199,
+      "previous_month_change_pct": -1.5664,
       "month_min": 4.583692,
       "month_max": 4.680717,
-      "per_10000_change_cny": -755.81
+      "per_10000_change_cny": -590.64
     }
   },
   "month_end": [
@@ -148,6 +148,12 @@
       "USD": 6.671294,
       "CAD": 4.742757,
       "AUD": 4.583692
+    },
+    {
+      "date": "2026-11-09",
+      "USD": 6.672831,
+      "CAD": 4.731644,
+      "AUD": 4.600209
     }
   ],
   "daily": [
@@ -1458,6 +1464,12 @@
       "USD": 6.671294,
       "CAD": 4.742757,
       "AUD": 4.583692
+    },
+    {
+      "date": "2026-11-09",
+      "USD": 6.672831,
+      "CAD": 4.731644,
+      "AUD": 4.600209
     }
   ]
 }
