@@ -15,7 +15,7 @@ const HORIZON_DAYS = 60;
 const MAX_ITEMS = 4;
 
 const AMAZON_PATTERN = /\b(?:amazon|fba|asin|seller central|listing|inbound performance|brand registry)\b/i;
-const CANADA_RELEVANCE_PATTERN = /\b(?:customs?|border services?|tariffs?|trade|imports?|exports?|CARM|assessment and revenue management|supply chain|transport(?:ation)?|ports?|terminals?|rail(?:way)?|trucking|freight|shipping|cargo|strike|labou?r disruption|work stoppage|closures?|closed|product safety|consumer products?|regulations?|regulatory|compliance)\b/i;
+const CANADA_RELEVANCE_PATTERN = /\b(?:customs?|border services?|tariffs?|trade (?:policy|agreement|dispute|remedy|restriction|facilitation)|imports?|export (?:controls?|restrictions?)|CARM|assessment and revenue management|supply chain|transport(?:ation)?|ports?|terminals?|rail(?:way)?|trucking|freight|shipping|cargo|strike|labou?r disruption|work stoppage|closures?|closed|product safety|consumer products?|regulations?|regulatory|compliance)\b/i;
 const CONFIRMED_DISRUPTION_PATTERN = /\b(?:closed|closure|shutdown|work stoppage|operations? suspended|strike (?:begins|started|underway)|service interruption)\b/i;
 const UNCERTAIN_PATTERN = /\b(?:potential|possible|risk|threat|may|could|proposed|planned|scheduled)\b/i;
 const CANADA_PROVINCES = {
@@ -111,14 +111,20 @@ function canadaCategory(text) {
 }
 
 function canadaFact(category, title) {
-  if (/tariff/i.test(title)) return '加拿大政府发布应对关税影响的企业支持动态，具体适用对象与实施范围需查看原文。';
+  if (/tariff/i.test(title)) {
+    const region = /Ontario/i.test(title) ? '安大略省' : /Alberta|Calgary/i.test(title) ? '阿尔伯塔省' : '';
+    return `加拿大政府发布${region}关税应对相关支持动态，具体适用对象与措施见原文。`;
+  }
   if (/CARM|assessment and revenue management/i.test(title)) return '加拿大边境服务部门发布进口评估与税收管理系统相关动态。';
   if (category === 'logistics') return '加拿大政府发布供应链、交通运输或物流节点相关动态。';
   if (category === 'compliance') return '加拿大政府发布产品合规、安全或监管要求相关动态。';
   return '加拿大政府发布贸易、海关或边境政策相关动态。';
 }
 
-function canadaImpact(category) {
+function canadaImpact(category, title) {
+  if (/tariff/i.test(title) && /support|investments?|workers?|industries|businesses/i.test(title)) {
+    return '这类措施主要面向当地企业；建议先核对适用行业，再评估是否影响相关市场。';
+  }
   if (category === 'logistics') return '可能影响加拿大境内运输、跨境时效或到港安排；建议相关团队核对承运商状态与重点节点。';
   if (category === 'compliance') return '可能影响产品进入加拿大市场的合规要求；建议先确认适用品类、正式生效范围和过渡期。';
   return '可能影响北美贸易或跨境流程；建议确认是否涉及当前商品、申报方式或成本测算。';
@@ -129,15 +135,18 @@ async function collectCanadaNews(coverage) {
   const entries = payload.feed?.entry || [];
   return entries.flatMap((entry) => {
     const title = cleanText(entry.title);
+    // A backgrounder and its corresponding announcement report the same event.
+    if (/^Backgrounder:/i.test(title)) return [];
     const teaser = cleanText(entry.teaser);
     const link = cleanText(entry.link);
     const publishedDate = String(entry.publishedDate || '').slice(0, 10);
     const text = `${title} ${teaser}`;
     if (!publishedDate || !compareDate(publishedDate, coverage.start, coverage.end)) return [];
-    if (!CANADA_RELEVANCE_PATTERN.test(text) || AMAZON_PATTERN.test(text)) return [];
+    if (!CANADA_RELEVANCE_PATTERN.test(title) || AMAZON_PATTERN.test(text)) return [];
     const meta = canadaCategory(text);
     const confirmedDisruption = CONFIRMED_DISRUPTION_PATTERN.test(text) && !UNCERTAIN_PATTERN.test(text);
-    const highPriority = confirmedDisruption || /tariff|customs|CARM|takes effect|effective|deadline|product safety|recall/i.test(text);
+    const supportOnly = /tariff/i.test(title) && /support|investments?|workers?|industries|businesses/i.test(title);
+    const highPriority = confirmedDisruption || (!supportOnly && /tariff|customs|CARM|takes effect|effective|deadline|product safety|recall/i.test(text));
     return [{
       id: hashId('canada-news', link, title),
       source: 'canada_news',
@@ -149,11 +158,12 @@ async function collectCanadaNews(coverage) {
       ...meta,
       status: confirmedDisruption ? 'confirmed_disruption' : 'published',
       status_zh: confirmedDisruption ? '已确认中断' : '官方发布',
-      published_at: entry.publishedDate,
+      published_at: /T\d{2}:\d{2}/.test(String(entry.publishedDate || '')) ? entry.publishedDate : null,
       published_date_et: publishedDate,
+      publication_precision: /T\d{2}:\d{2}/.test(String(entry.publishedDate || '')) ? 'datetime' : 'date',
       title,
       fact_zh: canadaFact(meta.category, title),
-      impact_zh: canadaImpact(meta.category),
+      impact_zh: canadaImpact(meta.category, title),
       impact_is_inference: true,
       url: link,
       priority: confirmedDisruption ? 'critical' : highPriority ? 'high' : 'medium',
@@ -233,8 +243,9 @@ async function collectCanadaWeather(coverage, previousItems) {
       category_zh: '天气与运营',
       status: 'active_alert',
       status_zh: '当前生效',
-      published_at: `${coverage.end}T12:00:00-05:00`,
-      published_date_et: coverage.end,
+      published_at: null,
+      published_date_et: null,
+      publication_precision: 'unknown',
       title: `${entry.alert} - ${province}`,
       fact_zh: `加拿大环境与气候变化部对${province}发布${label}，当前页面涉及 ${entry.zones.length || 1} 个预报区域。`,
       impact_zh: '可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。',
@@ -244,7 +255,7 @@ async function collectCanadaWeather(coverage, previousItems) {
       emergency_push: emergency,
       emergency_title_zh: emergency ? `${province}${label}升级` : '',
       action_zh: emergency ? '立即核对受影响地区的人员安全、运输节点和配送承诺，并持续查看加拿大官方预警。' : '',
-      detected_at: emergency ? previousById.get(id)?.detected_at || new Date().toISOString() : undefined,
+      detected_at: previousById.get(id)?.detected_at || new Date().toISOString(),
       tags: [province, label, levelZh],
       monitoring_reason: 'active_alert',
       monitoring_reason_zh: `加拿大 · ${levelZh}`,

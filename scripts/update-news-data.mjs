@@ -136,7 +136,7 @@ function coverageWindow(now) {
   const beijing = zonedParts(now, BEIJING_TIMEZONE);
   const eastern = zonedParts(now, EASTERN_TIMEZONE);
   const shouldRun = !['Sat', 'Sun'].includes(beijing.weekday);
-  const end = addDays(eastern.date, -1);
+  const end = beijing.weekday === 'Mon' ? addDays(beijing.date, -1) : addDays(eastern.date, -1);
   const start = beijing.weekday === 'Mon' ? addDays(end, -2) : end;
   return {
     start,
@@ -171,8 +171,9 @@ function buildItem(input) {
     category_zh: CATEGORY_LABELS[input.category],
     status: input.status || 'announced',
     status_zh: input.status_zh || '已发布',
-    published_at: input.published_at || `${input.published_date}T12:00:00-05:00`,
-    published_date_et: input.published_date,
+    published_at: input.published_at || null,
+    published_date_et: input.published_date || null,
+    publication_precision: input.publication_precision || (input.published_at ? 'datetime' : 'date'),
     title: cleanText(input.title),
     fact_zh: cleanText(input.fact_zh),
     impact_zh: cleanText(input.impact_zh),
@@ -290,11 +291,11 @@ async function verifyTrackedPage(entry) {
 }
 
 async function collectOngoingWatchlist(catalog, window) {
-  const entries = catalog.tracked_items || [];
-  const settled = await Promise.allSettled(entries.map(async (entry) => {
+  const entries = (catalog.tracked_items || [])
+    .map((entry) => ({ entry, reason: trackedItemReason(entry, window) }))
+    .filter(({ reason }) => reason);
+  const settled = await Promise.allSettled(entries.map(async ({ entry, reason }) => {
     await verifyTrackedPage(entry);
-    const reason = trackedItemReason(entry, window);
-    if (!reason) return null;
     return buildItem({
       source: 'ongoing_watchlist',
       source_name: entry.source_name,
@@ -304,6 +305,7 @@ async function collectOngoingWatchlist(catalog, window) {
       status_zh: entry.status_zh,
       published_date: entry.published_date,
       published_at: entry.published_at,
+      publication_precision: entry.published_at?.includes('T12:00:00') ? 'date' : undefined,
       title: entry.title,
       fact_zh: entry.fact_zh,
       impact_zh: entry.impact_zh,
@@ -334,28 +336,33 @@ async function collectOngoingWatchlist(catalog, window) {
   };
 }
 
-async function collectCalendarRegistry(catalog) {
+async function collectCalendarRegistry(catalog, window) {
+  const year = Number(window.end.slice(0, 4));
+  const lastDay = addDays(window.end, CALENDAR_HORIZON_DAYS);
+  const upcomingEvents = (catalog.events || []).filter((event) => event.date > window.end && event.date <= lastDay);
   const checks = [
     {
       id: 'opm-holidays',
       url: SOURCE_META.calendar_registry.homepage,
-      expected_phrases: ['2026 Holiday Schedule', 'Wednesday, November 11', 'Friday, December 25']
+      expected_phrases: [`${year} Holiday Schedule`, `${year + 1} Holiday Schedule`]
     },
-    ...(catalog.events || []).map((event) => ({
+    ...upcomingEvents.map((event) => ({
       id: event.id,
       url: event.source_url,
       expected_phrases: event.expected_phrases || []
     }))
   ];
   const settled = await Promise.allSettled(checks.map(verifyTrackedPage));
-  const failures = settled.filter((result) => result.status === 'rejected');
+  const failures = settled.flatMap((result, index) => result.status === 'rejected'
+    ? [`${checks[index].id}: ${result.reason.message}`] : []);
   const verified = settled.length - failures.length;
-  if (!verified && checks.length) throw new Error(failures.map((result) => result.reason.message).join('; '));
   return {
     items: [],
     fetched: checks.length,
     relevant: verified,
-    warning: failures.length ? `${failures.length} 个日历来源校验失败` : '',
+    verified_event_ids: upcomingEvents.filter((_, index) => settled[index + 1].status === 'fulfilled').map((event) => event.id),
+    holidays_verified: settled[0].status === 'fulfilled',
+    warning: failures.length ? `日历来源校验失败：${failures.join('; ')}` : '',
     url: SOURCE_META.calendar_registry.homepage
   };
 }
@@ -397,8 +404,17 @@ async function collectFederalRegister(window) {
   const url = `https://www.federalregister.gov/api/v1/documents.json?${params}`;
   const payload = await fetchJson(url);
   const items = (payload.results || []).flatMap((document) => {
+    const title = document.title || '';
+    const summary = `${title} ${document.abstract || ''}`;
+    // Local safety zones and unrelated infrastructure/product cases do not imply cargo disruption.
+    if (/^(?:Safety Zone|Special Local Regulation);/i.test(title)
+      && !/\b(?:cargo|container|commercial port operations|port closure|shipping channel)\b/i.test(summary)) return [];
+    if (/\bdeauthorization\b/i.test(title) && /\bwater resources? projects?\b/i.test(title)) return [];
+    if (/\b(?:couplers?|bearings?|parts thereof|components)\b/i.test(title)
+      && /\b(?:determinations|antidumping|countervailing|reviews?)\b/i.test(title)
+      && !OUTDOOR_PRODUCT_PATTERN.test(title)) return [];
     const agencies = (document.agencies || []).map((agency) => agency.name).join(' ');
-    const text = `${document.title || ''} ${document.abstract || ''} ${document.action || ''} ${agencies}`;
+    const text = `${summary} ${document.action || ''} ${agencies}`;
     const strongAgency = /Customs and Border Protection|Federal Maritime Commission|United States Trade Representative|Consumer Product Safety Commission/i.test(agencies);
     const broadTrade = /\b(de minimis|customs|tariffs?|forced labor|section 301|section 232|ocean shipping|maritime|containers?|freight|supply chain|ports?)\b/i.test(text);
     const outdoorSpecific = OUTDOOR_PRODUCT_PATTERN.test(text);
@@ -611,6 +627,7 @@ async function collectPortLa(window) {
 
 const EVENT_TRANSLATIONS = {
   'Blizzard Warning': '暴风雪警报',
+  'Winter Storm Watch': '冬季风暴观察预警',
   'Winter Storm Warning': '冬季风暴警报',
   'Ice Storm Warning': '冰暴警报',
   'Hurricane Warning': '飓风警报',
@@ -623,6 +640,13 @@ const EVENT_TRANSLATIONS = {
   'Coastal Flood Warning': '沿海洪水警报',
   'Tornado Warning': '龙卷风警报',
   'Severe Thunderstorm Warning': '强雷暴警报'
+};
+
+const TARGET_STATE_NAMES_ZH = {
+  CA: '加利福尼亚州', WA: '华盛顿州', TX: '得克萨斯州', GA: '佐治亚州',
+  FL: '佛罗里达州', NY: '纽约州', NJ: '新泽西州', PA: '宾夕法尼亚州',
+  IL: '伊利诺伊州', OH: '俄亥俄州', TN: '田纳西州', KY: '肯塔基州',
+  VA: '弗吉尼亚州', SC: '南卡罗来纳州'
 };
 
 function alertStateCodes(properties) {
@@ -650,6 +674,7 @@ async function collectNws() {
     const properties = feature.properties;
     const translated = EVENT_TRANSLATIONS[event] || event;
     const areaDesc = cleanText(properties.areaDesc);
+    const areaNote = !areaDesc || areaDesc.length > 32 ? '，具体影响县区见官方原文' : `，影响区域包括 ${areaDesc}`;
     const observedExtreme = properties.severity === 'Extreme' && properties.certainty === 'Observed';
     const majorHubWarning = /^(?:Hurricane|Storm Surge|Blizzard|Ice Storm) Warning$/i.test(event)
       && LOGISTICS_HUB_PATTERN.test(areaDesc);
@@ -663,7 +688,7 @@ async function collectNws() {
       published_date: zonedParts(new Date(properties.sent || Date.now()), EASTERN_TIMEZONE).date,
       published_at: properties.sent,
       title: properties.headline || `${event}: ${properties.areaDesc}`,
-      fact_zh: `美国国家气象局对 ${states.join('、')} 发布${translated}，影响区域包括 ${areaDesc.slice(0, 180)}。`,
+      fact_zh: `美国国家气象局对${states.map((state) => TARGET_STATE_NAMES_ZH[state] || state).join('、')}发布${translated}${areaNote}。`,
       impact_zh: '若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。',
       url: properties['@id'] || properties.id || SOURCE_META.nws.homepage,
       priority: emergencyPush ? 'critical' : 'high',
@@ -690,6 +715,8 @@ async function safeCollect(id, collector) {
       elapsed_ms: Date.now() - started,
       url: result.url || SOURCE_META[id].homepage,
       warning: result.warning || '',
+      verified_event_ids: result.verified_event_ids,
+      holidays_verified: result.holidays_verified,
       items: result.items
     };
   } catch (error) {
@@ -709,7 +736,7 @@ async function safeCollect(id, collector) {
 
 function assertSourceContinuity(runs, existing, editionId) {
   const degraded = new Map();
-  for (const source of ['ongoing_watchlist', 'nws', 'port_la', 'calendar_registry']) {
+  for (const source of ['ongoing_watchlist', 'nws', 'port_la']) {
     const run = runs.find((item) => item.id === source);
     if (!run || run.status !== 'ok' || run.warning) {
       degraded.set(source, run?.warning || run?.error || 'unavailable');
@@ -721,15 +748,17 @@ function assertSourceContinuity(runs, existing, editionId) {
     }
     return;
   }
-  const previousCounts = new Map();
-  (existing.latest.items || []).forEach((item) => {
-    previousCounts.set(item.source, (previousCounts.get(item.source) || 0) + 1);
-  });
-  for (const [source, previousCount] of previousCounts) {
+  const previousRuns = new Map((existing.latest.source_runs || []).map((run) => [run.id, run]));
+  const previousSources = new Set((existing.latest.items || []).map((item) => item.source));
+  for (const source of previousSources) {
     const run = runs.find((item) => item.id === source);
-    const currentCount = run?.status === 'ok' ? run.items.length : 0;
-    if (!run || run.status !== 'ok' || run.warning || currentCount < previousCount) {
-      degraded.set(source, `${currentCount}/${previousCount}${run?.warning ? ` (${run.warning})` : ''}`);
+    const previousFetched = previousRuns.get(source)?.fetched_count || 0;
+    // Relevant counts can fall when an alert expires or a corrected filter drops a false positive.
+    // For archival sources, a previously populated feed suddenly returning zero still needs review.
+    const emptyArchive = !['nws', 'ongoing_watchlist'].includes(source)
+      && previousFetched > 0 && run?.fetched_count === 0;
+    if (!run || run.status !== 'ok' || run.warning || emptyArchive) {
+      degraded.set(source, run?.warning || run?.error || (emptyArchive ? `fetched 0/${previousFetched}` : 'unavailable'));
     }
   }
   if (degraded.size) {
@@ -840,10 +869,11 @@ function upcomingHolidays(afterDate) {
   }).sort((left, right) => left.date.localeCompare(right.date));
 }
 
-function upcomingCalendar(catalog, afterDate) {
+function upcomingCalendar(catalog, afterDate, calendarRun) {
   const end = addDays(afterDate, CALENDAR_HORIZON_DAYS);
+  const verifiedEventIds = new Set(calendarRun?.verified_event_ids || []);
   const events = (catalog.events || [])
-    .filter((event) => event.date > afterDate && event.date <= end)
+    .filter((event) => event.date > afterDate && event.date <= end && verifiedEventIds.has(event.id))
     .map((event) => ({
       type: event.type || 'event',
       date: event.date,
@@ -854,7 +884,8 @@ function upcomingCalendar(catalog, afterDate) {
       source_name: event.source_name,
       source_url: event.source_url
     }));
-  return [...events, ...upcomingHolidays(afterDate)].sort((left, right) => left.date.localeCompare(right.date));
+  const holidays = calendarRun?.holidays_verified ? upcomingHolidays(afterDate) : [];
+  return [...events, ...holidays].sort((left, right) => left.date.localeCompare(right.date));
 }
 
 async function readExisting() {
@@ -920,7 +951,7 @@ async function main() {
     safeCollect('ustr', () => collectUstr(window)),
     safeCollect('port_la', () => collectPortLa(window)),
     safeCollect('ongoing_watchlist', () => collectOngoingWatchlist(catalog, window)),
-    safeCollect('calendar_registry', () => collectCalendarRegistry(catalog))
+    safeCollect('calendar_registry', () => collectCalendarRegistry(catalog, window))
   ]);
 
   const successful = runs.filter((run) => run.status === 'ok');
@@ -948,7 +979,7 @@ async function main() {
       reason: window.reason
     },
     items: selected,
-    upcoming: upcomingCalendar(catalog, window.end),
+    upcoming: upcomingCalendar(catalog, window.end, runs.find((run) => run.id === 'calendar_registry')),
     source_runs: runs.map(({ items, ...run }) => run)
   };
 

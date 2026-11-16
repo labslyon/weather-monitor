@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-06T20:15:00.817Z",
+  "generated_at": "2026-11-16T01:18:29.665Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -12,19 +12,19 @@
     "public_holidays": true
   },
   "latest": {
-    "id": "2026-11-05",
-    "generated_at": "2026-11-06T20:15:00.817Z",
+    "id": "2026-11-15",
+    "generated_at": "2026-11-16T01:18:29.665Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
-      "start": "2026-11-05",
-      "end": "2026-11-05",
+      "start": "2026-11-13",
+      "end": "2026-11-15",
       "timezone": "America/New_York",
-      "reason": "Previous U.S. Eastern date"
+      "reason": "Monday covers U.S. Friday through Sunday"
     },
     "items": [
       {
-        "id": "efd19b7b25a9de7f6889",
+        "id": "f8e24523fdf5afb0786d",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -33,20 +33,21 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-06T13:31:00-05:00",
-        "published_date_et": "2026-11-06",
-        "title": "Flash Flood Warning issued November 6 at 1:31PM EST until November 6 at 4:00PM EST by NWS Wakefield VA",
-        "fact_zh": "美国国家气象局对 VA 发布山洪警报，影响区域包括 City of Chesapeake, VA; City of Norfolk, VA; City of Portsmouth, VA; City of Virginia Beach, VA。",
+        "published_at": "2026-11-15T11:46:00-08:00",
+        "published_date_et": "2026-11-15",
+        "publication_precision": "datetime",
+        "title": "Winter Storm Watch issued November 15 at 11:46AM PST until November 20 at 4:00AM PST by NWS Reno NV",
+        "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴观察预警，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.cc2febecce0d2eec819488a3d1d1ee0c097b3533.001.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.23e8c17b27c37a4e4af233d3a09666c860908307.002.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
           "当前预警",
-          "VA"
+          "CA"
         ],
         "monitoring_reason": "new_publication",
         "monitoring_reason_zh": "美国 · 本期新发布",
@@ -57,9 +58,9 @@
         "country_zh": "美国"
       },
       {
-        "id": "24b97f83c0dd38ea363b",
+        "id": "3cafb0373957c818a625",
         "source": "canada_news",
-        "source_name": "加拿大财政部",
+        "source_name": "加拿大外交事务部",
         "source_tier": "official",
         "source_tier_zh": "加拿大官方来源",
         "country_code": "CA",
@@ -68,13 +69,14 @@
         "category_zh": "政策与贸易",
         "status": "published",
         "status_zh": "官方发布",
-        "published_at": "2026-11-05T16:02:40-05:00",
-        "published_date_et": "2026-11-05",
-        "title": "Government of Canada releases Budget 2026: Masters of our destiny",
-        "fact_zh": "加拿大政府发布贸易、海关或边境政策相关动态。",
-        "impact_zh": "可能影响北美贸易或跨境流程；建议确认是否涉及当前商品、申报方式或成本测算。",
+        "published_at": "2026-11-13T13:03:16-05:00",
+        "published_date_et": "2026-11-13",
+        "publication_precision": "datetime",
+        "title": "Parliamentary Secretary Naqvi highlights new action plan to protect workers from tariffs and strengthen Ontario industries",
+        "fact_zh": "加拿大政府发布安大略省关税应对相关支持动态，具体适用对象与措施见原文。",
+        "impact_zh": "这类措施主要面向当地企业；建议先核对适用行业，再评估是否影响相关市场。",
         "impact_is_inference": true,
-        "url": "https://www.canada.ca/en/department-finance/news/2026/11/government-of-canada-releases-budget-2026-masters-of-our-destiny.html",
+        "url": "https://www.canada.ca/en/global-affairs/news/2026/11/parliamentary-secretary-naqvi-highlights-new-action-plan-to-protect-workers-from-tariffs-and-strengthen-ontario-industries.html",
         "priority": "medium",
         "emergency_push": false,
         "emergency_title_zh": "",
@@ -90,64 +92,41 @@
         "active_until": null
       },
       {
-        "id": "f31015bb0b542d2cb195",
-        "source": "nws",
-        "source_name": "美国国家气象局",
+        "id": "ce5181471409ca47b3ff",
+        "source": "canada_news",
+        "source_name": "加拿大政府新闻中心",
         "source_tier": "official",
-        "source_tier_zh": "官方来源",
-        "category": "weather",
-        "category_zh": "物流天气",
-        "status": "active_alert",
-        "status_zh": "当前生效",
-        "published_at": "2026-11-06T10:54:00-08:00",
-        "published_date_et": "2026-11-06",
-        "title": "High Wind Watch issued November 6 at 10:54AM PST until November 8 at 4:00AM PST by NWS Seattle WA",
-        "fact_zh": "美国国家气象局对 WA 发布High Wind Watch，影响区域包括 Grays Harbor County Coast。",
-        "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
+        "source_tier_zh": "加拿大官方来源",
+        "country_code": "CA",
+        "country_zh": "加拿大",
+        "category": "policy",
+        "category_zh": "政策与贸易",
+        "status": "published",
+        "status_zh": "官方发布",
+        "published_at": "2026-11-13T10:33:03-05:00",
+        "published_date_et": "2026-11-13",
+        "publication_precision": "datetime",
+        "title": "Minister Olszewski highlights the positive impact Budget 2026 will have for Alberta businesses and announces new investments to help Calgary-area businesses overcome tariff-related challenges",
+        "fact_zh": "加拿大政府发布阿尔伯塔省关税应对相关支持动态，具体适用对象与措施见原文。",
+        "impact_zh": "这类措施主要面向当地企业；建议先核对适用行业，再评估是否影响相关市场。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.a6c321b1aefd777240a960c061a0b0bedc8576a5.002.1",
-        "priority": "high",
+        "url": "https://www.canada.ca/en/prairies-economic-development/news/2026/11/minister-olszewski-highlights-the-positive-impact-budget-2026-will-have-for-alberta-businesses-and-announces-new-investments-to-help-calgary-area-b.html",
+        "priority": "medium",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
-          "当前预警",
-          "WA"
+          "加拿大官方",
+          "政策与贸易"
         ],
         "monitoring_reason": "new_publication",
-        "monitoring_reason_zh": "美国 · 本期新发布",
+        "monitoring_reason_zh": "加拿大 · 本期发布",
         "effective_date": null,
         "deadline_date": null,
-        "active_until": null,
-        "country_code": "US",
-        "country_zh": "美国"
+        "active_until": null
       }
     ],
     "upcoming": [
-      {
-        "type": "federal_holiday",
-        "date": "2026-11-11",
-        "date_display": "2026-11-11",
-        "title_zh": "退伍军人节",
-        "scope_zh": "美国联邦假日；政府机构和部分企业休息，私营企业不一定停工。",
-        "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
-        "source_name": "美国人事管理局（OPM）",
-        "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
-        "country_code": "US",
-        "country_zh": "美国"
-      },
-      {
-        "type": "federal_holiday",
-        "country_code": "CA",
-        "country_zh": "加拿大",
-        "date": "2026-11-11",
-        "date_display": "2026-11-11",
-        "title_zh": "阵亡将士纪念日",
-        "scope_zh": "加拿大公共假日；各省、私营企业及连续运营单位的实际安排可能不同。",
-        "impact_zh": "临近日期应确认办公室、承运商、仓库及客户支持安排，不把公共假日直接等同于全行业停运。",
-        "source_name": "加拿大政府",
-        "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
-      },
       {
         "type": "federal_holiday",
         "date": "2026-11-26",
@@ -226,13 +205,13 @@
         "id": "us_general",
         "name": "美国官方及行业来源（已过滤平台专属内容）",
         "status": "ok",
-        "relevant_count": 2
+        "relevant_count": 1
       },
       {
         "id": "canada_news",
         "name": "加拿大政府新闻 API",
         "status": "ok",
-        "relevant_count": 1,
+        "relevant_count": 2,
         "url": "https://api.io.canada.ca/io-server/gc/news/en/v2?sort=publishedDate&orderBy=desc&pick=100&format=json"
       },
       {
@@ -245,6 +224,218 @@
     ]
   },
   "editions": [
+    {
+      "id": "2026-11-15",
+      "generated_at": "2026-11-16T01:18:29.665Z",
+      "mode": "north-america-general-team-rules",
+      "delivery_status": "scf_ready",
+      "coverage": {
+        "start": "2026-11-13",
+        "end": "2026-11-15",
+        "timezone": "America/New_York",
+        "reason": "Monday covers U.S. Friday through Sunday"
+      },
+      "items": [
+        {
+          "id": "f8e24523fdf5afb0786d",
+          "source": "nws",
+          "source_name": "美国国家气象局",
+          "source_tier": "official",
+          "source_tier_zh": "官方来源",
+          "category": "weather",
+          "category_zh": "物流天气",
+          "status": "active_alert",
+          "status_zh": "当前生效",
+          "published_at": "2026-11-15T11:46:00-08:00",
+          "published_date_et": "2026-11-15",
+          "publication_precision": "datetime",
+          "title": "Winter Storm Watch issued November 15 at 11:46AM PST until November 20 at 4:00AM PST by NWS Reno NV",
+          "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴观察预警，具体影响县区见官方原文。",
+          "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
+          "impact_is_inference": true,
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.23e8c17b27c37a4e4af233d3a09666c860908307.002.1",
+          "priority": "high",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
+          "tags": [
+            "当前预警",
+            "CA"
+          ],
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "美国 · 本期新发布",
+          "effective_date": null,
+          "deadline_date": null,
+          "active_until": null,
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "id": "3cafb0373957c818a625",
+          "source": "canada_news",
+          "source_name": "加拿大外交事务部",
+          "source_tier": "official",
+          "source_tier_zh": "加拿大官方来源",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "category": "policy",
+          "category_zh": "政策与贸易",
+          "status": "published",
+          "status_zh": "官方发布",
+          "published_at": "2026-11-13T13:03:16-05:00",
+          "published_date_et": "2026-11-13",
+          "publication_precision": "datetime",
+          "title": "Parliamentary Secretary Naqvi highlights new action plan to protect workers from tariffs and strengthen Ontario industries",
+          "fact_zh": "加拿大政府发布安大略省关税应对相关支持动态，具体适用对象与措施见原文。",
+          "impact_zh": "这类措施主要面向当地企业；建议先核对适用行业，再评估是否影响相关市场。",
+          "impact_is_inference": true,
+          "url": "https://www.canada.ca/en/global-affairs/news/2026/11/parliamentary-secretary-naqvi-highlights-new-action-plan-to-protect-workers-from-tariffs-and-strengthen-ontario-industries.html",
+          "priority": "medium",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
+          "tags": [
+            "加拿大官方",
+            "政策与贸易"
+          ],
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "加拿大 · 本期发布",
+          "effective_date": null,
+          "deadline_date": null,
+          "active_until": null
+        },
+        {
+          "id": "ce5181471409ca47b3ff",
+          "source": "canada_news",
+          "source_name": "加拿大政府新闻中心",
+          "source_tier": "official",
+          "source_tier_zh": "加拿大官方来源",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "category": "policy",
+          "category_zh": "政策与贸易",
+          "status": "published",
+          "status_zh": "官方发布",
+          "published_at": "2026-11-13T10:33:03-05:00",
+          "published_date_et": "2026-11-13",
+          "publication_precision": "datetime",
+          "title": "Minister Olszewski highlights the positive impact Budget 2026 will have for Alberta businesses and announces new investments to help Calgary-area businesses overcome tariff-related challenges",
+          "fact_zh": "加拿大政府发布阿尔伯塔省关税应对相关支持动态，具体适用对象与措施见原文。",
+          "impact_zh": "这类措施主要面向当地企业；建议先核对适用行业，再评估是否影响相关市场。",
+          "impact_is_inference": true,
+          "url": "https://www.canada.ca/en/prairies-economic-development/news/2026/11/minister-olszewski-highlights-the-positive-impact-budget-2026-will-have-for-alberta-businesses-and-announces-new-investments-to-help-calgary-area-b.html",
+          "priority": "medium",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
+          "tags": [
+            "加拿大官方",
+            "政策与贸易"
+          ],
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "加拿大 · 本期发布",
+          "effective_date": null,
+          "deadline_date": null,
+          "active_until": null
+        }
+      ],
+      "upcoming": [
+        {
+          "type": "federal_holiday",
+          "date": "2026-11-26",
+          "date_display": "2026-11-26—2026-11-29",
+          "title_zh": "感恩节周末",
+          "scope_zh": "感恩节为周四；周五也休息的单位可形成四天周末，但并非全国统一四天假。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2026-12-25",
+          "date_display": "2026-12-25—2026-12-27",
+          "title_zh": "圣诞节周末",
+          "scope_zh": "圣诞节为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "type": "federal_holiday",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "date": "2026-12-25",
+          "date_display": "2026-12-25—2026-12-27",
+          "title_zh": "圣诞节",
+          "scope_zh": "加拿大公共假日；各省、私营企业及连续运营单位的实际安排可能不同。",
+          "impact_zh": "临近日期应确认办公室、承运商、仓库及客户支持安排，不把公共假日直接等同于全行业停运。",
+          "source_name": "加拿大政府",
+          "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
+        },
+        {
+          "type": "federal_holiday",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "date": "2026-12-26",
+          "date_display": "2026-12-26",
+          "title_zh": "节礼日",
+          "scope_zh": "加拿大公共假日；各省、私营企业及连续运营单位的实际安排可能不同。",
+          "impact_zh": "临近日期应确认办公室、承运商、仓库及客户支持安排，不把公共假日直接等同于全行业停运。",
+          "source_name": "加拿大政府",
+          "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2027-01-01",
+          "date_display": "2027-01-01—2027-01-03",
+          "title_zh": "元旦周末",
+          "scope_zh": "元旦为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "type": "federal_holiday",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "date": "2027-01-01",
+          "date_display": "2027-01-01—2027-01-03",
+          "title_zh": "元旦",
+          "scope_zh": "加拿大公共假日；各省、私营企业及连续运营单位的实际安排可能不同。",
+          "impact_zh": "临近日期应确认办公室、承运商、仓库及客户支持安排，不把公共假日直接等同于全行业停运。",
+          "source_name": "加拿大政府",
+          "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
+        }
+      ],
+      "source_runs": [
+        {
+          "id": "us_general",
+          "name": "美国官方及行业来源（已过滤平台专属内容）",
+          "status": "ok",
+          "relevant_count": 1
+        },
+        {
+          "id": "canada_news",
+          "name": "加拿大政府新闻 API",
+          "status": "ok",
+          "relevant_count": 2,
+          "url": "https://api.io.canada.ca/io-server/gc/news/en/v2?sort=publishedDate&orderBy=desc&pick=100&format=json"
+        },
+        {
+          "id": "canada_weather",
+          "name": "加拿大环境与气候变化部天气预警",
+          "status": "ok",
+          "relevant_count": 0,
+          "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
+        }
+      ]
+    },
     {
       "id": "2026-11-05",
       "generated_at": "2026-11-06T20:15:00.817Z",
