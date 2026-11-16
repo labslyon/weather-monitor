@@ -421,7 +421,7 @@ async function main() {
     latest: edition,
     editions
   };
-  const unchanged = editionKey(existing.latest) === editionKey(edition);
+  const unchanged = !hasFlag('force-write') && editionKey(existing.latest) === editionKey(edition);
   if (!hasFlag('no-write') && !unchanged) await fs.writeFile(DATA_PATH, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
   console.log(JSON.stringify({
     ok: true,

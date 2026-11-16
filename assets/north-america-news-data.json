@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-16T01:18:29.665Z",
+  "generated_at": "2026-11-16T01:36:50.527Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -13,7 +13,7 @@
   },
   "latest": {
     "id": "2026-11-15",
-    "generated_at": "2026-11-16T01:18:29.665Z",
+    "generated_at": "2026-11-16T01:36:50.527Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
@@ -226,7 +226,7 @@
   "editions": [
     {
       "id": "2026-11-15",
-      "generated_at": "2026-11-16T01:18:29.665Z",
+      "generated_at": "2026-11-16T01:36:50.527Z",
       "mode": "north-america-general-team-rules",
       "delivery_status": "scf_ready",
       "coverage": {
