@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-17T12:46:10.039Z",
+  "generated_at": "2026-11-17T22:01:33.901Z",
   "mode": "fixed-source-rules-with-watchlist-prototype",
   "ai_summary_enabled": false,
   "search_api_enabled": false,
@@ -19,7 +19,7 @@
   },
   "latest": {
     "id": "2026-11-16",
-    "generated_at": "2026-11-17T12:46:10.039Z",
+    "generated_at": "2026-11-17T22:01:33.901Z",
     "mode": "fixed-source-rules-with-watchlist-prototype",
     "delivery_status": "preview_only",
     "coverage": {
@@ -30,7 +30,7 @@
     },
     "items": [
       {
-        "id": "49103dd63404b38d2659",
+        "id": "83b2b78e5d4e3d808057",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -39,14 +39,14 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-17T03:56:00-08:00",
+        "published_at": "2026-11-17T13:46:00-08:00",
         "published_date_et": "2026-11-17",
         "publication_precision": "datetime",
-        "title": "High Wind Warning issued November 17 at 3:56AM PST until November 18 at 7:00AM PST by NWS Medford OR",
-        "fact_zh": "美国国家气象局对加利福尼亚州发布大风警报，影响区域包括 Central Siskiyou County。",
+        "title": "Winter Storm Warning issued November 17 at 1:46PM PST until November 19 at 1:00AM PST by NWS Eureka CA",
+        "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.902e1059c88f61449d1505764d741bfb5f440c32.001.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9683ba7991ffec7ca59e2cfdffc0630279002367.001.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
@@ -62,7 +62,7 @@
         "active_until": null
       },
       {
-        "id": "5f787c9beca4bd364311",
+        "id": "8326df560d949df91ac8",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -71,21 +71,21 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-17T03:54:00-08:00",
+        "published_at": "2026-11-17T16:37:00-05:00",
         "published_date_et": "2026-11-17",
         "publication_precision": "datetime",
-        "title": "Winter Storm Warning issued November 17 at 3:54AM PST until November 19 at 4:00AM PST by NWS Medford OR",
-        "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
+        "title": "Flood Watch issued November 17 at 4:37PM EST until November 19 at 7:00PM EST by NWS Miami FL",
+        "fact_zh": "美国国家气象局对佛罗里达州发布Flood Watch，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.dd92d85d6d50943770789d89d58e35b0d2fe0c87.002.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e56b6a067e9d6a25c2f00431766ea8b57894ab08.001.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
           "当前预警",
-          "CA"
+          "FL"
         ],
         "monitoring_reason": "new_publication",
         "monitoring_reason_zh": "本期新发布",
@@ -239,7 +239,7 @@
         "status": "ok",
         "fetched_count": 104,
         "relevant_count": 2,
-        "elapsed_ms": 270,
+        "elapsed_ms": 231,
         "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&order=newest&conditions%5Bpublication_date%5D%5Bgte%5D=2026-11-16&conditions%5Bpublication_date%5D%5Blte%5D=2026-11-16",
         "warning": ""
       },
@@ -249,7 +249,7 @@
         "status": "ok",
         "fetched_count": 0,
         "relevant_count": 0,
-        "elapsed_ms": 393,
+        "elapsed_ms": 280,
         "url": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2026-11-16&RecallDateEnd=2026-11-16",
         "warning": ""
       },
@@ -257,9 +257,9 @@
         "id": "nws",
         "name": "美国国家气象局",
         "status": "ok",
-        "fetched_count": 580,
+        "fetched_count": 502,
         "relevant_count": 2,
-        "elapsed_ms": 367,
+        "elapsed_ms": 1460,
         "url": "https://api.weather.gov/alerts/active?status=actual",
         "warning": ""
       },
@@ -269,7 +269,7 @@
         "status": "ok",
         "fetched_count": 14,
         "relevant_count": 0,
-        "elapsed_ms": 761,
+        "elapsed_ms": 907,
         "url": "https://sellercentral.amazon.com/seller-forums/discussions?categories=amzn1.spce.category.8b1ad9d2",
         "warning": ""
       },
@@ -279,7 +279,7 @@
         "status": "ok",
         "fetched_count": 30,
         "relevant_count": 1,
-        "elapsed_ms": 170,
+        "elapsed_ms": 298,
         "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases",
         "warning": ""
       },
@@ -287,9 +287,9 @@
         "id": "port_la",
         "name": "洛杉矶港",
         "status": "ok",
-        "fetched_count": 646,
+        "fetched_count": 647,
         "relevant_count": 0,
-        "elapsed_ms": 891,
+        "elapsed_ms": 1081,
         "url": "https://portoflosangeles.org/news/news-release-archive",
         "warning": ""
       },
@@ -309,7 +309,7 @@
         "status": "ok",
         "fetched_count": 2,
         "relevant_count": 2,
-        "elapsed_ms": 387,
+        "elapsed_ms": 552,
         "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
         "warning": "",
         "verified_event_ids": [
@@ -322,7 +322,7 @@
   "editions": [
     {
       "id": "2026-11-16",
-      "generated_at": "2026-11-17T12:46:10.039Z",
+      "generated_at": "2026-11-17T22:01:33.901Z",
       "mode": "fixed-source-rules-with-watchlist-prototype",
       "delivery_status": "preview_only",
       "coverage": {
@@ -333,7 +333,7 @@
       },
       "items": [
         {
-          "id": "49103dd63404b38d2659",
+          "id": "83b2b78e5d4e3d808057",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -342,14 +342,14 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-17T03:56:00-08:00",
+          "published_at": "2026-11-17T13:46:00-08:00",
           "published_date_et": "2026-11-17",
           "publication_precision": "datetime",
-          "title": "High Wind Warning issued November 17 at 3:56AM PST until November 18 at 7:00AM PST by NWS Medford OR",
-          "fact_zh": "美国国家气象局对加利福尼亚州发布大风警报，影响区域包括 Central Siskiyou County。",
+          "title": "Winter Storm Warning issued November 17 at 1:46PM PST until November 19 at 1:00AM PST by NWS Eureka CA",
+          "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.902e1059c88f61449d1505764d741bfb5f440c32.001.1",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9683ba7991ffec7ca59e2cfdffc0630279002367.001.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
@@ -365,7 +365,7 @@
           "active_until": null
         },
         {
-          "id": "5f787c9beca4bd364311",
+          "id": "8326df560d949df91ac8",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -374,21 +374,21 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-17T03:54:00-08:00",
+          "published_at": "2026-11-17T16:37:00-05:00",
           "published_date_et": "2026-11-17",
           "publication_precision": "datetime",
-          "title": "Winter Storm Warning issued November 17 at 3:54AM PST until November 19 at 4:00AM PST by NWS Medford OR",
-          "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
+          "title": "Flood Watch issued November 17 at 4:37PM EST until November 19 at 7:00PM EST by NWS Miami FL",
+          "fact_zh": "美国国家气象局对佛罗里达州发布Flood Watch，具体影响县区见官方原文。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.dd92d85d6d50943770789d89d58e35b0d2fe0c87.002.1",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e56b6a067e9d6a25c2f00431766ea8b57894ab08.001.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
           "action_zh": "",
           "tags": [
             "当前预警",
-            "CA"
+            "FL"
           ],
           "monitoring_reason": "new_publication",
           "monitoring_reason_zh": "本期新发布",
@@ -542,7 +542,7 @@
           "status": "ok",
           "fetched_count": 104,
           "relevant_count": 2,
-          "elapsed_ms": 270,
+          "elapsed_ms": 231,
           "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&order=newest&conditions%5Bpublication_date%5D%5Bgte%5D=2026-11-16&conditions%5Bpublication_date%5D%5Blte%5D=2026-11-16",
           "warning": ""
         },
@@ -552,7 +552,7 @@
           "status": "ok",
           "fetched_count": 0,
           "relevant_count": 0,
-          "elapsed_ms": 393,
+          "elapsed_ms": 280,
           "url": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2026-11-16&RecallDateEnd=2026-11-16",
           "warning": ""
         },
@@ -560,9 +560,9 @@
           "id": "nws",
           "name": "美国国家气象局",
           "status": "ok",
-          "fetched_count": 580,
+          "fetched_count": 502,
           "relevant_count": 2,
-          "elapsed_ms": 367,
+          "elapsed_ms": 1460,
           "url": "https://api.weather.gov/alerts/active?status=actual",
           "warning": ""
         },
@@ -572,7 +572,7 @@
           "status": "ok",
           "fetched_count": 14,
           "relevant_count": 0,
-          "elapsed_ms": 761,
+          "elapsed_ms": 907,
           "url": "https://sellercentral.amazon.com/seller-forums/discussions?categories=amzn1.spce.category.8b1ad9d2",
           "warning": ""
         },
@@ -582,7 +582,7 @@
           "status": "ok",
           "fetched_count": 30,
           "relevant_count": 1,
-          "elapsed_ms": 170,
+          "elapsed_ms": 298,
           "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases",
           "warning": ""
         },
@@ -590,9 +590,9 @@
           "id": "port_la",
           "name": "洛杉矶港",
           "status": "ok",
-          "fetched_count": 646,
+          "fetched_count": 647,
           "relevant_count": 0,
-          "elapsed_ms": 891,
+          "elapsed_ms": 1081,
           "url": "https://portoflosangeles.org/news/news-release-archive",
           "warning": ""
         },
@@ -612,7 +612,7 @@
           "status": "ok",
           "fetched_count": 2,
           "relevant_count": 2,
-          "elapsed_ms": 387,
+          "elapsed_ms": 552,
           "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
           "warning": "",
           "verified_event_ids": [
