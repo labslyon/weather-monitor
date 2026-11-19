@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-19T05:55:22.823Z",
+  "generated_at": "2026-11-19T15:16:56.978Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -13,7 +13,7 @@
   },
   "latest": {
     "id": "2026-11-18",
-    "generated_at": "2026-11-19T05:55:22.823Z",
+    "generated_at": "2026-11-19T15:16:56.978Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
@@ -127,7 +127,7 @@
         "country_zh": "美国"
       },
       {
-        "id": "d11df94718a6705a62a6",
+        "id": "a4ab4fd48da1469b600d",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -136,14 +136,14 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-18T17:19:00-08:00",
-        "published_date_et": "2026-11-18",
+        "published_at": "2026-11-19T07:16:00-08:00",
+        "published_date_et": "2026-11-19",
         "publication_precision": "datetime",
-        "title": "Winter Storm Warning issued November 18 at 5:19PM PST until November 20 at 4:00AM PST by NWS Hanford CA",
-        "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
+        "title": "Severe Thunderstorm Warning issued November 19 at 7:16AM PST until November 19 at 8:45AM PST by NWS Los Angeles/Oxnard CA",
+        "fact_zh": "美国国家气象局对加利福尼亚州发布强雷暴警报，影响区域包括 Los Angeles, CA。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.03b052771b3008b6039aafd70e5fabe7431f8ae6.001.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e50ae2f02dc2e076c419caeb877e232d05599e58.001.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
@@ -261,7 +261,7 @@
   "editions": [
     {
       "id": "2026-11-18",
-      "generated_at": "2026-11-19T05:55:22.823Z",
+      "generated_at": "2026-11-19T15:16:56.978Z",
       "mode": "north-america-general-team-rules",
       "delivery_status": "scf_ready",
       "coverage": {
@@ -375,7 +375,7 @@
           "country_zh": "美国"
         },
         {
-          "id": "d11df94718a6705a62a6",
+          "id": "a4ab4fd48da1469b600d",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -384,14 +384,14 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-18T17:19:00-08:00",
-          "published_date_et": "2026-11-18",
+          "published_at": "2026-11-19T07:16:00-08:00",
+          "published_date_et": "2026-11-19",
           "publication_precision": "datetime",
-          "title": "Winter Storm Warning issued November 18 at 5:19PM PST until November 20 at 4:00AM PST by NWS Hanford CA",
-          "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
+          "title": "Severe Thunderstorm Warning issued November 19 at 7:16AM PST until November 19 at 8:45AM PST by NWS Los Angeles/Oxnard CA",
+          "fact_zh": "美国国家气象局对加利福尼亚州发布强雷暴警报，影响区域包括 Los Angeles, CA。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.03b052771b3008b6039aafd70e5fabe7431f8ae6.001.1",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.e50ae2f02dc2e076c419caeb877e232d05599e58.001.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
