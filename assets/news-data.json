@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-20T05:44:17.658Z",
+  "generated_at": "2026-11-20T14:54:29.395Z",
   "mode": "fixed-source-rules-with-watchlist-prototype",
   "ai_summary_enabled": false,
   "search_api_enabled": false,
@@ -19,7 +19,7 @@
   },
   "latest": {
     "id": "2026-11-19",
-    "generated_at": "2026-11-20T05:44:17.658Z",
+    "generated_at": "2026-11-20T14:54:29.395Z",
     "mode": "fixed-source-rules-with-watchlist-prototype",
     "delivery_status": "preview_only",
     "coverage": {
@@ -94,7 +94,7 @@
         "active_until": null
       },
       {
-        "id": "4ededa35981545ef8307",
+        "id": "8ab7bcc3eb97808c5977",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -103,14 +103,14 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-19T22:26:00-07:00",
+        "published_at": "2026-11-20T08:49:00-06:00",
         "published_date_et": "2026-11-20",
         "publication_precision": "datetime",
-        "title": "High Wind Watch issued November 19 at 10:26PM MST until November 21 at 7:00PM MST by NWS Midland/Odessa TX",
+        "title": "High Wind Watch issued November 20 at 8:49AM CST until November 21 at 8:00PM CST by NWS Midland/Odessa TX",
         "fact_zh": "美国国家气象局对得克萨斯州发布High Wind Watch，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.494c05d96c5d5e00a074b9141d5f1b7101bab718.002.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.2963a4854d5ad70b7c99f05ba80c6b848673761b.003.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
@@ -126,7 +126,7 @@
         "active_until": null
       },
       {
-        "id": "4dd932750f19a73b2e02",
+        "id": "f86cc4be4179a69d786e",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -135,14 +135,14 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-19T20:50:00-08:00",
-        "published_date_et": "2026-11-19",
+        "published_at": "2026-11-20T04:01:00-08:00",
+        "published_date_et": "2026-11-20",
         "publication_precision": "datetime",
-        "title": "Winter Storm Warning issued November 19 at 8:50PM PST until November 20 at 10:00AM PST by NWS Sacramento CA",
+        "title": "Winter Storm Warning issued November 20 at 4:01AM PST until November 20 at 10:00AM PST by NWS Reno NV",
         "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9442699eff66b236077fd28708db45b1927e0f56.001.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.fb0632e7076b766966e8c4552880c451026b4c77.002.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
@@ -250,7 +250,7 @@
         "status": "ok",
         "fetched_count": 98,
         "relevant_count": 3,
-        "elapsed_ms": 305,
+        "elapsed_ms": 342,
         "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&order=newest&conditions%5Bpublication_date%5D%5Bgte%5D=2026-11-19&conditions%5Bpublication_date%5D%5Blte%5D=2026-11-19",
         "warning": ""
       },
@@ -260,7 +260,7 @@
         "status": "ok",
         "fetched_count": 9,
         "relevant_count": 2,
-        "elapsed_ms": 260,
+        "elapsed_ms": 254,
         "url": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2026-11-19&RecallDateEnd=2026-11-19",
         "warning": ""
       },
@@ -268,9 +268,9 @@
         "id": "nws",
         "name": "美国国家气象局",
         "status": "ok",
-        "fetched_count": 328,
+        "fetched_count": 355,
         "relevant_count": 2,
-        "elapsed_ms": 308,
+        "elapsed_ms": 430,
         "url": "https://api.weather.gov/alerts/active?status=actual",
         "warning": ""
       },
@@ -280,7 +280,7 @@
         "status": "ok",
         "fetched_count": 14,
         "relevant_count": 0,
-        "elapsed_ms": 630,
+        "elapsed_ms": 844,
         "url": "https://sellercentral.amazon.com/seller-forums/discussions?categories=amzn1.spce.category.8b1ad9d2",
         "warning": ""
       },
@@ -290,7 +290,7 @@
         "status": "ok",
         "fetched_count": 30,
         "relevant_count": 0,
-        "elapsed_ms": 136,
+        "elapsed_ms": 125,
         "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases",
         "warning": ""
       },
@@ -300,7 +300,7 @@
         "status": "ok",
         "fetched_count": 648,
         "relevant_count": 1,
-        "elapsed_ms": 770,
+        "elapsed_ms": 792,
         "url": "https://portoflosangeles.org/news/news-release-archive",
         "warning": ""
       },
@@ -310,7 +310,7 @@
         "status": "ok",
         "fetched_count": 0,
         "relevant_count": 0,
-        "elapsed_ms": 2,
+        "elapsed_ms": 3,
         "url": "https://www.stgusa.com/alerts/",
         "warning": ""
       },
@@ -320,7 +320,7 @@
         "status": "ok",
         "fetched_count": 2,
         "relevant_count": 2,
-        "elapsed_ms": 289,
+        "elapsed_ms": 237,
         "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
         "warning": "",
         "verified_event_ids": [
@@ -333,7 +333,7 @@
   "editions": [
     {
       "id": "2026-11-19",
-      "generated_at": "2026-11-20T05:44:17.658Z",
+      "generated_at": "2026-11-20T14:54:29.395Z",
       "mode": "fixed-source-rules-with-watchlist-prototype",
       "delivery_status": "preview_only",
       "coverage": {
@@ -408,7 +408,7 @@
           "active_until": null
         },
         {
-          "id": "4ededa35981545ef8307",
+          "id": "8ab7bcc3eb97808c5977",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -417,14 +417,14 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-19T22:26:00-07:00",
+          "published_at": "2026-11-20T08:49:00-06:00",
           "published_date_et": "2026-11-20",
           "publication_precision": "datetime",
-          "title": "High Wind Watch issued November 19 at 10:26PM MST until November 21 at 7:00PM MST by NWS Midland/Odessa TX",
+          "title": "High Wind Watch issued November 20 at 8:49AM CST until November 21 at 8:00PM CST by NWS Midland/Odessa TX",
           "fact_zh": "美国国家气象局对得克萨斯州发布High Wind Watch，具体影响县区见官方原文。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.494c05d96c5d5e00a074b9141d5f1b7101bab718.002.1",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.2963a4854d5ad70b7c99f05ba80c6b848673761b.003.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
@@ -440,7 +440,7 @@
           "active_until": null
         },
         {
-          "id": "4dd932750f19a73b2e02",
+          "id": "f86cc4be4179a69d786e",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -449,14 +449,14 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-19T20:50:00-08:00",
-          "published_date_et": "2026-11-19",
+          "published_at": "2026-11-20T04:01:00-08:00",
+          "published_date_et": "2026-11-20",
           "publication_precision": "datetime",
-          "title": "Winter Storm Warning issued November 19 at 8:50PM PST until November 20 at 10:00AM PST by NWS Sacramento CA",
+          "title": "Winter Storm Warning issued November 20 at 4:01AM PST until November 20 at 10:00AM PST by NWS Reno NV",
           "fact_zh": "美国国家气象局对加利福尼亚州发布冬季风暴警报，具体影响县区见官方原文。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9442699eff66b236077fd28708db45b1927e0f56.001.1",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.fb0632e7076b766966e8c4552880c451026b4c77.002.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
@@ -564,7 +564,7 @@
           "status": "ok",
           "fetched_count": 98,
           "relevant_count": 3,
-          "elapsed_ms": 305,
+          "elapsed_ms": 342,
           "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=1000&order=newest&conditions%5Bpublication_date%5D%5Bgte%5D=2026-11-19&conditions%5Bpublication_date%5D%5Blte%5D=2026-11-19",
           "warning": ""
         },
@@ -574,7 +574,7 @@
           "status": "ok",
           "fetched_count": 9,
           "relevant_count": 2,
-          "elapsed_ms": 260,
+          "elapsed_ms": 254,
           "url": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2026-11-19&RecallDateEnd=2026-11-19",
           "warning": ""
         },
@@ -582,9 +582,9 @@
           "id": "nws",
           "name": "美国国家气象局",
           "status": "ok",
-          "fetched_count": 328,
+          "fetched_count": 355,
           "relevant_count": 2,
-          "elapsed_ms": 308,
+          "elapsed_ms": 430,
           "url": "https://api.weather.gov/alerts/active?status=actual",
           "warning": ""
         },
@@ -594,7 +594,7 @@
           "status": "ok",
           "fetched_count": 14,
           "relevant_count": 0,
-          "elapsed_ms": 630,
+          "elapsed_ms": 844,
           "url": "https://sellercentral.amazon.com/seller-forums/discussions?categories=amzn1.spce.category.8b1ad9d2",
           "warning": ""
         },
@@ -604,7 +604,7 @@
           "status": "ok",
           "fetched_count": 30,
           "relevant_count": 0,
-          "elapsed_ms": 136,
+          "elapsed_ms": 125,
           "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases",
           "warning": ""
         },
@@ -614,7 +614,7 @@
           "status": "ok",
           "fetched_count": 648,
           "relevant_count": 1,
-          "elapsed_ms": 770,
+          "elapsed_ms": 792,
           "url": "https://portoflosangeles.org/news/news-release-archive",
           "warning": ""
         },
@@ -624,7 +624,7 @@
           "status": "ok",
           "fetched_count": 0,
           "relevant_count": 0,
-          "elapsed_ms": 2,
+          "elapsed_ms": 3,
           "url": "https://www.stgusa.com/alerts/",
           "warning": ""
         },
@@ -634,7 +634,7 @@
           "status": "ok",
           "fetched_count": 2,
           "relevant_count": 2,
-          "elapsed_ms": 289,
+          "elapsed_ms": 237,
           "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
           "warning": "",
           "verified_event_ids": [
