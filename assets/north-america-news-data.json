@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-22T21:32:05.739Z",
+  "generated_at": "2026-11-23T14:01:22.734Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -13,7 +13,7 @@
   },
   "latest": {
     "id": "2026-11-22",
-    "generated_at": "2026-11-22T21:32:05.739Z",
+    "generated_at": "2026-11-23T14:01:22.734Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
@@ -129,40 +129,38 @@
         "detected_at": "2026-11-22T21:32:05.739Z"
       },
       {
-        "id": "ee3d5c9e7494d45c371d",
-        "source": "canada_weather",
-        "source_name": "加拿大环境与气候变化部",
+        "id": "5f8e89b2731540d8bfd4",
+        "source": "nws",
+        "source_name": "美国国家气象局",
         "source_tier": "official",
-        "source_tier_zh": "加拿大官方来源",
-        "country_code": "CA",
-        "country_zh": "加拿大",
+        "source_tier_zh": "官方来源",
         "category": "weather",
-        "category_zh": "天气与运营",
+        "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": null,
-        "published_date_et": null,
-        "publication_precision": "unknown",
-        "title": "Snowfall - 安大略省",
-        "fact_zh": "加拿大环境与气候变化部对安大略省发布强降雪预警，当前页面涉及 7 个预报区域。",
-        "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
+        "published_at": "2026-11-23T03:54:00-08:00",
+        "published_date_et": "2026-11-23",
+        "publication_precision": "datetime",
+        "title": "High Wind Warning issued November 23 at 3:54AM PST until November 24 at 10:00PM PST by NWS Medford OR",
+        "fact_zh": "美国国家气象局对加利福尼亚州发布大风警报，影响区域包括 Central Siskiyou County。",
+        "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://weather.gc.ca/warnings/report_e.html?onrm95=#21045493793434677202611210503",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f3bf9633cf6e93233886dee289928673486cbdb5.001.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
-        "detected_at": "2026-11-22T21:32:07.170Z",
         "tags": [
-          "安大略省",
-          "强降雪预警",
-          "黄色预警"
+          "当前预警",
+          "CA"
         ],
-        "monitoring_reason": "active_alert",
-        "monitoring_reason_zh": "加拿大 · 黄色预警",
+        "monitoring_reason": "new_publication",
+        "monitoring_reason_zh": "美国 · 本期新发布",
         "effective_date": null,
         "deadline_date": null,
-        "active_until": null
+        "active_until": null,
+        "country_code": "US",
+        "country_zh": "美国"
       }
     ],
     "upcoming": [
@@ -269,7 +267,7 @@
         "id": "canada_weather",
         "name": "加拿大环境与气候变化部天气预警",
         "status": "ok",
-        "relevant_count": 2,
+        "relevant_count": 0,
         "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
       }
     ]
@@ -277,7 +275,7 @@
   "editions": [
     {
       "id": "2026-11-22",
-      "generated_at": "2026-11-22T21:32:05.739Z",
+      "generated_at": "2026-11-23T14:01:22.734Z",
       "mode": "north-america-general-team-rules",
       "delivery_status": "scf_ready",
       "coverage": {
@@ -393,40 +391,38 @@
           "detected_at": "2026-11-22T21:32:05.739Z"
         },
         {
-          "id": "ee3d5c9e7494d45c371d",
-          "source": "canada_weather",
-          "source_name": "加拿大环境与气候变化部",
+          "id": "5f8e89b2731540d8bfd4",
+          "source": "nws",
+          "source_name": "美国国家气象局",
           "source_tier": "official",
-          "source_tier_zh": "加拿大官方来源",
-          "country_code": "CA",
-          "country_zh": "加拿大",
+          "source_tier_zh": "官方来源",
           "category": "weather",
-          "category_zh": "天气与运营",
+          "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": null,
-          "published_date_et": null,
-          "publication_precision": "unknown",
-          "title": "Snowfall - 安大略省",
-          "fact_zh": "加拿大环境与气候变化部对安大略省发布强降雪预警，当前页面涉及 7 个预报区域。",
-          "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
+          "published_at": "2026-11-23T03:54:00-08:00",
+          "published_date_et": "2026-11-23",
+          "publication_precision": "datetime",
+          "title": "High Wind Warning issued November 23 at 3:54AM PST until November 24 at 10:00PM PST by NWS Medford OR",
+          "fact_zh": "美国国家气象局对加利福尼亚州发布大风警报，影响区域包括 Central Siskiyou County。",
+          "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://weather.gc.ca/warnings/report_e.html?onrm95=#21045493793434677202611210503",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.f3bf9633cf6e93233886dee289928673486cbdb5.001.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
           "action_zh": "",
-          "detected_at": "2026-11-22T21:32:07.170Z",
           "tags": [
-            "安大略省",
-            "强降雪预警",
-            "黄色预警"
+            "当前预警",
+            "CA"
           ],
-          "monitoring_reason": "active_alert",
-          "monitoring_reason_zh": "加拿大 · 黄色预警",
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "美国 · 本期新发布",
           "effective_date": null,
           "deadline_date": null,
-          "active_until": null
+          "active_until": null,
+          "country_code": "US",
+          "country_zh": "美国"
         }
       ],
       "upcoming": [
@@ -533,7 +529,7 @@
           "id": "canada_weather",
           "name": "加拿大环境与气候变化部天气预警",
           "status": "ok",
-          "relevant_count": 2,
+          "relevant_count": 0,
           "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
         }
       ]
