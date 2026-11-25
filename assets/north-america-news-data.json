@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-25T00:20:18.382Z",
+  "generated_at": "2026-11-25T10:52:42.960Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -12,43 +12,42 @@
     "public_holidays": true
   },
   "latest": {
-    "id": "2026-11-23",
-    "generated_at": "2026-11-25T00:20:18.382Z",
+    "id": "2026-11-24",
+    "generated_at": "2026-11-25T10:52:42.960Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
-      "start": "2026-11-23",
-      "end": "2026-11-23",
+      "start": "2026-11-24",
+      "end": "2026-11-24",
       "timezone": "America/New_York",
       "reason": "Previous U.S. Eastern date"
     },
     "items": [
       {
-        "id": "2fbe5c234bac0063a4d9",
-        "source": "federal_register",
-        "source_name": "美国联邦公报",
+        "id": "41d8916c2890fffabeda",
+        "source": "nws",
+        "source_name": "美国国家气象局",
         "source_tier": "official",
         "source_tier_zh": "官方来源",
-        "category": "logistics",
-        "category_zh": "物流与入仓",
-        "status": "final_rule",
-        "status_zh": "最终规则",
-        "published_at": null,
-        "published_date_et": "2026-11-23",
-        "publication_precision": "date",
-        "title": "Extension of Import Restrictions Imposed on Archaeological and Ethnological Material of Egypt",
-        "fact_zh": "美国《联邦公报》发布“Extension of Import Restrictions Imposed on Archaeological and Ethnological Material of Egypt”，文件类型为最终规则。",
-        "impact_zh": "可能影响进口税负、清关或申报要求；需核对适用品类、生效日期和过渡安排后再调整成本测算。",
+        "category": "weather",
+        "category_zh": "物流天气",
+        "status": "active_alert",
+        "status_zh": "当前生效",
+        "published_at": "2026-11-25T04:58:00-05:00",
+        "published_date_et": "2026-11-25",
+        "publication_precision": "datetime",
+        "title": "Flood Watch issued November 25 at 4:58AM EST until November 26 at 1:00AM EST by NWS Miami FL",
+        "fact_zh": "美国国家气象局对佛罗里达州发布Flood Watch，具体影响县区见官方原文。",
+        "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://www.federalregister.gov/documents/2026/11/23/2026-23795/extension-of-import-restrictions-imposed-on-archaeological-and-ethnological-material-of-egypt",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3bf2130aa2b19e1cf85b4cde4bd3aad20e2add6b.001.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
-          "最终规则",
-          "Homeland Security Department",
-          "U.S. Customs and Border Protection"
+          "当前预警",
+          "FL"
         ],
         "monitoring_reason": "new_publication",
         "monitoring_reason_zh": "美国 · 本期新发布",
@@ -59,7 +58,7 @@
         "country_zh": "美国"
       },
       {
-        "id": "4354d677ce88583c1431",
+        "id": "a85768621948a1f337af",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -68,55 +67,21 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-24T18:28:00-05:00",
-        "published_date_et": "2026-11-24",
+        "published_at": "2026-11-25T04:21:00-05:00",
+        "published_date_et": "2026-11-25",
         "publication_precision": "datetime",
-        "title": "Coastal Flood Warning issued November 24 at 6:28PM EST until November 25 at 11:00AM EST by NWS Charleston SC",
-        "fact_zh": "美国国家气象局对南卡罗来纳州发布沿海洪水警报，影响区域包括 Coastal Colleton; Charleston。",
+        "title": "Coastal Flood Warning issued November 25 at 4:21AM EST until November 27 at 6:00AM EST by NWS Upton NY",
+        "fact_zh": "美国国家气象局对纽约州发布沿海洪水警报，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b25c063bae12d33dc3066c7e5b17e80d28fb795f.001.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.357dad86fab348f2e4cb5f69acc329eb27b87cce.005.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
           "当前预警",
-          "SC"
-        ],
-        "monitoring_reason": "new_publication",
-        "monitoring_reason_zh": "美国 · 本期新发布",
-        "effective_date": null,
-        "deadline_date": null,
-        "active_until": null,
-        "country_code": "US",
-        "country_zh": "美国"
-      },
-      {
-        "id": "fa436b11920e87af711c",
-        "source": "nws",
-        "source_name": "美国国家气象局",
-        "source_tier": "official",
-        "source_tier_zh": "官方来源",
-        "category": "weather",
-        "category_zh": "物流天气",
-        "status": "active_alert",
-        "status_zh": "当前生效",
-        "published_at": "2026-11-24T15:47:00-08:00",
-        "published_date_et": "2026-11-24",
-        "publication_precision": "datetime",
-        "title": "High Wind Watch issued November 24 at 3:47PM PST until November 26 at 7:00AM PST by NWS Portland OR",
-        "fact_zh": "美国国家气象局对华盛顿州发布High Wind Watch，具体影响县区见官方原文。",
-        "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
-        "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1758f29d827f2a817d215b2aff09d54cf9b9559f.003.1",
-        "priority": "high",
-        "emergency_push": false,
-        "emergency_title_zh": "",
-        "action_zh": "",
-        "tags": [
-          "当前预警",
-          "WA"
+          "NY"
         ],
         "monitoring_reason": "new_publication",
         "monitoring_reason_zh": "美国 · 本期新发布",
@@ -218,7 +183,7 @@
         "id": "us_general",
         "name": "美国官方及行业来源（已过滤平台专属内容）",
         "status": "ok",
-        "relevant_count": 3
+        "relevant_count": 2
       },
       {
         "id": "canada_news",
@@ -237,6 +202,196 @@
     ]
   },
   "editions": [
+    {
+      "id": "2026-11-24",
+      "generated_at": "2026-11-25T10:52:42.960Z",
+      "mode": "north-america-general-team-rules",
+      "delivery_status": "scf_ready",
+      "coverage": {
+        "start": "2026-11-24",
+        "end": "2026-11-24",
+        "timezone": "America/New_York",
+        "reason": "Previous U.S. Eastern date"
+      },
+      "items": [
+        {
+          "id": "41d8916c2890fffabeda",
+          "source": "nws",
+          "source_name": "美国国家气象局",
+          "source_tier": "official",
+          "source_tier_zh": "官方来源",
+          "category": "weather",
+          "category_zh": "物流天气",
+          "status": "active_alert",
+          "status_zh": "当前生效",
+          "published_at": "2026-11-25T04:58:00-05:00",
+          "published_date_et": "2026-11-25",
+          "publication_precision": "datetime",
+          "title": "Flood Watch issued November 25 at 4:58AM EST until November 26 at 1:00AM EST by NWS Miami FL",
+          "fact_zh": "美国国家气象局对佛罗里达州发布Flood Watch，具体影响县区见官方原文。",
+          "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
+          "impact_is_inference": true,
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.3bf2130aa2b19e1cf85b4cde4bd3aad20e2add6b.001.1",
+          "priority": "high",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
+          "tags": [
+            "当前预警",
+            "FL"
+          ],
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "美国 · 本期新发布",
+          "effective_date": null,
+          "deadline_date": null,
+          "active_until": null,
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "id": "a85768621948a1f337af",
+          "source": "nws",
+          "source_name": "美国国家气象局",
+          "source_tier": "official",
+          "source_tier_zh": "官方来源",
+          "category": "weather",
+          "category_zh": "物流天气",
+          "status": "active_alert",
+          "status_zh": "当前生效",
+          "published_at": "2026-11-25T04:21:00-05:00",
+          "published_date_et": "2026-11-25",
+          "publication_precision": "datetime",
+          "title": "Coastal Flood Warning issued November 25 at 4:21AM EST until November 27 at 6:00AM EST by NWS Upton NY",
+          "fact_zh": "美国国家气象局对纽约州发布沿海洪水警报，具体影响县区见官方原文。",
+          "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
+          "impact_is_inference": true,
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.357dad86fab348f2e4cb5f69acc329eb27b87cce.005.1",
+          "priority": "high",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
+          "tags": [
+            "当前预警",
+            "NY"
+          ],
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "美国 · 本期新发布",
+          "effective_date": null,
+          "deadline_date": null,
+          "active_until": null,
+          "country_code": "US",
+          "country_zh": "美国"
+        }
+      ],
+      "upcoming": [
+        {
+          "type": "federal_holiday",
+          "date": "2026-11-26",
+          "date_display": "2026-11-26—2026-11-29",
+          "title_zh": "感恩节周末",
+          "scope_zh": "感恩节为周四；周五也休息的单位可形成四天周末，但并非全国统一四天假。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2026-12-25",
+          "date_display": "2026-12-25—2026-12-27",
+          "title_zh": "圣诞节周末",
+          "scope_zh": "圣诞节为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "type": "federal_holiday",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "date": "2026-12-25",
+          "date_display": "2026-12-25—2026-12-27",
+          "title_zh": "圣诞节",
+          "scope_zh": "加拿大公共假日；各省、私营企业及连续运营单位的实际安排可能不同。",
+          "impact_zh": "临近日期应确认办公室、承运商、仓库及客户支持安排，不把公共假日直接等同于全行业停运。",
+          "source_name": "加拿大政府",
+          "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
+        },
+        {
+          "type": "federal_holiday",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "date": "2026-12-26",
+          "date_display": "2026-12-26",
+          "title_zh": "节礼日",
+          "scope_zh": "加拿大公共假日；各省、私营企业及连续运营单位的实际安排可能不同。",
+          "impact_zh": "临近日期应确认办公室、承运商、仓库及客户支持安排，不把公共假日直接等同于全行业停运。",
+          "source_name": "加拿大政府",
+          "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2027-01-01",
+          "date_display": "2027-01-01—2027-01-03",
+          "title_zh": "元旦周末",
+          "scope_zh": "元旦为周五，适用休假者可与周末形成三天假期；私营企业安排并不统一。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "country_code": "US",
+          "country_zh": "美国"
+        },
+        {
+          "type": "federal_holiday",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "date": "2027-01-01",
+          "date_display": "2027-01-01—2027-01-03",
+          "title_zh": "元旦",
+          "scope_zh": "加拿大公共假日；各省、私营企业及连续运营单位的实际安排可能不同。",
+          "impact_zh": "临近日期应确认办公室、承运商、仓库及客户支持安排，不把公共假日直接等同于全行业停运。",
+          "source_name": "加拿大政府",
+          "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
+        },
+        {
+          "type": "federal_holiday",
+          "date": "2027-01-18",
+          "date_display": "2027-01-16—2027-01-18",
+          "title_zh": "马丁·路德·金纪念日周末",
+          "scope_zh": "马丁·路德·金纪念日为周一，适用休假者可与前一周末形成三天假期；私营企业安排并不统一。",
+          "impact_zh": "临近日期应核对承运人、港口、卡车公司及 平台与仓库 仓库的实际工作安排，不把联邦假日直接等同于全行业停运。",
+          "source_name": "美国人事管理局（OPM）",
+          "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+          "country_code": "US",
+          "country_zh": "美国"
+        }
+      ],
+      "source_runs": [
+        {
+          "id": "us_general",
+          "name": "美国官方及行业来源（已过滤平台专属内容）",
+          "status": "ok",
+          "relevant_count": 2
+        },
+        {
+          "id": "canada_news",
+          "name": "加拿大政府新闻 API",
+          "status": "ok",
+          "relevant_count": 0,
+          "url": "https://api.io.canada.ca/io-server/gc/news/en/v2?sort=publishedDate&orderBy=desc&pick=100&format=json"
+        },
+        {
+          "id": "canada_weather",
+          "name": "加拿大环境与气候变化部天气预警",
+          "status": "ok",
+          "relevant_count": 0,
+          "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
+        }
+      ]
+    },
     {
       "id": "2026-11-23",
       "generated_at": "2026-11-25T00:20:18.382Z",
