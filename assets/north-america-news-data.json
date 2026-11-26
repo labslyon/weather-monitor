@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-25T21:03:42.857Z",
+  "generated_at": "2026-11-26T03:57:10.170Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -13,7 +13,7 @@
   },
   "latest": {
     "id": "2026-11-24",
-    "generated_at": "2026-11-25T21:03:42.857Z",
+    "generated_at": "2026-11-26T03:57:10.170Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
@@ -24,7 +24,7 @@
     },
     "items": [
       {
-        "id": "11f567ecc8cb6591a911",
+        "id": "46385e3939cb9ec5374a",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -33,21 +33,21 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-25T14:49:00-05:00",
+        "published_at": "2026-11-25T21:40:00-05:00",
         "published_date_et": "2026-11-25",
         "publication_precision": "datetime",
-        "title": "Flood Watch issued November 25 at 2:49PM EST until November 26 at 1:00AM EST by NWS Miami FL",
-        "fact_zh": "美国国家气象局对佛罗里达州发布Flood Watch，具体影响县区见官方原文。",
+        "title": "Flood Watch issued November 25 at 9:40PM EST until November 26 at 1:00PM EST by NWS Wakefield VA",
+        "fact_zh": "美国国家气象局对弗吉尼亚州发布Flood Watch，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c673a9907be498dacf95faec2d917a8c2fc1beb4.001.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9f3d7f96b59b08a530ba5a239b1f2d85a2d34235.001.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
           "当前预警",
-          "FL"
+          "VA"
         ],
         "monitoring_reason": "new_publication",
         "monitoring_reason_zh": "美国 · 本期新发布",
@@ -56,6 +56,42 @@
         "active_until": null,
         "country_code": "US",
         "country_zh": "美国"
+      },
+      {
+        "id": "0ab702404031adaef189",
+        "source": "canada_weather",
+        "source_name": "加拿大环境与气候变化部",
+        "source_tier": "official",
+        "source_tier_zh": "加拿大官方来源",
+        "country_code": "CA",
+        "country_zh": "加拿大",
+        "category": "weather",
+        "category_zh": "天气与运营",
+        "status": "active_alert",
+        "status_zh": "当前生效",
+        "published_at": null,
+        "published_date_et": null,
+        "publication_precision": "unknown",
+        "title": "Freezing rain - 不列颠哥伦比亚省",
+        "fact_zh": "加拿大环境与气候变化部对不列颠哥伦比亚省发布冻雨预警，当前页面涉及 1 个预报区域。",
+        "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
+        "impact_is_inference": true,
+        "url": "https://weather.gc.ca/warnings/report_e.html?bcrm10=#2045054091628448199202611250502",
+        "priority": "high",
+        "emergency_push": false,
+        "emergency_title_zh": "",
+        "action_zh": "",
+        "detected_at": "2026-11-26T03:57:10.946Z",
+        "tags": [
+          "不列颠哥伦比亚省",
+          "冻雨预警",
+          "黄色预警"
+        ],
+        "monitoring_reason": "active_alert",
+        "monitoring_reason_zh": "加拿大 · 黄色预警",
+        "effective_date": null,
+        "deadline_date": null,
+        "active_until": null
       },
       {
         "id": "b79ec2e1d4b2156db182",
@@ -94,7 +130,7 @@
         "active_until": null
       },
       {
-        "id": "27986eaf9f5ad02fe103",
+        "id": "a032f9e2958cd5e70f7e",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -103,21 +139,21 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-25T12:28:00-08:00",
+        "published_at": "2026-11-25T20:57:00-05:00",
         "published_date_et": "2026-11-25",
         "publication_precision": "datetime",
-        "title": "High Wind Warning issued November 25 at 12:28PM PST until November 26 at 7:00AM PST by NWS Portland OR",
-        "fact_zh": "美国国家气象局对华盛顿州发布大风警报，具体影响县区见官方原文。",
+        "title": "High Wind Warning issued November 25 at 8:57PM EST until November 26 at 7:00PM EST by NWS Blacksburg VA",
+        "fact_zh": "美国国家气象局对弗吉尼亚州发布大风警报，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9c0462cfc0443ca07039faf4a49b54458cd3c80c.001.2",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.76327639fe1a6868b2b29bb1002a6247fb9f30b2.001.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
           "当前预警",
-          "WA"
+          "VA"
         ],
         "monitoring_reason": "new_publication",
         "monitoring_reason_zh": "美国 · 本期新发布",
@@ -232,7 +268,7 @@
         "id": "canada_weather",
         "name": "加拿大环境与气候变化部天气预警",
         "status": "ok",
-        "relevant_count": 1,
+        "relevant_count": 2,
         "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
       }
     ]
@@ -240,7 +276,7 @@
   "editions": [
     {
       "id": "2026-11-24",
-      "generated_at": "2026-11-25T21:03:42.857Z",
+      "generated_at": "2026-11-26T03:57:10.170Z",
       "mode": "north-america-general-team-rules",
       "delivery_status": "scf_ready",
       "coverage": {
@@ -251,7 +287,7 @@
       },
       "items": [
         {
-          "id": "11f567ecc8cb6591a911",
+          "id": "46385e3939cb9ec5374a",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -260,21 +296,21 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-25T14:49:00-05:00",
+          "published_at": "2026-11-25T21:40:00-05:00",
           "published_date_et": "2026-11-25",
           "publication_precision": "datetime",
-          "title": "Flood Watch issued November 25 at 2:49PM EST until November 26 at 1:00AM EST by NWS Miami FL",
-          "fact_zh": "美国国家气象局对佛罗里达州发布Flood Watch，具体影响县区见官方原文。",
+          "title": "Flood Watch issued November 25 at 9:40PM EST until November 26 at 1:00PM EST by NWS Wakefield VA",
+          "fact_zh": "美国国家气象局对弗吉尼亚州发布Flood Watch，具体影响县区见官方原文。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.c673a9907be498dacf95faec2d917a8c2fc1beb4.001.1",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9f3d7f96b59b08a530ba5a239b1f2d85a2d34235.001.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
           "action_zh": "",
           "tags": [
             "当前预警",
-            "FL"
+            "VA"
           ],
           "monitoring_reason": "new_publication",
           "monitoring_reason_zh": "美国 · 本期新发布",
@@ -283,6 +319,42 @@
           "active_until": null,
           "country_code": "US",
           "country_zh": "美国"
+        },
+        {
+          "id": "0ab702404031adaef189",
+          "source": "canada_weather",
+          "source_name": "加拿大环境与气候变化部",
+          "source_tier": "official",
+          "source_tier_zh": "加拿大官方来源",
+          "country_code": "CA",
+          "country_zh": "加拿大",
+          "category": "weather",
+          "category_zh": "天气与运营",
+          "status": "active_alert",
+          "status_zh": "当前生效",
+          "published_at": null,
+          "published_date_et": null,
+          "publication_precision": "unknown",
+          "title": "Freezing rain - 不列颠哥伦比亚省",
+          "fact_zh": "加拿大环境与气候变化部对不列颠哥伦比亚省发布冻雨预警，当前页面涉及 1 个预报区域。",
+          "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
+          "impact_is_inference": true,
+          "url": "https://weather.gc.ca/warnings/report_e.html?bcrm10=#2045054091628448199202611250502",
+          "priority": "high",
+          "emergency_push": false,
+          "emergency_title_zh": "",
+          "action_zh": "",
+          "detected_at": "2026-11-26T03:57:10.946Z",
+          "tags": [
+            "不列颠哥伦比亚省",
+            "冻雨预警",
+            "黄色预警"
+          ],
+          "monitoring_reason": "active_alert",
+          "monitoring_reason_zh": "加拿大 · 黄色预警",
+          "effective_date": null,
+          "deadline_date": null,
+          "active_until": null
         },
         {
           "id": "b79ec2e1d4b2156db182",
@@ -321,7 +393,7 @@
           "active_until": null
         },
         {
-          "id": "27986eaf9f5ad02fe103",
+          "id": "a032f9e2958cd5e70f7e",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -330,21 +402,21 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-25T12:28:00-08:00",
+          "published_at": "2026-11-25T20:57:00-05:00",
           "published_date_et": "2026-11-25",
           "publication_precision": "datetime",
-          "title": "High Wind Warning issued November 25 at 12:28PM PST until November 26 at 7:00AM PST by NWS Portland OR",
-          "fact_zh": "美国国家气象局对华盛顿州发布大风警报，具体影响县区见官方原文。",
+          "title": "High Wind Warning issued November 25 at 8:57PM EST until November 26 at 7:00PM EST by NWS Blacksburg VA",
+          "fact_zh": "美国国家气象局对弗吉尼亚州发布大风警报，具体影响县区见官方原文。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9c0462cfc0443ca07039faf4a49b54458cd3c80c.001.2",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.76327639fe1a6868b2b29bb1002a6247fb9f30b2.001.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
           "action_zh": "",
           "tags": [
             "当前预警",
-            "WA"
+            "VA"
           ],
           "monitoring_reason": "new_publication",
           "monitoring_reason_zh": "美国 · 本期新发布",
@@ -459,7 +531,7 @@
           "id": "canada_weather",
           "name": "加拿大环境与气候变化部天气预警",
           "status": "ok",
-          "relevant_count": 1,
+          "relevant_count": 2,
           "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
         }
       ]
