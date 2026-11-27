@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-27T06:45:26.134Z",
+  "generated_at": "2026-11-27T17:50:22.395Z",
   "mode": "north-america-general-team-rules",
   "audience": "all_teams",
   "excluded_content": "marketplace_specific_operations",
@@ -13,7 +13,7 @@
   },
   "latest": {
     "id": "2026-11-26",
-    "generated_at": "2026-11-27T06:45:26.134Z",
+    "generated_at": "2026-11-27T17:50:22.395Z",
     "mode": "north-america-general-team-rules",
     "delivery_status": "scf_ready",
     "coverage": {
@@ -24,7 +24,7 @@
     },
     "items": [
       {
-        "id": "4adfcd05a8a66f9511e7",
+        "id": "7c5ec0a61d88654b4582",
         "source": "nws",
         "source_name": "美国国家气象局",
         "source_tier": "official",
@@ -33,21 +33,22 @@
         "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": "2026-11-27T01:19:00-05:00",
+        "published_at": "2026-11-27T12:33:00-05:00",
         "published_date_et": "2026-11-27",
         "publication_precision": "datetime",
-        "title": "High Wind Warning issued November 27 at 1:19AM EST until November 27 at 7:00AM EST by NWS Albany NY",
-        "fact_zh": "美国国家气象局对纽约州发布大风警报，具体影响县区见官方原文。",
+        "title": "Coastal Flood Warning issued November 27 at 12:33PM EST until November 27 at 8:00PM EST by NWS Mount Holly NJ",
+        "fact_zh": "美国国家气象局对新泽西州、宾夕法尼亚州发布沿海洪水警报，具体影响县区见官方原文。",
         "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.6770b4d5b0a773f930055af1e9314de7adeb71b4.001.1",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.175317b4c5dbb4dea22a10e808ae85ede5fc233c.003.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
         "tags": [
           "当前预警",
-          "NY"
+          "NJ",
+          "PA"
         ],
         "monitoring_reason": "new_publication",
         "monitoring_reason_zh": "美国 · 本期新发布",
@@ -93,7 +94,7 @@
         "detected_at": "2026-11-27T06:45:26.134Z"
       },
       {
-        "id": "66a214da3362a7a6b19c",
+        "id": "43c4f93ba7bb1b90dcff",
         "source": "canada_weather",
         "source_name": "加拿大环境与气候变化部",
         "source_tier": "official",
@@ -107,18 +108,18 @@
         "published_at": null,
         "published_date_et": null,
         "publication_precision": "unknown",
-        "title": "Freezing rain - 阿尔伯塔省",
-        "fact_zh": "加拿大环境与气候变化部对阿尔伯塔省发布冻雨预警，当前页面涉及 8 个预报区域。",
+        "title": "Freezing rain - 魁北克省",
+        "fact_zh": "加拿大环境与气候变化部对魁北克省发布冻雨预警，当前页面涉及 8 个预报区域。",
         "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
         "impact_is_inference": true,
-        "url": "https://weather.gc.ca/warnings/report_e.html?abrm18=#230642254697449789202611250519",
+        "url": "https://weather.gc.ca/warnings/report_e.html?qcrm99=#45617795514295485202611260504",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
-        "detected_at": "2026-11-27T06:45:26.901Z",
+        "detected_at": "2026-11-27T17:50:22.757Z",
         "tags": [
-          "阿尔伯塔省",
+          "魁北克省",
           "冻雨预警",
           "黄色预警"
         ],
@@ -129,40 +130,38 @@
         "active_until": null
       },
       {
-        "id": "0ecc37fe8302b1f7a419",
-        "source": "canada_weather",
-        "source_name": "加拿大环境与气候变化部",
+        "id": "eb2caac4c862af55f847",
+        "source": "nws",
+        "source_name": "美国国家气象局",
         "source_tier": "official",
-        "source_tier_zh": "加拿大官方来源",
-        "country_code": "CA",
-        "country_zh": "加拿大",
+        "source_tier_zh": "官方来源",
         "category": "weather",
-        "category_zh": "天气与运营",
+        "category_zh": "物流天气",
         "status": "active_alert",
         "status_zh": "当前生效",
-        "published_at": null,
-        "published_date_et": null,
-        "publication_precision": "unknown",
-        "title": "Freezing rain - 安大略省",
-        "fact_zh": "加拿大环境与气候变化部对安大略省发布冻雨预警，当前页面涉及 8 个预报区域。",
-        "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
+        "published_at": "2026-11-27T11:30:00-06:00",
+        "published_date_et": "2026-11-27",
+        "publication_precision": "datetime",
+        "title": "High Wind Watch issued November 27 at 11:30AM CST until November 29 at 6:00AM CST by NWS Lubbock TX",
+        "fact_zh": "美国国家气象局对得克萨斯州发布High Wind Watch，具体影响县区见官方原文。",
+        "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
         "impact_is_inference": true,
-        "url": "https://weather.gc.ca/warnings/report_e.html?onrm33=#2101272301890631082202611250503",
+        "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.16717c042704324324419c72ac9aa2b23e3c4a05.003.1",
         "priority": "high",
         "emergency_push": false,
         "emergency_title_zh": "",
         "action_zh": "",
-        "detected_at": "2026-11-27T06:45:26.901Z",
         "tags": [
-          "安大略省",
-          "冻雨预警",
-          "黄色预警"
+          "当前预警",
+          "TX"
         ],
-        "monitoring_reason": "active_alert",
-        "monitoring_reason_zh": "加拿大 · 黄色预警",
+        "monitoring_reason": "new_publication",
+        "monitoring_reason_zh": "美国 · 本期新发布",
         "effective_date": null,
         "deadline_date": null,
-        "active_until": null
+        "active_until": null,
+        "country_code": "US",
+        "country_zh": "美国"
       }
     ],
     "upcoming": [
@@ -257,7 +256,7 @@
         "id": "canada_weather",
         "name": "加拿大环境与气候变化部天气预警",
         "status": "ok",
-        "relevant_count": 3,
+        "relevant_count": 1,
         "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
       }
     ]
@@ -265,7 +264,7 @@
   "editions": [
     {
       "id": "2026-11-26",
-      "generated_at": "2026-11-27T06:45:26.134Z",
+      "generated_at": "2026-11-27T17:50:22.395Z",
       "mode": "north-america-general-team-rules",
       "delivery_status": "scf_ready",
       "coverage": {
@@ -276,7 +275,7 @@
       },
       "items": [
         {
-          "id": "4adfcd05a8a66f9511e7",
+          "id": "7c5ec0a61d88654b4582",
           "source": "nws",
           "source_name": "美国国家气象局",
           "source_tier": "official",
@@ -285,21 +284,22 @@
           "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": "2026-11-27T01:19:00-05:00",
+          "published_at": "2026-11-27T12:33:00-05:00",
           "published_date_et": "2026-11-27",
           "publication_precision": "datetime",
-          "title": "High Wind Warning issued November 27 at 1:19AM EST until November 27 at 7:00AM EST by NWS Albany NY",
-          "fact_zh": "美国国家气象局对纽约州发布大风警报，具体影响县区见官方原文。",
+          "title": "Coastal Flood Warning issued November 27 at 12:33PM EST until November 27 at 8:00PM EST by NWS Mount Holly NJ",
+          "fact_zh": "美国国家气象局对新泽西州、宾夕法尼亚州发布沿海洪水警报，具体影响县区见官方原文。",
           "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.6770b4d5b0a773f930055af1e9314de7adeb71b4.001.1",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.175317b4c5dbb4dea22a10e808ae85ede5fc233c.003.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
           "action_zh": "",
           "tags": [
             "当前预警",
-            "NY"
+            "NJ",
+            "PA"
           ],
           "monitoring_reason": "new_publication",
           "monitoring_reason_zh": "美国 · 本期新发布",
@@ -345,7 +345,7 @@
           "detected_at": "2026-11-27T06:45:26.134Z"
         },
         {
-          "id": "66a214da3362a7a6b19c",
+          "id": "43c4f93ba7bb1b90dcff",
           "source": "canada_weather",
           "source_name": "加拿大环境与气候变化部",
           "source_tier": "official",
@@ -359,18 +359,18 @@
           "published_at": null,
           "published_date_et": null,
           "publication_precision": "unknown",
-          "title": "Freezing rain - 阿尔伯塔省",
-          "fact_zh": "加拿大环境与气候变化部对阿尔伯塔省发布冻雨预警，当前页面涉及 8 个预报区域。",
+          "title": "Freezing rain - 魁北克省",
+          "fact_zh": "加拿大环境与气候变化部对魁北克省发布冻雨预警，当前页面涉及 8 个预报区域。",
           "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
           "impact_is_inference": true,
-          "url": "https://weather.gc.ca/warnings/report_e.html?abrm18=#230642254697449789202611250519",
+          "url": "https://weather.gc.ca/warnings/report_e.html?qcrm99=#45617795514295485202611260504",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
           "action_zh": "",
-          "detected_at": "2026-11-27T06:45:26.901Z",
+          "detected_at": "2026-11-27T17:50:22.757Z",
           "tags": [
-            "阿尔伯塔省",
+            "魁北克省",
             "冻雨预警",
             "黄色预警"
           ],
@@ -381,40 +381,38 @@
           "active_until": null
         },
         {
-          "id": "0ecc37fe8302b1f7a419",
-          "source": "canada_weather",
-          "source_name": "加拿大环境与气候变化部",
+          "id": "eb2caac4c862af55f847",
+          "source": "nws",
+          "source_name": "美国国家气象局",
           "source_tier": "official",
-          "source_tier_zh": "加拿大官方来源",
-          "country_code": "CA",
-          "country_zh": "加拿大",
+          "source_tier_zh": "官方来源",
           "category": "weather",
-          "category_zh": "天气与运营",
+          "category_zh": "物流天气",
           "status": "active_alert",
           "status_zh": "当前生效",
-          "published_at": null,
-          "published_date_et": null,
-          "publication_precision": "unknown",
-          "title": "Freezing rain - 安大略省",
-          "fact_zh": "加拿大环境与气候变化部对安大略省发布冻雨预警，当前页面涉及 8 个预报区域。",
-          "impact_zh": "可能影响当地办公、道路运输和配送时效；建议相关团队核对人员安排、承运商通知及客户沟通。",
+          "published_at": "2026-11-27T11:30:00-06:00",
+          "published_date_et": "2026-11-27",
+          "publication_precision": "datetime",
+          "title": "High Wind Watch issued November 27 at 11:30AM CST until November 29 at 6:00AM CST by NWS Lubbock TX",
+          "fact_zh": "美国国家气象局对得克萨斯州发布High Wind Watch，具体影响县区见官方原文。",
+          "impact_zh": "若货件途经相关港口、铁路或卡车线路，建议核对承运人时效、仓库预约及末端配送延误；这是天气风险预警，不代表港口已经停工。",
           "impact_is_inference": true,
-          "url": "https://weather.gc.ca/warnings/report_e.html?onrm33=#2101272301890631082202611250503",
+          "url": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.16717c042704324324419c72ac9aa2b23e3c4a05.003.1",
           "priority": "high",
           "emergency_push": false,
           "emergency_title_zh": "",
           "action_zh": "",
-          "detected_at": "2026-11-27T06:45:26.901Z",
           "tags": [
-            "安大略省",
-            "冻雨预警",
-            "黄色预警"
+            "当前预警",
+            "TX"
           ],
-          "monitoring_reason": "active_alert",
-          "monitoring_reason_zh": "加拿大 · 黄色预警",
+          "monitoring_reason": "new_publication",
+          "monitoring_reason_zh": "美国 · 本期新发布",
           "effective_date": null,
           "deadline_date": null,
-          "active_until": null
+          "active_until": null,
+          "country_code": "US",
+          "country_zh": "美国"
         }
       ],
       "upcoming": [
@@ -509,7 +507,7 @@
           "id": "canada_weather",
           "name": "加拿大环境与气候变化部天气预警",
           "status": "ok",
-          "relevant_count": 3,
+          "relevant_count": 1,
           "url": "https://weather.gc.ca/index_e.html?alertTabName=public"
         }
       ]
